@@ -23,7 +23,6 @@ public class AllTests {
     TestSuite suite = new TestSuite();
     suite.addTestSuite(SimpleSmtpServerTest.class);
     suite.addTestSuite(SmtpRequestTest.class);
-    suite.addTestSuite(BindProblemTest.class);
     return suite;
   }
 
