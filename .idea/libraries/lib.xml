@@ -3,7 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/activation.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/mail.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

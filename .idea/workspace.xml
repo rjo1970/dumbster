@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="a7f8553f-357d-4d52-987f-b91964a928bd" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test-src/com/dumbster/smtp/AllTests.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java" afterPath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/junit.jar" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" afterPath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="$USER_HOME_GRAILS$/" />
@@ -66,8 +70,30 @@
       <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="9" selection-start="3156" selection-end="3156" vertical-scroll-proportion="0.5705522">
+            <state line="37" column="65" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.6166667">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SimpleSmtpServerTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="10" selection-start="1241" selection-end="1241" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SmtpRequestTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="9" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,6 +113,7 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/AllTests.java" />
+        <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java" />
         <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" />
         <option value="$PROJECT_DIR$/build.xml" />
       </list>
@@ -149,6 +176,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dumbster" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dumbster" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test-src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smtp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -156,9 +201,9 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
@@ -466,30 +511,27 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/AllTests.java">
+    <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="881" selection-end="881" vertical-scroll-proportion="0.24911033">
-          <folding />
+        <state line="67" column="9" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="1033" selection-end="1033" vertical-scroll-proportion="-0.68677497">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="13" selection-start="709" selection-end="709" vertical-scroll-proportion="0.0974478">
-          <folding />
+        <state line="42" column="10" selection-start="1241" selection-end="1241" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="9" selection-start="3156" selection-end="3156" vertical-scroll-proportion="0.5705522">
+        <state line="37" column="65" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.6166667">
           <folding />
         </state>
       </provider>

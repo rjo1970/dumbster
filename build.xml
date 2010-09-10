@@ -19,95 +19,99 @@ limitations under the License.
 
 <project name="dumbster" default="test">
 
-  <!-- === project configuration ========================================== -->
-  <property name="release" value="1.6"/>
-  <property name="srcdir" value="src" />
-  <property name="etcdir" value="etc" />
-  <property name="builddir" value="build" />
-  <property name="docdir" value="doc" />
-  <property name="stagedir" value="${builddir}/stage" />
-  <property name="compiledir" value="${builddir}/classes" />
-  <property name="libdir" value="lib" />
-  <property name="testsrcdir" value="test-src" />
-  <property name="testcompiledir" value="${builddir}/test" />
-  <property name="debug" value="" />
+    <!-- === project configuration ========================================== -->
+    <property name="release" value="1.6"/>
+    <property name="srcdir" value="src"/>
+    <property name="etcdir" value="etc"/>
+    <property name="builddir" value="build"/>
+    <property name="docdir" value="doc"/>
+    <property name="stagedir" value="${builddir}/stage"/>
+    <property name="compiledir" value="${builddir}/classes"/>
+    <property name="libdir" value="lib"/>
+    <property name="testsrcdir" value="test-src"/>
+    <property name="testcompiledir" value="${builddir}/test"/>
+    <property name="debug" value=""/>
 
-  <property name="build.compiler" value="modern" />
+    <property name="build.compiler" value="modern"/>
 
-  <path id="compile.path">
-    <fileset dir="${libdir}">
-      <include name="**/*.jar" />
-    </fileset>
-    <pathelement location="${compiledir}" />
-  </path>
-
-  <!-- === compile ======================================================== -->
-
-  <target name="compile" depends="init">
-    <javac srcdir="${srcdir}" destdir="${compiledir}" debug="${debug}">
-      <classpath refid="compile.path" />
-      <include name="com/dumbster/smtp/" />
-    </javac>
-  </target>
-
-  <!-- === jar ============================================================ -->
-
-  <target name="jar" depends="compile">
-    <delete file="${builddir}/dumbster.jar"/>
-    <jar jarfile="${builddir}/dumbster.jar" basedir="${compiledir}/" />
-  </target>
-
-  <!-- === clean ========================================================== -->
-
-  <target name="clean">
-    <delete dir="${builddir}" />
-    <delete>
-      <fileset dir="." includes="**/*~" defaultexcludes="no" />
-    </delete>
-  </target>
-
-  <!-- === init =========================================================== -->
-
-  <target name="init">
-    <mkdir dir="${compiledir}" />
-    <mkdir dir="${testcompiledir}" />
-  </target>
-
-  <!-- === Unit test ====================================================== -->
-  <target name="compile-tests" depends="init">
-    <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="${debug}">
-      <classpath refid="compile.path" />
-      <include name="com/dumbster/smtp/" />
-    </javac>
-  </target>
-
-  <target name="test" depends="jar, compile-tests">
-    <junit fork="yes" printsummary="yes" haltonfailure="yes">
-      <classpath>
-        <pathelement path="${testcompiledir}" />
-	      <pathelement path="${compiledir}" />
+    <path id="compile.path">
         <fileset dir="${libdir}">
-          <include name="**/*.jar" />
+            <include name="**/*.jar"/>
         </fileset>
-      </classpath>
-      <formatter type="plain"/>
-      <test name="com.dumbster.smtp.AllTests" />
-    </junit>
-  </target>
+        <pathelement location="${compiledir}"/>
+    </path>
 
-  <!-- == Generate javadoc ================================================ -->
-  <target name="javadoc" depends="compile">
-    <javadoc destdir="${docdir}">
-      <fileset dir="src" defaultexcludes="yes">
-        <include name="com/dumbster/**" />
-      </fileset>
-  </javadoc>
-  </target>
+    <!-- === compile ======================================================== -->
 
-  <!-- == Prepare release ================================================= -->
-  <target name="release" depends="jar">
-    <zip destfile="dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
-      <zipfileset dir="." includes="build/dumbster.jar" fullpath="dumbster${release}.jar"/>
-    </zip>
-  </target>
+    <target name="compile" depends="init">
+        <javac srcdir="${srcdir}" destdir="${compiledir}" debug="${debug}">
+            <classpath refid="compile.path"/>
+            <include name="com/dumbster/smtp/"/>
+        </javac>
+    </target>
+
+    <!-- === jar ============================================================ -->
+
+    <target name="jar" depends="compile">
+        <delete file="${builddir}/dumbster.jar"/>
+        <jar jarfile="${builddir}/dumbster.jar" basedir="${compiledir}/"/>
+    </target>
+
+    <!-- === clean ========================================================== -->
+
+    <target name="clean">
+        <delete dir="${builddir}"/>
+        <delete>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+    <!-- === init =========================================================== -->
+
+    <target name="init">
+        <mkdir dir="${compiledir}"/>
+        <mkdir dir="${testcompiledir}"/>
+    </target>
+
+    <!-- === Unit test ====================================================== -->
+    <target name="compile-tests" depends="init">
+        <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="${debug}">
+            <classpath refid="compile.path"/>
+            <include name="com/dumbster/smtp/"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="clean, jar, compile-tests">
+        <junit fork="yes" printsummary="yes" haltonfailure="yes">
+            <classpath>
+                <pathelement path="${testcompiledir}"/>
+                <pathelement path="${compiledir}"/>
+                <fileset dir="${libdir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <formatter type="plain"/>
+            <batchtest todir="${builddir}/test" haltonfailure="yes">
+                <fileset dir="${testsrcdir}">
+                    <include name="**/*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <!-- == Generate javadoc ================================================ -->
+    <target name="javadoc" depends="compile">
+        <javadoc destdir="${docdir}">
+            <fileset dir="src" defaultexcludes="yes">
+                <include name="com/dumbster/**"/>
+            </fileset>
+        </javadoc>
+    </target>
+
+    <!-- == Prepare release ================================================= -->
+    <target name="release" depends="jar">
+        <zip destfile="dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
+            <zipfileset dir="." includes="build/dumbster.jar" fullpath="dumbster${release}.jar"/>
+        </zip>
+    </target>
 </project>
