@@ -25,49 +25,49 @@ public class SmtpRequestTest {
 
     @Test
     public void testUnrecognizedCommandConnectState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.CONNECT);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.CONNECT);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == 500);
     }
 
     @Test
     public void testUnrecognizedCommandGreetState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.GREET);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.GREET);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == 500);
     }
 
     @Test
     public void testUnrecognizedCommandMailState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.MAIL);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.MAIL);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == 500);
     }
 
     @Test
     public void testUnrecognizedCommandQuitState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.QUIT);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.QUIT);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == 500);
     }
 
     @Test
     public void testUnrecognizedCommandRcptState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.RCPT);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.RCPT);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == 500);
     }
 
     @Test
     public void testUnrecognizedCommandDataBodyState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.DATA_BODY);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.DATA_BODY);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == -1);
     }
 
     @Test
     public void testUnrecognizedCommandDataHdrState() {
-        SmtpRequest request = new SmtpRequest(SmtpActionType.UNRECOG, null, SmtpState.DATA_HDR);
+        SmtpRequest request = new SmtpRequest(SmtpAction.UNRECOG, null, SmtpState.DATA_HDR);
         SmtpResponse response = request.execute();
         assertTrue(response.getCode() == -1);
     }

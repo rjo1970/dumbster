@@ -166,7 +166,7 @@ public class SimpleSmtpServer implements Runnable {
     private List handleTransaction(PrintWriter out, BufferedReader input) throws IOException {
         // Initialize the state machine
         SmtpState smtpState = SmtpState.CONNECT;
-        SmtpRequest smtpRequest = new SmtpRequest(SmtpActionType.CONNECT, "", smtpState);
+        SmtpRequest smtpRequest = new SmtpRequest(SmtpAction.CONNECT, "", smtpState);
 
         // Execute the connection request
         SmtpResponse smtpResponse = smtpRequest.execute();

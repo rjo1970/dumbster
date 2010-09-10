@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="a7f8553f-357d-4d52-987f-b91964a928bd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpResponse.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpResponse.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" afterPath="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="$USER_HOME_GRAILS$/" />
@@ -67,101 +63,129 @@
   </component>
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="65" selection-start="1389" selection-end="1389" vertical-scroll-proportion="-23.545454">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimpleSmtpServer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="13" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpActionType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="13" selection-start="226" selection-end="226" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpMessage.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="13" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpRequest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="13" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpResponse.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpResponse.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="13" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1284149948000" expanded="true" signature="729:777" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="804:840" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="873:956" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="995:1160" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="1329:1406" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="1466:1549" placeholder="/**...*/" />
-                <marker date="1284149948000" expanded="true" signature="1618:1696" placeholder="/**...*/" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpState.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="13" selection-start="704" selection-end="704" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimpleSmtpServerTest.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="10" selection-start="1242" selection-end="1242" vertical-scroll-proportion="0.7132701">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SmtpRequestTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="9" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="vertical" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/build.xml">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="37" column="65" selection-start="1389" selection-end="1389" vertical-scroll-proportion="-23.545454">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SimpleSmtpServer.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="168" column="60" selection-start="5432" selection-end="5432" vertical-scroll-proportion="0.0">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpActionType.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="17" column="0" selection-start="660" selection-end="660" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpAction.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpAction.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="12" column="8" selection-start="421" selection-end="421" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpMessage.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="28" column="13" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpRequest.java" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="212" column="35" selection-start="10327" selection-end="10327" vertical-scroll-proportion="0.16803278">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpResponse.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpResponse.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="21" column="13" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+                  <folding>
+                    <marker date="1284149948000" expanded="true" signature="729:777" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="804:840" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="873:956" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="995:1160" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="1329:1406" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="1466:1549" placeholder="/**...*/" />
+                    <marker date="1284149948000" expanded="true" signature="1618:1696" placeholder="/**...*/" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpState.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="21" column="13" selection-start="704" selection-end="704" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SimpleSmtpServerTest.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="43" column="10" selection-start="1242" selection-end="1242" vertical-scroll-proportion="0.0">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SmtpRequestTest.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="67" column="9" selection-start="2341" selection-end="2341" vertical-scroll-proportion="0.0">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="SmtpActionType.java" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="129" column="43" selection-start="3936" selection-end="3940" vertical-scroll-proportion="6.676806">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -178,13 +202,15 @@
         <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/AllTests.java" />
         <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/SmtpRequestTest.java" />
         <option value="$PROJECT_DIR$/build.xml" />
-        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java" />
-        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpResponse.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java" />
         <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java" />
+        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActions.java" />
+        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java" />
+        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpAction.java" />
+        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java" />
       </list>
     </option>
   </component>
@@ -538,11 +564,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1920" height="1032" extended-state="6" />
+    <frame x="1" y="24" width="1912" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32918552" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -553,12 +580,11 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.66254216" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25080386" sideWeight="0.6628959" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295838" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
@@ -605,30 +631,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="226" selection-end="226" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="13" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="13" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -666,10 +671,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/SimpleSmtpServerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="10" selection-start="1242" selection-end="1242" vertical-scroll-proportion="0.7132701">
+        <state line="43" column="10" selection-start="1242" selection-end="1242" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpActionType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="660" selection-end="660" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="8" selection-start="421" selection-end="421" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SimpleSmtpServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="168" column="60" selection-start="5432" selection-end="5432" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="212" column="35" selection-start="10327" selection-end="10327" vertical-scroll-proportion="0.16803278">
+          <folding />
         </state>
       </provider>
     </entry>
