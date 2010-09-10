@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<!--
+Dumbster - a dummy SMTP server
+Copyright 2004 Jason Paul Kitchen
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="dumbster" default="world">
+
+  <!-- === project configuration ========================================== -->
+  <property name="release" value="1.6"/>
+  <property name="srcdir" value="src" />
+  <property name="etcdir" value="etc" />
+  <property name="builddir" value="build" />
+  <property name="docdir" value="doc" />
+  <property name="stagedir" value="${builddir}/stage" />
+  <property name="compiledir" value="${builddir}/classes" />
+  <property name="libdir" value="lib" />
+  <property name="testsrcdir" value="test-src" />
+  <property name="testcompiledir" value="${builddir}/test" />
+  <property name="debug" value="" />
+
+  <property name="build.compiler" value="modern" />
+
+  <path id="compile.path">
+    <fileset dir="${libdir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${compiledir}" />
+  </path>
+
+  <!-- === world ========================================================== -->
+
+  <target name="world" depends="jar, test" />
+
+  <!-- === compile ======================================================== -->
+
+  <target name="compile" depends="init">
+    <javac srcdir="${srcdir}" destdir="${compiledir}" debug="${debug}">
+      <classpath refid="compile.path" />
+      <include name="com/dumbster/smtp/" />
+    </javac>
+  </target>
+
+  <!-- === jar ============================================================ -->
+
+  <target name="jar" depends="compile">
+    <delete file="${builddir}/dumbster.jar"/>
+    <jar jarfile="${builddir}/dumbster.jar" basedir="${compiledir}/" />
+  </target>
+
+  <!-- === clean ========================================================== -->
+
+  <target name="clean">
+    <delete dir="${builddir}" />
+    <delete>
+      <fileset dir="." includes="**/*~" defaultexcludes="no" />
+    </delete>
+  </target>
+
+  <!-- === init =========================================================== -->
+
+  <target name="init">
+    <mkdir dir="${compiledir}" />
+    <mkdir dir="${testcompiledir}" />
+  </target>
+
+  <!-- === Unit test ====================================================== -->
+  <target name="compile-tests" depends="init">
+    <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="${debug}">
+      <classpath refid="compile.path" />
+      <include name="com/dumbster/smtp/" />
+    </javac>
+  </target>
+
+  <target name="test" depends="compile-tests">
+    <junit fork="yes" printsummary="yes" haltonfailure="yes">
+      <classpath>
+        <pathelement path="${testcompiledir}" />
+	      <pathelement path="${compiledir}" />
+        <fileset dir="${libdir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <formatter type="plain"/>
+      <test name="com.dumbster.smtp.AllTests" />
+    </junit>
+  </target>
+
+  <!-- == Generate javadoc ================================================ -->
+  <target name="javadoc" depends="compile">
+    <javadoc destdir="${docdir}">
+      <fileset dir="src" defaultexcludes="yes">
+        <include name="com/dumbster/**" />
+      </fileset>
+  </javadoc>
+  </target>
+
+  <!-- == Prepare release ================================================= -->
+  <target name="release" depends="jar">
+    <zip destfile="dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
+      <zipfileset dir="." includes="build/dumbster.jar" fullpath="dumbster${release}.jar"/>
+    </zip>
+  </target>
+</project>

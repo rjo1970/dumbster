@@ -1,0 +1,52 @@
+The following is a list of changes per release:
+
+1.6 (2005-04-04)
+Fixed threading and synchronization problems (sourceforge tracker id: 1111796). Thanks to Charles Hudak for pointing
+out these issues.
+Build now fails on unit test failure (sourceforge tracker id: 1115202). Thanks to Charles Hudak for complaining about
+this.
+Fixed a few more threading issues related to the time required for the server socket to bind. Thanks to Jeremy Hulford
+for researching and providing a fix for this issue.
+
+
+1.5 (2004-11-18)
+Moved from LGPL license to Apache License Version 2.0. See http://www.apache.org/licenses/LICENSE-2.0.txt.
+This provides at least the same freedoms as the LGPL license but does not have the potential legal problems
+associated with imports from other libraries.
+Removed vestiges of port 25 from unit tests to allow OSX and *nix to run on non-priveleged ports.
+
+
+1.4 (2004-11-2)
+Fixed bug where misbehaving SMTP clients cause Dumbster to fail with a NullPointerException (sourceforge tracker id:
+1055322).
+Binary distribution (jar with class files) now available in addition to source (sourceforge tracker id: 1059102).
+Corrected mispelling of SimpleSmtpServer.getReceivedEmailSize() again (can't believe how long I stared at this
+until I saw it - thanks to Ken Pelletier).
+Stopped using port 25 and 80 in unit tests - these are priveleged ports under *nix and OSX (thanks to Ken Pelletier
+and Mark Lowe).
+Uncommented stack trace on server startup failure (this probably ought to throw an IllegalStateException or something,
+but at least this way any failure won't be hidden) - thanks Ken Pelletier.
+CVS now operational for the Dumbster project.
+Added javadoc target to "build.xml".
+
+
+1.3 (2004-10-08)
+Documented internal state transition table (see Javadoc for SmtpRequest).
+Fixed bug which prevented mutliple messages in the same connection from being transferred (sourceforge tracker id:
+1022357).
+
+
+1.2 (2004-05-08)
+Configurable SMTP port (thanks Dr. Christian Möller and Kevin Fries).
+Mispelled getReceievedEmailSize (Sourceforge tracker id: 824194).
+Not able to enter '\n' in body of message (sourceforge tracker id: 903326).
+
+
+1.1 (2003-09-28)
+Change from GPL license to LGPL license.
+HELO command is now recognized (not just EHLO).
+
+
+1.0 (2003-06-08)
+Initial version released in conjunction with the JavaWorld article "Test email components in your software".
+See: http://www.javaworld.com/javaworld/jw-08-2003/jw-0829-smtp.html
