@@ -44,28 +44,12 @@ public class SimpleSmtpServer implements Runnable {
     public void run() {
         stopped = false;
         try {
-            try {
-                serverSocket = new ServerSocket(port);
-                serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT); // Block for maximum of 1.5 seconds
-            } finally {
-                synchronized (this) {
-                    // Notify when server socket has been created
-                    notifyAll();
-                }
-            }
+            initializeServerSocket();
 
-            // Server: loop until stopped
+            //serverLoop();
+
             while (!isStopped()) {
-                // Start server socket and listen for client connections
-                Socket socket = null;
-                try {
-                    socket = serverSocket.accept();
-                } catch (Exception e) {
-                    if (socket != null) {
-                        socket.close();
-                    }
-                    continue; // Non-blocking socket timeout occurred: try accept() again
-                }
+                Socket socket = clientSocket();
 
                 // Get the input and output streams
                 BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -84,7 +68,6 @@ public class SimpleSmtpServer implements Runnable {
                 socket.close();
             }
         } catch (Exception e) {
-            /** @todo Should throw an appropriate exception here. */
             e.printStackTrace();
         } finally {
             if (serverSocket != null) {
@@ -95,6 +78,33 @@ public class SimpleSmtpServer implements Runnable {
                 }
             }
         }
+    }
+
+    private void initializeServerSocket() throws Exception {
+	    serverSocket = new ServerSocket(port);
+      serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
+      synchronized (this) {
+          notifyAll();
+      }  
+    }
+
+    private Socket clientSocket() {
+	    Socket socket = null;
+	    while (!isStopped() && socket==null)  {
+				try {
+					socket = serverSocket.accept();
+				} catch (Exception e) {
+					if (socket != null) {
+						try {
+							socket.close();
+							} catch(Exception e2) {}
+							finally {
+								socket = null;
+							}
+						}
+					}
+			}
+      return socket;  
     }
 
     public synchronized boolean isStopped() {
