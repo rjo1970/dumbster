@@ -20,7 +20,7 @@ limitations under the License.
 <project name="dumbster" default="test">
 
     <!-- === project configuration ========================================== -->
-    <property name="release" value="1.6"/>
+    <property name="release" value="1.9-SNAPSHOT"/>
     <property name="srcdir" value="src"/>
     <property name="etcdir" value="etc"/>
     <property name="builddir" value="build"/>
@@ -110,7 +110,7 @@ limitations under the License.
 
     <!-- == Prepare release ================================================= -->
     <target name="release" depends="jar">
-        <zip destfile="dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
+        <zip destfile="${builddir}/dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
             <zipfileset dir="." includes="build/dumbster.jar" fullpath="dumbster${release}.jar"/>
         </zip>
     </target>
