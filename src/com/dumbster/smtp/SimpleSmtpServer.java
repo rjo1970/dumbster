@@ -51,16 +51,8 @@ public class SimpleSmtpServer implements Runnable {
 
             while (!isStopped()) {
                 Socket socket = clientSocket();
-
                 synchronized (this) {
-                    /*
-                    * We synchronize over the handle method and the list update because the client call completes inside
-                    * the handle method and we have to prevent the client from reading the list until we've updated it.
-                    * For higher concurrency, we could just change handle to return void and update the list inside the method
-                    * to limit the duration that we hold the lock.
-                    */
-                    handleTransaction(socket);
-                    
+                     handleTransaction(socket);                    
                 }
                 socket.close();
             }
@@ -127,7 +119,7 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    private List handleTransaction(Socket socket) throws IOException {
+    private void handleTransaction(Socket socket) throws IOException {
       BufferedReader input = getSocketInput(socket);
       PrintWriter out = getSocketOutput(socket);
 
@@ -172,7 +164,6 @@ public class SimpleSmtpServer implements Runnable {
             }
         }
         receivedMail.addAll(msgList);
-        return msgList;
     }
 
     private static void sendResponse(PrintWriter out, SmtpResponse smtpResponse) {
