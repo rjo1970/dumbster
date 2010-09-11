@@ -60,16 +60,6 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    private void serverLoop() throws IOException {
-	    while (!isStopped()) {
-          Socket socket = clientSocket();
-          synchronized (this) {
-               handleTransaction(socket);                    
-          }
-          socket.close();
-      }  
-    }
-
     private void initializeServerSocket() throws Exception {
 	    serverSocket = new ServerSocket(port);
       serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
@@ -78,24 +68,33 @@ public class SimpleSmtpServer implements Runnable {
       }  
     }
 
-    private Socket clientSocket() {
-	    Socket socket = null;
-	    while (!isStopped() && socket==null)  {
-				try {
-					socket = serverSocket.accept();
-				} catch (Exception e) {
-					if (socket != null) {
-						try {
-							socket.close();
-							} catch(Exception e2) {}
-							finally {
-								socket = null;
-							}
-						}
-					}
-			}
-      return socket;  
+    private void serverLoop() throws IOException {
+	    while (!isStopped()) {
+          Socket socket = clientSocket();
+          if (socket == null) continue;
+          synchronized (this) {
+               handleTransaction(socket);                    
+          }
+          socket.close();
+      }  
     }
+
+		private Socket clientSocket() {
+			Socket socket = null;
+			try {
+				socket = serverSocket.accept();
+			} catch (Exception e) {
+				if (socket != null) {
+					try {
+						socket.close();
+					} catch(Exception e2) {}
+					finally {
+						socket = null;
+					}
+				}
+			}
+		  return socket;  
+		}
 
     private BufferedReader getSocketInput(Socket socket) throws IOException {
 	    return new BufferedReader(new InputStreamReader(socket.getInputStream()));
