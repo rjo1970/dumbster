@@ -22,9 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 /**
@@ -38,6 +35,7 @@ public class SimpleSmtpServer implements Runnable {
 	private ServerSocket serverSocket;
 	private int port = DEFAULT_SMTP_PORT;
 	private static final int SERVER_SOCKET_TIMEOUT = 500;
+	private volatile boolean threaded = true;
 
 	public SimpleSmtpServer(int port) {
 		this.port = port;
@@ -76,11 +74,18 @@ public class SimpleSmtpServer implements Runnable {
 			if (socket == null)
 				continue;
 			synchronized (this) {
-				SmtpClientTransaction transaction = new SmtpClientTransaction(socket);
-				transaction.handleTransaction();
-				receivedMail.addAll(transaction.getReceivedMail());
+				SmtpClientTransaction transaction = new SmtpClientTransaction(socket, receivedMail);
+				if (threaded) {
+				Thread t = new Thread(transaction);
+				try {
+					t.join();
+				} catch (InterruptedException e) {}
+				t.start();
+				} else {
+					transaction.run();
+				}
+				
 			}
-			socket.close();
 		}
 	}
 
@@ -145,4 +150,8 @@ public class SimpleSmtpServer implements Runnable {
 		return server;
 	}
 
+	public void setThreaded(boolean threaded) {
+		this.threaded = threaded;
+	}
+	
 }

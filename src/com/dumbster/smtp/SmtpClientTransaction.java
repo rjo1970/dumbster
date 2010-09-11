@@ -8,16 +8,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmtpClientTransaction {
+public class SmtpClientTransaction implements Runnable {
 	
 	private Socket socket;	
 	private List<SmtpMessage> receivedMail = new ArrayList<SmtpMessage>();
-	
-	public SmtpClientTransaction(Socket socket) {
+	private List<SmtpMessage> serverMessages;
+	public SmtpClientTransaction(Socket socket, List<SmtpMessage> messages) {
 		this.socket = socket;
+		this.serverMessages = messages;
 	}
 	
-	public void handleTransaction() throws IOException {
+	private void handleTransaction() throws IOException {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
@@ -85,6 +86,19 @@ public class SmtpClientTransaction {
 
 	public List<SmtpMessage> getReceivedMail() {
 		return receivedMail;
+	}
+
+	@Override
+	public void run() {
+		try {
+		handleTransaction();
+		serverMessages.addAll(getReceivedMail());
+		} catch(Exception e) {}
+		finally {
+			try {
+				socket.close();
+			} catch (Exception e2) {}
+		}
 	}
 	
 }
