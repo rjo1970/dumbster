@@ -46,16 +46,7 @@ public class SimpleSmtpServer implements Runnable {
         stopped = false;
         try {
             initializeServerSocket();
-
-            //serverLoop();
-
-            while (!isStopped()) {
-                Socket socket = clientSocket();
-                synchronized (this) {
-                     handleTransaction(socket);                    
-                }
-                socket.close();
-            }
+            serverLoop();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -67,6 +58,16 @@ public class SimpleSmtpServer implements Runnable {
                 }
             }
         }
+    }
+
+    private void serverLoop() throws IOException {
+	    while (!isStopped()) {
+          Socket socket = clientSocket();
+          synchronized (this) {
+               handleTransaction(socket);                    
+          }
+          socket.close();
+      }  
     }
 
     private void initializeServerSocket() throws Exception {
