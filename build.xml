@@ -30,7 +30,6 @@ limitations under the License.
     <property name="libdir" value="lib"/>
     <property name="testsrcdir" value="test-src"/>
     <property name="testcompiledir" value="${builddir}/test"/>
-    <property name="debug" value=""/>
 
     <property name="build.compiler" value="modern"/>
 
@@ -44,7 +43,7 @@ limitations under the License.
     <!-- === compile ======================================================== -->
 
     <target name="compile" depends="init">
-        <javac srcdir="${srcdir}" destdir="${compiledir}" debug="${debug}">
+        <javac srcdir="${srcdir}" destdir="${compiledir}" debug="true" debuglevel="lines,vars,source">
             <classpath refid="compile.path"/>
             <include name="com/dumbster/smtp/"/>
         </javac>
@@ -75,7 +74,7 @@ limitations under the License.
 
     <!-- === Unit test ====================================================== -->
     <target name="compile-tests" depends="init">
-        <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="${debug}">
+        <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="true" debuglevel="lines,vars,source">
             <classpath refid="compile.path"/>
             <include name="com/dumbster/smtp/"/>
         </javac>
