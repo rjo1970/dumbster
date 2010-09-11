@@ -55,7 +55,7 @@ public class SimpleSmtpServerTest {
             fail("Unexpected exception: " + e);
         }
 
-        assertTrue(server.getReceivedEmailSize() == 1);
+        assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
         assertTrue(email.getHeaderValue("Subject").equals("Test"));
@@ -72,7 +72,7 @@ public class SimpleSmtpServerTest {
             fail("Unexpected exception: " + e);
         }
 
-        assertTrue(server.getReceivedEmailSize() == 1);
+        assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
         assertTrue(email.getBody().equals(bodyWithCR));
@@ -103,7 +103,7 @@ public class SimpleSmtpServerTest {
             fail("Unexpected exception: " + e);
         }
 
-        assertTrue(server.getReceivedEmailSize() == 2);
+        assertTrue(server.getEmailCount() == 2);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
         }
 
-        assertTrue(server.getReceivedEmailSize() == 2);
+        assertTrue(server.getEmailCount() == 2);
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
         assertTrue(email.getHeaderValue("Subject").equals("Test"));

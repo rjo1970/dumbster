@@ -28,59 +28,25 @@ import java.io.IOException;
 
 /**
  * Dummy SMTP server for testing purposes.
- *
- * @todo constructor allowing user to pass preinitialized ServerSocket
  */
 public class SimpleSmtpServer implements Runnable {
-    /**
-     * Stores all of the email received since this instance started up.
-     */
-    private List receivedMail;
-
-    /**
-     * Default SMTP port is 25.
-     */
+    private List receivedMail = new ArrayList();
     public static final int DEFAULT_SMTP_PORT = 25;
-
-    /**
-     * Indicates whether this server is stopped or not.
-     */
     private volatile boolean stopped = true;
-
-    /**
-     * Handle to the server socket this server listens to.
-     */
     private ServerSocket serverSocket;
-
-    /**
-     * Port the server listens on - set to the default SMTP port initially.
-     */
     private int port = DEFAULT_SMTP_PORT;
+    private static final int SERVER_SOCKET_TIMEOUT = 500;
 
-    /**
-     * Timeout listening on server socket.
-     */
-    private static final int TIMEOUT = 500;
-
-    /**
-     * Constructor.
-     *
-     * @param port port number
-     */
     public SimpleSmtpServer(int port) {
-        receivedMail = new ArrayList();
         this.port = port;
     }
 
-    /**
-     * Main loop of the SMTP server.
-     */
     public void run() {
         stopped = false;
         try {
             try {
                 serverSocket = new ServerSocket(port);
-                serverSocket.setSoTimeout(TIMEOUT); // Block for maximum of 1.5 seconds
+                serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT); // Block for maximum of 1.5 seconds
             } finally {
                 synchronized (this) {
                     // Notify when server socket has been created
@@ -131,19 +97,10 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    /**
-     * Check if the server has been placed in a stopped state. Allows another thread to
-     * stop the server safely.
-     *
-     * @return true if the server has been sent a stop signal, false otherwise
-     */
     public synchronized boolean isStopped() {
         return stopped;
     }
 
-    /**
-     * Stops the server. Server is shutdown after processing of the current request is complete.
-     */
     public synchronized void stop() {
         // Mark us closed
         stopped = true;
@@ -155,14 +112,6 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    /**
-     * Handle an SMTP transaction, i.e. all activity between initial connect and QUIT command.
-     *
-     * @param out   output stream
-     * @param input input stream
-     * @return List of SmtpMessage
-     * @throws IOException
-     */
     private List handleTransaction(PrintWriter out, BufferedReader input) throws IOException {
         // Initialize the state machine
         SmtpState smtpState = SmtpState.CONNECT;
@@ -208,12 +157,6 @@ public class SimpleSmtpServer implements Runnable {
         return msgList;
     }
 
-    /**
-     * Send response to client.
-     *
-     * @param out          socket output stream
-     * @param smtpResponse response object
-     */
     private static void sendResponse(PrintWriter out, SmtpResponse smtpResponse) {
         if (smtpResponse.getCode() > 0) {
             int code = smtpResponse.getCode();
@@ -223,39 +166,18 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    /**
-     * Get email received by this instance since start up.
-     *
-     * @return List of String
-     */
     public synchronized Iterator getReceivedEmail() {
         return receivedMail.iterator();
     }
 
-    /**
-     * Get the number of messages received.
-     *
-     * @return size of received email list
-     */
-    public synchronized int getReceivedEmailSize() {
+    public synchronized int getEmailCount() {
         return receivedMail.size();
     }
 
-    /**
-     * Creates an instance of SimpleSmtpServer and starts it. Will listen on the default port.
-     *
-     * @return a reference to the SMTP server
-     */
     public static SimpleSmtpServer start() {
         return start(DEFAULT_SMTP_PORT);
     }
 
-    /**
-     * Creates an instance of SimpleSmtpServer and starts it.
-     *
-     * @param port port number the server should listen to
-     * @return a reference to the SMTP server
-     */
     public static SimpleSmtpServer start(int port) {
         SimpleSmtpServer server = new SimpleSmtpServer(port);
         Thread t = new Thread(server);
