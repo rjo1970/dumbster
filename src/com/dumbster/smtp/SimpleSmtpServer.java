@@ -18,6 +18,7 @@ package com.dumbster.smtp;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ import java.io.IOException;
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-    private List receivedMail = new ArrayList();
+    private List receivedMail = Collections.synchronizedList(new ArrayList());
     public static final int DEFAULT_SMTP_PORT = 25;
     private volatile boolean stopped = true;
     private ServerSocket serverSocket;
