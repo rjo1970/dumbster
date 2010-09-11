@@ -50,8 +50,6 @@ public class SimpleSmtpServer implements Runnable {
 
             while (!isStopped()) {
                 Socket socket = clientSocket();
-                BufferedReader input = getSocketInput(socket);
-                PrintWriter out = getSocketOutput(socket);
 
                 synchronized (this) {
                     /*
@@ -60,7 +58,7 @@ public class SimpleSmtpServer implements Runnable {
                     * For higher concurrency, we could just change handle to return void and update the list inside the method
                     * to limit the duration that we hold the lock.
                     */
-                    List msgs = handleTransaction(out, input);
+                    List msgs = handleTransaction(socket);
                     receivedMail.addAll(msgs);
                 }
                 socket.close();
@@ -128,7 +126,10 @@ public class SimpleSmtpServer implements Runnable {
         }
     }
 
-    private List handleTransaction(PrintWriter out, BufferedReader input) throws IOException {
+    private List handleTransaction(Socket socket) throws IOException {
+      BufferedReader input = getSocketInput(socket);
+      PrintWriter out = getSocketOutput(socket);
+
         // Initialize the state machine
         SmtpState smtpState = SmtpState.CONNECT;
         SmtpRequest smtpRequest = new SmtpRequest(SmtpAction.CONNECT, "", smtpState);
