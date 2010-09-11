@@ -16,29 +16,19 @@
  */
 package com.dumbster.smtp;
 
-/**
- * SMTP server state.
- */
 public enum SmtpState {
-  CONNECT ((byte) 1, "CONNECT"),
-  GREET ((byte) 2, "GREET"),
-  MAIL ((byte) 3, "MAIL"),
-  RCPT ((byte) 4, "RCPT"),
-  DATA_HDR ((byte) 5, "DATA_HDR"),
-  DATA_BODY ((byte) 6, "DATA_BODY"),
-  QUIT ((byte) 7, "QUIT");
+  CONNECT ("CONNECT"),
+  GREET ("GREET"),
+  MAIL ("MAIL"),
+  RCPT ("RCPT"),
+  DATA_HDR ("DATA_HDR"),
+  DATA_BODY ("DATA_BODY"),
+  QUIT ("QUIT");
 
-
-    private byte value;
     private String description;
 
-    SmtpState(byte value, String description) {
-        this.value = value;
+    SmtpState(String description) {
         this.description = description;
-    }
-
-    public byte getValue() {
-	      return this.value;
     }
 
     public String toString() {
