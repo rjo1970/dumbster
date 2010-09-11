@@ -37,6 +37,9 @@ public class SimpleSmtpServer implements Runnable {
 	private static final int SERVER_SOCKET_TIMEOUT = 500;
 	private volatile boolean threaded = true;
 
+	public SimpleSmtpServer() {
+	}
+	
 	public SimpleSmtpServer(int port) {
 		this.port = port;
 	}
