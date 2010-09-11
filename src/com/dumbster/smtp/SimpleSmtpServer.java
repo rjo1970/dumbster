@@ -59,8 +59,8 @@ public class SimpleSmtpServer implements Runnable {
                     * For higher concurrency, we could just change handle to return void and update the list inside the method
                     * to limit the duration that we hold the lock.
                     */
-                    List msgs = handleTransaction(socket);
-                    receivedMail.addAll(msgs);
+                    handleTransaction(socket);
+                    
                 }
                 socket.close();
             }
@@ -171,7 +171,7 @@ public class SimpleSmtpServer implements Runnable {
                 msg = new SmtpMessage();
             }
         }
-
+        receivedMail.addAll(msgList);
         return msgList;
     }
 
