@@ -31,176 +31,118 @@ import java.io.IOException;
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-    private List receivedMail = Collections.synchronizedList(new ArrayList());
-    public static final int DEFAULT_SMTP_PORT = 25;
-    private volatile boolean stopped = true;
-    private ServerSocket serverSocket;
-    private int port = DEFAULT_SMTP_PORT;
-    private static final int SERVER_SOCKET_TIMEOUT = 500;
+	private List<SmtpMessage> receivedMail = Collections
+			.synchronizedList(new ArrayList<SmtpMessage>());
+	public static final int DEFAULT_SMTP_PORT = 25;
+	private volatile boolean stopped = true;
+	private ServerSocket serverSocket;
+	private int port = DEFAULT_SMTP_PORT;
+	private static final int SERVER_SOCKET_TIMEOUT = 500;
 
-    public SimpleSmtpServer(int port) {
-        this.port = port;
-    }
+	public SimpleSmtpServer(int port) {
+		this.port = port;
+	}
 
-    public void run() {
-        stopped = false;
-        try {
-            initializeServerSocket();
-            serverLoop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (serverSocket != null) {
-                try {
-                    serverSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void initializeServerSocket() throws Exception {
-	    serverSocket = new ServerSocket(port);
-      serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
-      synchronized (this) {
-          notifyAll();
-      }  
-    }
-
-    private void serverLoop() throws IOException {
-	    while (!isStopped()) {
-          Socket socket = clientSocket();
-          if (socket == null) continue;
-          synchronized (this) {
-               handleTransaction(socket);                    
-          }
-          socket.close();
-      }  
-    }
-
-		private Socket clientSocket() {
-			Socket socket = null;
-			try {
-				socket = serverSocket.accept();
-			} catch (Exception e) {
-				if (socket != null) {
-					try {
-						socket.close();
-					} catch(Exception e2) {}
-					finally {
-						socket = null;
-					}
+	public void run() {
+		stopped = false;
+		try {
+			initializeServerSocket();
+			serverLoop();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (serverSocket != null) {
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-		  return socket;  
 		}
+	}
 
-    private BufferedReader getSocketInput(Socket socket) throws IOException {
-	    return new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    }
+	private void initializeServerSocket() throws Exception {
+		serverSocket = new ServerSocket(port);
+		serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
+		Thread.sleep(250);  // wait a quarter of a second to stop build/test hangs
+		synchronized (this) {
+			notifyAll();
+		}
+	}
 
-    private PrintWriter getSocketOutput(Socket socket) throws IOException {
-	    return new PrintWriter(socket.getOutputStream());
-    }
+	private void serverLoop() throws IOException {
+		while (!isStopped()) {
+			Socket socket = clientSocket();
+			if (socket == null)
+				continue;
+			synchronized (this) {
+				SmtpClientTransaction transaction = new SmtpClientTransaction(socket);
+				transaction.handleTransaction();
+				receivedMail.addAll(transaction.getReceivedMail());
+			}
+			socket.close();
+		}
+	}
 
-    public synchronized boolean isStopped() {
-        return stopped;
-    }
+	private Socket clientSocket() {
+		Socket socket = null;
+		try {
+			socket = serverSocket.accept();
+		} catch (Exception e) {
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (Exception e2) {
+				} finally {
+					socket = null;
+				}
+			}
+		}
+		return socket;
+	}
 
-    public synchronized void stop() {
-        // Mark us closed
-        stopped = true;
-        try {
-            // Kick the server accept loop
-            serverSocket.close();
-        } catch (IOException e) {
-            // Ignore
-        }
-    }
 
-    private void handleTransaction(Socket socket) throws IOException {
-      BufferedReader input = getSocketInput(socket);
-      PrintWriter out = getSocketOutput(socket);
+	public synchronized boolean isStopped() {
+		return stopped;
+	}
 
-        // Initialize the state machine
-        SmtpState smtpState = SmtpState.CONNECT;
-        SmtpRequest smtpRequest = new SmtpRequest(SmtpAction.CONNECT, "", smtpState);
+	public synchronized void stop() {
+		// Mark us closed
+		stopped = true;
+		try {
+			// Kick the server accept loop
+			serverSocket.close();
+		} catch (IOException e) {
+			// Ignore
+		}
+	}
 
-        // Execute the connection request
-        SmtpResponse smtpResponse = smtpRequest.execute();
+	public synchronized Iterator<SmtpMessage> getReceivedEmail() {
+		return receivedMail.iterator();
+	}
 
-        // Send initial response
-        sendResponse(out, smtpResponse);
-        smtpState = smtpResponse.getNextState();
+	public synchronized int getEmailCount() {
+		return receivedMail.size();
+	}
 
-        List msgList = new ArrayList();
-        SmtpMessage msg = new SmtpMessage();
+	public static SimpleSmtpServer start() {
+		return start(DEFAULT_SMTP_PORT);
+	}
 
-        while (smtpState != SmtpState.CONNECT) {
-            String line = input.readLine();
+	public static SimpleSmtpServer start(int port) {
+		SimpleSmtpServer server = new SimpleSmtpServer(port);
+		Thread t = new Thread(server);
+		t.start();
 
-            if (line == null) {
-                break;
-            }
-
-            // Create request from client input and current state
-            SmtpRequest request = SmtpRequest.createRequest(line, smtpState);
-            // Execute request and create response object
-            SmtpResponse response = request.execute();
-            // Move to next internal state
-            smtpState = response.getNextState();
-            // Send reponse to client
-            sendResponse(out, response);
-
-            // Store input in message
-            String params = request.getParams();
-            msg.store(response, params);
-
-            // If message reception is complete save it
-            if (smtpState == SmtpState.QUIT) {
-                msgList.add(msg);
-                msg = new SmtpMessage();
-            }
-        }
-        receivedMail.addAll(msgList);
-    }
-
-    private static void sendResponse(PrintWriter out, SmtpResponse smtpResponse) {
-        if (smtpResponse.getCode() > 0) {
-            int code = smtpResponse.getCode();
-            String message = smtpResponse.getMessage();
-            out.print(code + " " + message + "\r\n");
-            out.flush();
-        }
-    }
-
-    public synchronized Iterator getReceivedEmail() {
-        return receivedMail.iterator();
-    }
-
-    public synchronized int getEmailCount() {
-        return receivedMail.size();
-    }
-
-    public static SimpleSmtpServer start() {
-        return start(DEFAULT_SMTP_PORT);
-    }
-
-    public static SimpleSmtpServer start(int port) {
-        SimpleSmtpServer server = new SimpleSmtpServer(port);
-        Thread t = new Thread(server);
-        t.start();
-
-        // Block until the server socket is created
-        synchronized (server) {
-            try {
-                server.wait();
-            } catch (InterruptedException e) {
-                // Ignore don't care.
-            }
-        }
-        return server;
-    }
+		// Block until the server socket is created
+		synchronized (server) {
+			try {
+				server.wait();
+			} catch (InterruptedException e) {
+				// Ignore don't care.
+			}
+		}
+		return server;
+	}
 
 }
