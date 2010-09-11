@@ -50,10 +50,8 @@ public class SimpleSmtpServer implements Runnable {
 
             while (!isStopped()) {
                 Socket socket = clientSocket();
-
-                // Get the input and output streams
-                BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                BufferedReader input = getSocketInput(socket);
+                PrintWriter out = getSocketOutput(socket);
 
                 synchronized (this) {
                     /*
@@ -105,6 +103,14 @@ public class SimpleSmtpServer implements Runnable {
 					}
 			}
       return socket;  
+    }
+
+    private BufferedReader getSocketInput(Socket socket) throws IOException {
+	    return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
+
+    private PrintWriter getSocketOutput(Socket socket) throws IOException {
+	    return new PrintWriter(socket.getOutputStream());
     }
 
     public synchronized boolean isStopped() {
