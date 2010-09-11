@@ -17,21 +17,16 @@
 package com.dumbster.smtp;
 
 public enum SmtpState {
-  CONNECT ("CONNECT"),
-  GREET ("GREET"),
-  MAIL ("MAIL"),
-  RCPT ("RCPT"),
-  DATA_HDR ("DATA_HDR"),
-  DATA_BODY ("DATA_BODY"),
-  QUIT ("QUIT");
+	CONNECT("CONNECT"), GREET("GREET"), MAIL("MAIL"), RCPT("RCPT"), DATA_HDR(
+			"DATA_HDR"), DATA_BODY("DATA_BODY"), QUIT("QUIT");
 
-    private String description;
+	private String description;
 
-    SmtpState(String description) {
-        this.description = description;
-    }
+	SmtpState(String description) {
+		this.description = description;
+	}
 
-    public String toString() {
-	      return this.description;
-    }
+	public String toString() {
+		return this.description;
+	}
 }
