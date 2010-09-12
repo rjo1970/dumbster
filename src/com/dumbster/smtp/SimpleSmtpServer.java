@@ -78,7 +78,7 @@ public class SimpleSmtpServer implements Runnable {
 			if (socket == null)
 				continue;
 			synchronized (this) {
-				SmtpClientTransaction transaction = new SmtpClientTransaction(
+				SmtpClientSession transaction = new SmtpClientSession(
 						socket, receivedMail);
 				if (threaded) {
 					Thread t = new Thread(transaction);

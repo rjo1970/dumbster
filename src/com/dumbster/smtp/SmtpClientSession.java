@@ -9,16 +9,16 @@ import java.util.List;
 
 import com.dumbster.smtp.action.Connect;
 
-public class SmtpClientTransaction implements Runnable {
+public class SmtpClientSession implements Runnable {
 	
 	private Socket socket;	
 	private List<SmtpMessage> serverMessages;
-	public SmtpClientTransaction(Socket socket, List<SmtpMessage> messages) {
+	public SmtpClientSession(Socket socket, List<SmtpMessage> messages) {
 		this.socket = socket;
 		this.serverMessages = messages;
 	}
 	
-	private void handleTransaction() throws IOException {
+	private void sessionLoop() throws IOException {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
@@ -55,15 +55,11 @@ public class SmtpClientTransaction implements Runnable {
 
 	private SmtpState sendInitialResponse(PrintWriter out,
 			SmtpResponse smtpResponse) {
-		SmtpState smtpState;
-		// Send initial response
 		sendResponse(out, smtpResponse);
-		smtpState = smtpResponse.getNextState();
-		return smtpState;
+		return smtpResponse.getNextState();
 	}
 
 	private SmtpRequest initializeStateMachine() {
-		// Initialize the state machine
 		SmtpState smtpState = SmtpState.CONNECT;
 		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "",
 				smtpState);
@@ -91,7 +87,7 @@ public class SmtpClientTransaction implements Runnable {
 	@Override
 	public void run() {
 		try {
-		handleTransaction();
+			sessionLoop();
 		} catch(Exception e) {}
 		finally {
 			try {
