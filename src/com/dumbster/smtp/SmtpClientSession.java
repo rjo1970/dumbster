@@ -13,19 +13,22 @@ public class SmtpClientSession implements Runnable {
 	
 	private Socket socket;	
 	private List<SmtpMessage> serverMessages;
+	private SmtpMessage msg;
+	private SmtpResponse smtpResponse;
+	
 	public SmtpClientSession(Socket socket, List<SmtpMessage> messages) {
 		this.socket = socket;
 		this.serverMessages = messages;
+		msg = new SmtpMessage();
+		SmtpRequest smtpRequest = initializeStateMachine();
+		smtpResponse = smtpRequest.execute(serverMessages, msg);
 	}
 	
 	private void sessionLoop() throws IOException {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
-		SmtpMessage msg = new SmtpMessage();
-		SmtpRequest smtpRequest = initializeStateMachine();
-		SmtpResponse smtpResponse = smtpRequest.execute(serverMessages, msg);
-		SmtpState smtpState = sendInitialResponse(out, smtpResponse);
+		SmtpState smtpState = sendInitialResponse(out);
 
 
 		while (smtpState != SmtpState.CONNECT) {
@@ -53,8 +56,7 @@ public class SmtpClientSession implements Runnable {
 		}
 	}
 
-	private SmtpState sendInitialResponse(PrintWriter out,
-			SmtpResponse smtpResponse) {
+	private SmtpState sendInitialResponse(PrintWriter out) {
 		sendResponse(out, smtpResponse);
 		return smtpResponse.getNextState();
 	}
