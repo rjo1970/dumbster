@@ -23,7 +23,7 @@ public class SmtpClientSession implements Runnable {
 		PrintWriter out = getSocketOutput();
 
 		SmtpRequest smtpRequest = initializeStateMachine();
-		SmtpResponse smtpResponse = smtpRequest.execute();
+		SmtpResponse smtpResponse = smtpRequest.execute(serverMessages);
 		SmtpState smtpState = sendInitialResponse(out, smtpResponse);
 
 		SmtpMessage msg = new SmtpMessage();
@@ -35,8 +35,8 @@ public class SmtpClientSession implements Runnable {
 				break;
 			}
 
-			SmtpRequest request = SmtpRequest.createRequest(line, smtpState);
-			SmtpResponse response = request.execute();
+			SmtpRequest request = smtpState.createRequest(line);
+			SmtpResponse response = request.execute(serverMessages);
 			smtpState = response.getNextState();
 			sendResponse(out, response);
 

@@ -17,6 +17,8 @@
 
 package com.dumbster.smtp;
 
+import java.util.List;
+
 import com.dumbster.smtp.action.*;
 
 /**
@@ -56,77 +58,10 @@ public class SmtpRequest {
 		this.params = params;
 	}
 
-	public SmtpResponse execute() {		
+	public SmtpResponse execute(List<SmtpMessage> messages) {		
 		return clientAction.response(smtpState);
 	}
 
-	/**
-	 * Create an SMTP request object given a line of the input stream from the
-	 * client and the current internal state.
-	 * 
-	 * @param s
-	 *            line of input
-	 * @param state
-	 *            current state
-	 * @return a populated SmtpRequest object
-	 */
-	public static SmtpRequest createRequest(String s, SmtpState state) {
-		AbstractAction action = null;
-		String params = null;
-
-		if (state == SmtpState.DATA_HDR) {
-			if (s.equals(".")) {
-				action = new DataEnd();
-			} else if (s.length() < 1) {
-				action = new BlankLine();
-			} else {
-				action = new Unrecognized();
-				params = s;
-			}
-		} else if (state == SmtpState.DATA_BODY) {
-			if (s.equals(".")) {
-				action = new DataEnd();
-			} else {
-				action = new Unrecognized();
-				if (s.length() < 1) {
-					params = "\n";
-				} else {
-					params = s;
-				}
-			}
-		} else {
-			String su = s.toUpperCase();
-			if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
-				action = new Ehlo();
-				params = s.substring(5);
-			} else if (su.startsWith("MAIL FROM:")) {
-				action = new Mail();
-				params = s.substring(10);
-			} else if (su.startsWith("RCPT TO:")) {
-				action = new Rcpt();
-				params = s.substring(8);
-			} else if (su.startsWith("DATA")) {
-				action = new Data();
-			} else if (su.startsWith("QUIT")) {
-				action = new Quit();
-			} else if (su.startsWith("RSET")) {
-				action = new Rset();
-			} else if (su.startsWith("NOOP")) {
-				action = new NoOp();
-			} else if (su.startsWith("EXPN")) {
-				action = new Expn();
-			} else if (su.startsWith("VRFY")) {
-				action = new Vrfy();
-			} else if (su.startsWith("HELP")) {
-				action = new Help();
-			} else {
-				action = new Unrecognized();
-			}
-		}
-
-		SmtpRequest req = new SmtpRequest(action, params, state);
-		return req;
-	}
 
 	/**
 	 * Get the parameters of this request (remainder of command line once the
