@@ -17,12 +17,8 @@ public class Quit extends AbstractAction {
 
 	@Override
 	public SmtpResponse response(SmtpState smtpState) {
-		if (SmtpState.QUIT == smtpState) {
 			return new SmtpResponse(221, "localhost Dumbster service closing transmission channel",
 					SmtpState.CONNECT);
-		} else {
-			return new SmtpResponse(503, "Bad sequence of commands: " + this, smtpState);
-		}
 	}
 
 }
