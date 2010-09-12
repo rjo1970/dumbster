@@ -58,8 +58,12 @@ public class SmtpRequest {
 		this.params = params;
 	}
 
-	public SmtpResponse execute(List<SmtpMessage> messages) {		
-		return clientAction.response(smtpState);
+	public SmtpResponse execute(List<SmtpMessage> messages, SmtpMessage message) {		
+		return clientAction.response(smtpState, messages, message);
+	}
+	
+	public SmtpResponse execute(List<SmtpMessage> messages) {
+		return clientAction.response(smtpState, messages, null);
 	}
 
 

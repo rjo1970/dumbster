@@ -36,7 +36,7 @@ public class SmtpClientSession implements Runnable {
 			}
 
 			SmtpRequest request = smtpState.createRequest(line);
-			SmtpResponse response = request.execute(serverMessages);
+			SmtpResponse response = request.execute(serverMessages, msg);
 			smtpState = response.getNextState();
 			sendResponse(out, response);
 

@@ -1,5 +1,8 @@
 package com.dumbster.smtp.action;
 
+import java.util.List;
+
+import com.dumbster.smtp.SmtpMessage;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
 
@@ -16,7 +19,7 @@ public class Data extends AbstractAction {
 	}
 
 	@Override
-	public SmtpResponse response(SmtpState smtpState) {
+	public SmtpResponse response(SmtpState smtpState, List<SmtpMessage> messages, SmtpMessage currentMessage) {
 			if (SmtpState.RCPT == smtpState) {
 			return new SmtpResponse(354,
 					"Start mail input; end with <CRLF>.<CRLF>",
