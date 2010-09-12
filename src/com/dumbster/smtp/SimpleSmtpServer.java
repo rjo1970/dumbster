@@ -39,7 +39,7 @@ public class SimpleSmtpServer implements Runnable {
 
 	public SimpleSmtpServer() {
 	}
-	
+
 	public SimpleSmtpServer(int port) {
 		this.port = port;
 	}
@@ -65,7 +65,8 @@ public class SimpleSmtpServer implements Runnable {
 	private void initializeServerSocket() throws Exception {
 		serverSocket = new ServerSocket(port);
 		serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
-		Thread.sleep(250);  // wait a quarter of a second to stop build/test hangs
+		Thread.sleep(250); // wait a quarter of a second to stop build/test
+							// hangs
 		synchronized (this) {
 			notifyAll();
 		}
@@ -77,17 +78,19 @@ public class SimpleSmtpServer implements Runnable {
 			if (socket == null)
 				continue;
 			synchronized (this) {
-				SmtpClientTransaction transaction = new SmtpClientTransaction(socket, receivedMail);
+				SmtpClientTransaction transaction = new SmtpClientTransaction(
+						socket, receivedMail);
 				if (threaded) {
-				Thread t = new Thread(transaction);
-				try {
-					t.join();
-				} catch (InterruptedException e) {}
-				t.start();
+					Thread t = new Thread(transaction);
+					try {
+						t.join();
+					} catch (InterruptedException e) {
+					}
+					t.start();
 				} else {
 					transaction.run();
 				}
-				
+
 			}
 		}
 	}
@@ -109,19 +112,15 @@ public class SimpleSmtpServer implements Runnable {
 		return socket;
 	}
 
-
 	public synchronized boolean isStopped() {
 		return stopped;
 	}
 
 	public synchronized void stop() {
-		// Mark us closed
 		stopped = true;
 		try {
-			// Kick the server accept loop
 			serverSocket.close();
 		} catch (IOException e) {
-			// Ignore
 		}
 	}
 
@@ -142,23 +141,23 @@ public class SimpleSmtpServer implements Runnable {
 		Thread t = new Thread(server);
 		t.start();
 
-		// Block until the server socket is created
 		synchronized (server) {
 			try {
 				server.wait();
 			} catch (InterruptedException e) {
-				// Ignore don't care.
 			}
 		}
 		return server;
 	}
 
 	/**
-	 * Toggles if the SMTP server is single or multi-threaded for response to SMTP sessions.
+	 * Toggles if the SMTP server is single or multi-threaded for response to
+	 * SMTP sessions.
+	 * 
 	 * @param threaded
 	 */
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
 	}
-	
+
 }
