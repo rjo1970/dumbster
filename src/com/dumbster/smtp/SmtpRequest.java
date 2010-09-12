@@ -17,15 +17,17 @@
 
 package com.dumbster.smtp;
 
+import com.dumbster.smtp.action.*;
+
 /**
  * Contains an SMTP client request. Handles state transitions using the
  * following state transition table.
  * 
  * <PRE>
  * -----------+-------------------------------------------------------------------------------------------------
- * |                                 State
- * Action    +-------------+-----------+-----------+--------------+---------------+---------------+------------
- * | CONNECT     | GREET     | MAIL      | RCPT         | DATA_HDR      | DATA_BODY     | QUIT
+ *            |                                 State
+ *  Action    +-------------+-----------+-----------+--------------+---------------+---------------+------------
+ *            | CONNECT     | GREET     | MAIL      | RCPT         | DATA_HDR      | DATA_BODY     | QUIT
  * -----------+-------------+-----------+-----------+--------------+---------------+---------------+------------
  * connect    | 220/GREET   | 503/GREET | 503/MAIL  | 503/RCPT     | 503/DATA_HDR  | 503/DATA_BODY | 503/QUIT
  * ehlo       | 503/CONNECT | 250/MAIL  | 503/MAIL  | 503/RCPT     | 503/DATA_HDR  | 503/DATA_BODY | 503/QUIT
@@ -44,113 +46,18 @@ package com.dumbster.smtp;
  * </PRE>
  */
 public class SmtpRequest {
-	private SmtpAction clientAction;
+	private AbstractAction clientAction;
 	private SmtpState smtpState;
-	private String params;
+	private String params;	
 
-	public SmtpRequest(SmtpAction action, String params, SmtpState state) {
+	public SmtpRequest(AbstractAction action, String params, SmtpState state) {
 		this.clientAction = action;
 		this.smtpState = state;
 		this.params = params;
 	}
 
-	public SmtpResponse execute() {
-		SmtpResponse response = null;
-		if (clientAction.isStateless()) {
-			if (SmtpAction.EXPN == clientAction || SmtpAction.VRFY == clientAction) {
-				response = new SmtpResponse(252, "Not supported", this.smtpState);
-			} else if (SmtpAction.HELP == clientAction) {
-				response = new SmtpResponse(211, "No help available",
-						this.smtpState);
-			} else if (SmtpAction.NOOP == clientAction) {
-				response = new SmtpResponse(250, "OK", this.smtpState);
-			} else if (SmtpAction.VRFY == clientAction) {
-				response = new SmtpResponse(252, "Not supported", this.smtpState);
-			} else if (SmtpAction.RSET == clientAction) {
-				response = new SmtpResponse(250, "OK", SmtpState.GREET);
-			} else {
-				response = new SmtpResponse(500, "Command not recognized",
-						this.smtpState);
-			}
-		} else { // Stateful commands
-			if (SmtpAction.CONNECT == clientAction) {
-				if (SmtpState.CONNECT == smtpState) {
-					response = new SmtpResponse(220,
-							"localhost Dumbster SMTP service ready",
-							SmtpState.GREET);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.EHLO == clientAction) {
-				if (SmtpState.GREET == smtpState) {
-					response = new SmtpResponse(250, "OK", SmtpState.MAIL);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.MAIL == clientAction) {
-				if (SmtpState.MAIL == smtpState || SmtpState.QUIT == smtpState) {
-					response = new SmtpResponse(250, "OK", SmtpState.RCPT);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.RCPT == clientAction) {
-				if (SmtpState.RCPT == smtpState) {
-					response = new SmtpResponse(250, "OK", this.smtpState);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.DATA == clientAction) {
-				if (SmtpState.RCPT == smtpState) {
-					response = new SmtpResponse(354,
-							"Start mail input; end with <CRLF>.<CRLF>",
-							SmtpState.DATA_HDR);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.UNRECOG == clientAction) {
-				if (SmtpState.DATA_HDR == smtpState || SmtpState.DATA_BODY == smtpState) {
-					response = new SmtpResponse(-1, "", this.smtpState);
-				} else {
-					response = new SmtpResponse(500, "Command not recognized",
-							this.smtpState);
-				}
-			} else if (SmtpAction.DATA_END == clientAction) {
-				if (SmtpState.DATA_HDR == smtpState || SmtpState.DATA_BODY == smtpState) {
-					response = new SmtpResponse(250, "OK", SmtpState.QUIT);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.BLANK_LINE == clientAction) {
-				if (SmtpState.DATA_HDR == smtpState) {
-					response = new SmtpResponse(-1, "", SmtpState.DATA_BODY);
-				} else if (SmtpState.DATA_BODY == smtpState) {
-					response = new SmtpResponse(-1, "", this.smtpState);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else if (SmtpAction.QUIT == clientAction) {
-				if (SmtpState.QUIT == smtpState) {
-					response = new SmtpResponse(
-							221,
-							"localhost Dumbster service closing transmission channel",
-							SmtpState.CONNECT);
-				} else {
-					response = new SmtpResponse(503,
-							"Bad sequence of commands: " + clientAction, this.smtpState);
-				}
-			} else {
-				response = new SmtpResponse(500, "Command not recognized",
-						this.smtpState);
-			}
-		}
-		return response;
+	public SmtpResponse execute() {		
+		return clientAction.response(smtpState);
 	}
 
 	/**
@@ -164,23 +71,23 @@ public class SmtpRequest {
 	 * @return a populated SmtpRequest object
 	 */
 	public static SmtpRequest createRequest(String s, SmtpState state) {
-		SmtpAction action = null;
+		AbstractAction action = null;
 		String params = null;
 
 		if (state == SmtpState.DATA_HDR) {
 			if (s.equals(".")) {
-				action = SmtpAction.DATA_END;
+				action = new DataEnd();
 			} else if (s.length() < 1) {
-				action = SmtpAction.BLANK_LINE;
+				action = new BlankLine();
 			} else {
-				action = SmtpAction.UNRECOG;
+				action = new Unrecognized();
 				params = s;
 			}
 		} else if (state == SmtpState.DATA_BODY) {
 			if (s.equals(".")) {
-				action = SmtpAction.DATA_END;
+				action = new DataEnd();
 			} else {
-				action = SmtpAction.UNRECOG;
+				action = new Unrecognized();
 				if (s.length() < 1) {
 					params = "\n";
 				} else {
@@ -190,30 +97,30 @@ public class SmtpRequest {
 		} else {
 			String su = s.toUpperCase();
 			if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
-				action = SmtpAction.EHLO;
+				action = new Ehlo();
 				params = s.substring(5);
 			} else if (su.startsWith("MAIL FROM:")) {
-				action = SmtpAction.MAIL;
+				action = new Mail();
 				params = s.substring(10);
 			} else if (su.startsWith("RCPT TO:")) {
-				action = SmtpAction.RCPT;
+				action = new Rcpt();
 				params = s.substring(8);
 			} else if (su.startsWith("DATA")) {
-				action = SmtpAction.DATA;
+				action = new Data();
 			} else if (su.startsWith("QUIT")) {
-				action = SmtpAction.QUIT;
+				action = new Quit();
 			} else if (su.startsWith("RSET")) {
-				action = SmtpAction.RSET;
+				action = new Rset();
 			} else if (su.startsWith("NOOP")) {
-				action = SmtpAction.NOOP;
+				action = new NoOp();
 			} else if (su.startsWith("EXPN")) {
-				action = SmtpAction.EXPN;
+				action = new Expn();
 			} else if (su.startsWith("VRFY")) {
-				action = SmtpAction.VRFY;
+				action = new Vrfy();
 			} else if (su.startsWith("HELP")) {
-				action = SmtpAction.HELP;
+				action = new Help();
 			} else {
-				action = SmtpAction.UNRECOG;
+				action = new Unrecognized();
 			}
 		}
 

@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dumbster.smtp.action.Connect;
+
 public class SmtpClientTransaction implements Runnable {
 	
 	private Socket socket;	
@@ -24,7 +26,7 @@ public class SmtpClientTransaction implements Runnable {
 
 		// Initialize the state machine
 		SmtpState smtpState = SmtpState.CONNECT;
-		SmtpRequest smtpRequest = new SmtpRequest(SmtpAction.CONNECT, "",
+		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "",
 				smtpState);
 
 		// Execute the connection request
