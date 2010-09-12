@@ -24,17 +24,9 @@ public class SmtpClientTransaction implements Runnable {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
-		// Initialize the state machine
-		SmtpState smtpState = SmtpState.CONNECT;
-		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "",
-				smtpState);
-
-		// Execute the connection request
+		SmtpRequest smtpRequest = initializeStateMachine();
 		SmtpResponse smtpResponse = smtpRequest.execute();
-
-		// Send initial response
-		sendResponse(out, smtpResponse);
-		smtpState = smtpResponse.getNextState();
+		SmtpState smtpState = sendInitialResponse(out, smtpResponse);
 
 		List<SmtpMessage> msgList = new ArrayList<SmtpMessage>();
 		SmtpMessage msg = new SmtpMessage();
@@ -46,13 +38,9 @@ public class SmtpClientTransaction implements Runnable {
 				break;
 			}
 
-			// Create request from client input and current state
 			SmtpRequest request = SmtpRequest.createRequest(line, smtpState);
-			// Execute request and create response object
 			SmtpResponse response = request.execute();
-			// Move to next internal state
 			smtpState = response.getNextState();
-			// Send response to client
 			sendResponse(out, response);
 
 			// Store input in message
@@ -67,6 +55,23 @@ public class SmtpClientTransaction implements Runnable {
 			}
 		}
 		receivedMail.addAll(msgList);
+	}
+
+	private SmtpState sendInitialResponse(PrintWriter out,
+			SmtpResponse smtpResponse) {
+		SmtpState smtpState;
+		// Send initial response
+		sendResponse(out, smtpResponse);
+		smtpState = smtpResponse.getNextState();
+		return smtpState;
+	}
+
+	private SmtpRequest initializeStateMachine() {
+		// Initialize the state machine
+		SmtpState smtpState = SmtpState.CONNECT;
+		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "",
+				smtpState);
+		return smtpRequest;
 	}
 	
 	private BufferedReader getSocketInput() throws IOException {
