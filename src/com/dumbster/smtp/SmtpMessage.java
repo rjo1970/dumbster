@@ -30,7 +30,7 @@ public class SmtpMessage {
 	/**
 	 * Headers: Map of List of String hashed on header name.
 	 */
-	private Map headers;
+	private Map<String, List<String>> headers;
 	/**
 	 * Message body.
 	 */
@@ -40,7 +40,7 @@ public class SmtpMessage {
 	 * Constructor. Initializes headers Map and body buffer.
 	 */
 	public SmtpMessage() {
-		headers = new HashMap(10);
+		headers = new HashMap<String, List<String>>(10);
 		body = new StringBuffer();
 	}
 
@@ -73,8 +73,8 @@ public class SmtpMessage {
 	 * 
 	 * @return an Iterator over the set of header names (String)
 	 */
-	public Iterator getHeaderNames() {
-		Set nameSet = headers.keySet();
+	public Iterator<String> getHeaderNames() {
+		Set<String> nameSet = headers.keySet();
 		return nameSet.iterator();
 	}
 
@@ -86,7 +86,7 @@ public class SmtpMessage {
 	 * @return value(s) associated with the header name
 	 */
 	public String[] getHeaderValues(String name) {
-		List values = (List) headers.get(name);
+		List<String> values = (List<String>) headers.get(name);
 		if (values == null) {
 			return new String[0];
 		} else {
@@ -102,11 +102,11 @@ public class SmtpMessage {
 	 * @return first value associated with the header name
 	 */
 	public String getHeaderValue(String name) {
-		List values = (List) headers.get(name);
+		List<String> values = (List<String>) headers.get(name);
 		if (values == null) {
 			return null;
 		} else {
-			Iterator iterator = values.iterator();
+			Iterator<String> iterator = values.iterator();
 			return (String) iterator.next();
 		}
 	}
@@ -129,9 +129,9 @@ public class SmtpMessage {
 	 *            header value
 	 */
 	private void addHeader(String name, String value) {
-		List valueList = (List) headers.get(name);
+		List<String> valueList = (List<String>) headers.get(name);
 		if (valueList == null) {
-			valueList = new ArrayList(1);
+			valueList = new ArrayList<String>(1);
 			headers.put(name, valueList);
 		}
 		valueList.add(value);
@@ -144,10 +144,10 @@ public class SmtpMessage {
 	 */
 	public String toString() {
 		StringBuffer msg = new StringBuffer();
-		for (Iterator i = headers.keySet().iterator(); i.hasNext();) {
+		for (Iterator<String> i = headers.keySet().iterator(); i.hasNext();) {
 			String name = (String) i.next();
-			List values = (List) headers.get(name);
-			for (Iterator j = values.iterator(); j.hasNext();) {
+			List<String> values = (List<String>) headers.get(name);
+			for (Iterator<String> j = values.iterator(); j.hasNext();) {
 				String value = (String) j.next();
 				msg.append(name);
 				msg.append(": ");
