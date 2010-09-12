@@ -62,17 +62,6 @@ public class SmtpRequest {
 		return clientAction.response(smtpState, messages, message);
 	}
 	
-	public SmtpResponse execute(List<SmtpMessage> messages) {
-		return clientAction.response(smtpState, messages, null);
-	}
-
-
-	/**
-	 * Get the parameters of this request (remainder of command line once the
-	 * command is removed.
-	 * 
-	 * @return parameters
-	 */
 	public String getParams() {
 		return params;
 	}

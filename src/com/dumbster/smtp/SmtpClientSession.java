@@ -22,11 +22,11 @@ public class SmtpClientSession implements Runnable {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
+		SmtpMessage msg = new SmtpMessage();
 		SmtpRequest smtpRequest = initializeStateMachine();
-		SmtpResponse smtpResponse = smtpRequest.execute(serverMessages);
+		SmtpResponse smtpResponse = smtpRequest.execute(serverMessages, msg);
 		SmtpState smtpState = sendInitialResponse(out, smtpResponse);
 
-		SmtpMessage msg = new SmtpMessage();
 
 		while (smtpState != SmtpState.CONNECT) {
 			String line = input.readLine();
