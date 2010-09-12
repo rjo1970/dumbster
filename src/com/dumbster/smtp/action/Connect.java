@@ -6,7 +6,7 @@ import com.dumbster.smtp.SmtpMessage;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
 
-public class Connect extends AbstractAction {
+public class Connect implements Action {
 
 	public boolean isStateless() {
 		return false;

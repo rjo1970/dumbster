@@ -37,7 +37,7 @@ public enum SmtpState {
 	 * client.
 	 */
 	public SmtpRequest createRequest(String s) {
-		AbstractAction action = null;
+		Action action = null;
 		String params = null;
 
 		if (SmtpState.DATA_HDR == this) {

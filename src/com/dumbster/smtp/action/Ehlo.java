@@ -6,7 +6,7 @@ import com.dumbster.smtp.SmtpMessage;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
 
-public class Ehlo extends AbstractAction {
+public class Ehlo implements Action {
 
 	public boolean isStateless() {
 		return false;

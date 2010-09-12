@@ -22,11 +22,11 @@ import java.util.List;
 import com.dumbster.smtp.action.*;
 
 public class SmtpRequest {
-	private AbstractAction clientAction;
+	private Action clientAction;
 	private SmtpState smtpState;
 	private String params;	
 
-	public SmtpRequest(AbstractAction action, String params, SmtpState state) {
+	public SmtpRequest(Action action, String params, SmtpState state) {
 		this.clientAction = action;
 		this.smtpState = state;
 		this.params = params;

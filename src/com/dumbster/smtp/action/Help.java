@@ -6,7 +6,7 @@ import com.dumbster.smtp.SmtpMessage;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
 
-public class Help extends AbstractAction {
+public class Help implements Action {
 
 	@Override
 	public boolean isStateless() {

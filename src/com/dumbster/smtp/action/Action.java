@@ -3,7 +3,7 @@ package com.dumbster.smtp.action;
 import com.dumbster.smtp.*;
 import java.util.List;
 
-public abstract class AbstractAction {
+public interface Action {
 	
 	public abstract boolean isStateless();
 
