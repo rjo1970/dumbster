@@ -8,6 +8,7 @@ public class Main {
 		} else {
 			server = new SimpleSmtpServer();
 		}
+		server.setThreaded(true);
 		server.run();
 	}
 

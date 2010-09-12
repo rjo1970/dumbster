@@ -35,7 +35,7 @@ public class SimpleSmtpServer implements Runnable {
 	private ServerSocket serverSocket;
 	private int port = DEFAULT_SMTP_PORT;
 	private static final int SERVER_SOCKET_TIMEOUT = 500;
-	private volatile boolean threaded = true;
+	private volatile boolean threaded = false;
 
 	public SimpleSmtpServer() {
 	}
@@ -153,6 +153,10 @@ public class SimpleSmtpServer implements Runnable {
 		return server;
 	}
 
+	/**
+	 * Toggles if the SMTP server is single or multi-threaded for response to SMTP sessions.
+	 * @param threaded
+	 */
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
 	}

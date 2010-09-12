@@ -38,7 +38,6 @@ public class SimpleSmtpServerTest {
     @Before
     public void setup() {
         server = SimpleSmtpServer.start(SMTP_PORT);
-        server.setThreaded(false);
     }
 
     @After
