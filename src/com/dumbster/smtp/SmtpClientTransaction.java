@@ -62,6 +62,7 @@ public class SmtpClientTransaction implements Runnable {
 			// If message reception is complete save it
 			if (smtpState == SmtpState.QUIT) {
 				msgList.add(msg);
+				System.out.println(msg);
 				msg = new SmtpMessage();
 			}
 		}
