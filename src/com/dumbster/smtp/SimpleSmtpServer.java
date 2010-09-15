@@ -78,8 +78,9 @@ public class SimpleSmtpServer implements Runnable {
 			if (socket == null)
 				continue;
 			synchronized (this) {
-				SmtpClientSession transaction = new SmtpClientSession(
-						socket, receivedMail);
+				SmtpSocket source = new SmtpSocket();
+				source.setSocket(socket);
+				SmtpClientSession transaction = new SmtpClientSession(source, receivedMail);
 				if (threaded) {
 					Thread t = new Thread(transaction);
 					try {
