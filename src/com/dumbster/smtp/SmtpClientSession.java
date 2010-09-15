@@ -10,12 +10,12 @@ import java.util.List;
 import com.dumbster.smtp.action.Connect;
 
 public class SmtpClientSession implements Runnable {
-	
-	private Socket socket;	
+
+	private Socket socket;
 	private List<SmtpMessage> serverMessages;
 	private SmtpMessage msg;
 	private SmtpResponse smtpResponse;
-	
+
 	public SmtpClientSession(Socket socket, List<SmtpMessage> messages) {
 		this.socket = socket;
 		this.serverMessages = messages;
@@ -23,13 +23,12 @@ public class SmtpClientSession implements Runnable {
 		SmtpRequest smtpRequest = initializeStateMachine();
 		smtpResponse = smtpRequest.execute(serverMessages, msg);
 	}
-	
+
 	private void sessionLoop() throws IOException {
 		BufferedReader input = getSocketInput();
 		PrintWriter out = getSocketOutput();
 
 		SmtpState smtpState = sendInitialResponse(out);
-
 
 		while (smtpState != SmtpState.CONNECT) {
 			String line = input.readLine();
@@ -40,18 +39,33 @@ public class SmtpClientSession implements Runnable {
 
 			SmtpRequest request = smtpState.createRequest(line);
 			SmtpResponse response = request.execute(serverMessages, msg);
-			smtpState = response.getNextState();
+			storeInputInMessage(request, response);
 			sendResponse(out, response);
+			smtpState = response.getNextState();
+			saveAndRefreshMessageIfComplete(smtpState);
+		}
+	}
 
-			// Store input in message
-			String params = request.getParams();
-			msg.store(response, params);
+	private void saveAndRefreshMessageIfComplete(SmtpState smtpState) {
+		if (smtpState == SmtpState.QUIT) {
+			serverMessages.add(msg);
+			System.out.println(msg);
+			msg = new SmtpMessage();
+		}
+	}
 
-			// If message reception is complete save it
-			if (smtpState == SmtpState.QUIT) {
-				serverMessages.add(msg);
-				System.out.println(msg);
-				msg = new SmtpMessage();
+	private void storeInputInMessage(SmtpRequest request, SmtpResponse response) {
+		String params = request.getParams();
+		if (params != null) {
+			if (SmtpState.DATA_HDR.equals(response.getNextState())) {
+				int headerNameEnd = params.indexOf(':');
+				if (headerNameEnd >= 0) {
+					String name = params.substring(0, headerNameEnd).trim();
+					String value = params.substring(headerNameEnd + 1).trim();
+					msg.addHeader(name, value);
+				}
+			} else if (SmtpState.DATA_BODY == response.getNextState()) {
+				msg.appendBody(params);
 			}
 		}
 	}
@@ -63,11 +77,10 @@ public class SmtpClientSession implements Runnable {
 
 	private SmtpRequest initializeStateMachine() {
 		SmtpState smtpState = SmtpState.CONNECT;
-		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "",
-				smtpState);
+		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "", smtpState);
 		return smtpRequest;
 	}
-	
+
 	private BufferedReader getSocketInput() throws IOException {
 		return new BufferedReader(
 				new InputStreamReader(socket.getInputStream()));
@@ -90,12 +103,13 @@ public class SmtpClientSession implements Runnable {
 	public void run() {
 		try {
 			sessionLoop();
-		} catch(Exception e) {}
-		finally {
+		} catch (Exception e) {
+		} finally {
 			try {
 				socket.close();
-			} catch (Exception e2) {}
+			} catch (Exception e2) {
+			}
 		}
 	}
-	
+
 }

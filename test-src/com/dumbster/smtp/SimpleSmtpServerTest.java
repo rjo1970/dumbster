@@ -58,8 +58,8 @@ public class SimpleSmtpServerTest {
         assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
-        assertTrue(email.getHeaderValue("Subject").equals("Test"));
-        assertTrue(email.getBody().equals("Test Body"));
+        assertEquals("Test", email.getFirstHeaderValue("Subject"));
+        assertEquals("Test Body",email.getBody());
     }
 
     @Test
@@ -72,10 +72,10 @@ public class SimpleSmtpServerTest {
             fail("Unexpected exception: " + e);
         }
 
-        assertTrue(server.getEmailCount() == 1);
+        assertEquals(1, server.getEmailCount());
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
-        assertTrue(email.getBody().equals(bodyWithCR));
+        assertEquals(bodyWithCR, email.getBody());
     }
 
     @Test
@@ -84,8 +84,7 @@ public class SimpleSmtpServerTest {
             MimeMessage[] mimeMessages = new MimeMessage[2];
             Properties mailProps = getMailProperties(SMTP_PORT);
             Session session = Session.getInstance(mailProps, null);
-            //session.setDebug(true);
-
+ 
             mimeMessages[0] = createMessage(session, "sender@whatever.com", "receiver@home.com", "Doodle1", "Bug1");
             mimeMessages[1] = createMessage(session, "sender@whatever.com", "receiver@home.com", "Doodle2", "Bug2");
 
@@ -103,7 +102,7 @@ public class SimpleSmtpServerTest {
             fail("Unexpected exception: " + e);
         }
 
-        assertTrue(server.getEmailCount() == 2);
+        assertEquals(2, server.getEmailCount());
     }
 
     @Test
@@ -160,11 +159,11 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
         }
 
-        assertTrue(server.getEmailCount() == 2);
+        assertEquals(2, server.getEmailCount());
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
-        assertTrue(email.getHeaderValue("Subject").equals("Test"));
-        assertTrue(email.getBody().equals("Test Body"));
+        assertEquals("Test", email.getFirstHeaderValue("Subject"));
+        assertEquals("Test Body", email.getBody());
     }
 
     private Properties getMailProperties(int port) {
