@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class SmtpSocket implements IOSource {
+public class SocketWrapper implements IOSource {
 	private Socket socket;
 
 	public void setSocket(Socket socket) {
