@@ -3,13 +3,13 @@ package com.dumbster.smtp;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class SmtpMessageTest {
+public class MailMessageTest {
 
-	private SmtpMessage message;
+	private MailMessage message;
 
 	@Before
 	public void setup() {
-		this.message = new SmtpMessage();
+		this.message = new MailMessage();
 	}
 
 	@Test

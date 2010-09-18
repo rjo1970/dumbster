@@ -26,11 +26,11 @@ import java.util.Set;
 /**
  * Container for a complete SMTP message - headers and message body.
  */
-public class SmtpMessage {
+public class MailMessage {
 	private Map<String, List<String>> headers;
 	private StringBuffer body;
 
-	public SmtpMessage() {
+	public MailMessage() {
 		headers = new HashMap<String, List<String>>(10);
 		body = new StringBuffer();
 	}

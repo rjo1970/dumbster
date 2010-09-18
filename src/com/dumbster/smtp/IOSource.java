@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public interface SmtpIOSource {
+public interface IOSource {
 
 	public BufferedReader getInputStream() throws IOException;
 	public PrintWriter getOutputStream() throws IOException;

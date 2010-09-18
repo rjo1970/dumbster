@@ -9,6 +9,6 @@ public interface Action {
 
 	public abstract String toString();
 	
-	public abstract SmtpResponse response(SmtpState smtpState, List<SmtpMessage> messages, SmtpMessage currentMessage);
+	public abstract SmtpResponse response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage);
 	
 }

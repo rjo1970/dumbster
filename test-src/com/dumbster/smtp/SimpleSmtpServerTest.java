@@ -57,7 +57,7 @@ public class SimpleSmtpServerTest {
 
         assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
-        SmtpMessage email = (SmtpMessage) emailIter.next();
+        MailMessage email = (MailMessage) emailIter.next();
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body",email.getBody());
     }
@@ -74,7 +74,7 @@ public class SimpleSmtpServerTest {
 
         assertEquals(1, server.getEmailCount());
         Iterator emailIter = server.getReceivedEmail();
-        SmtpMessage email = (SmtpMessage) emailIter.next();
+        MailMessage email = (MailMessage) emailIter.next();
         assertEquals(bodyWithCR, email.getBody());
     }
 
@@ -161,7 +161,7 @@ public class SimpleSmtpServerTest {
 
         assertEquals(2, server.getEmailCount());
         Iterator emailIter = server.getReceivedEmail();
-        SmtpMessage email = (SmtpMessage) emailIter.next();
+        MailMessage email = (MailMessage) emailIter.next();
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body", email.getBody());
     }

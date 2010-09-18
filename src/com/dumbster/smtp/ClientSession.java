@@ -9,15 +9,15 @@ import com.dumbster.smtp.action.Connect;
 
 public class ClientSession implements Runnable {
 
-	private SmtpIOSource socket;
-	private List<SmtpMessage> serverMessages;
-	private SmtpMessage msg;
+	private IOSource socket;
+	private List<MailMessage> serverMessages;
+	private MailMessage msg;
 	private SmtpResponse smtpResponse;
 
-	public ClientSession(SmtpIOSource socket, List<SmtpMessage> messages) {
+	public ClientSession(IOSource socket, List<MailMessage> messages) {
 		this.socket = socket;
 		this.serverMessages = messages;
-		msg = new SmtpMessage();
+		msg = new MailMessage();
 		SmtpRequest smtpRequest = initializeStateMachine();
 		smtpResponse = smtpRequest.execute(serverMessages, msg);
 	}
@@ -48,7 +48,7 @@ public class ClientSession implements Runnable {
 		if (smtpState == SmtpState.QUIT) {
 			serverMessages.add(msg);
 			System.out.println(msg);
-			msg = new SmtpMessage();
+			msg = new MailMessage();
 		}
 	}
 

@@ -2,7 +2,7 @@ package com.dumbster.smtp.action;
 
 import java.util.List;
 
-import com.dumbster.smtp.SmtpMessage;
+import com.dumbster.smtp.MailMessage;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
 
@@ -19,7 +19,7 @@ public class BlankLine implements Action {
 	}
 
 	@Override
-	public SmtpResponse response(SmtpState smtpState, List<SmtpMessage> messages, SmtpMessage currentMessage) {
+	public SmtpResponse response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 		if (SmtpState.DATA_HDR == smtpState) {
 			return new SmtpResponse(-1, "", SmtpState.DATA_BODY);
 		} else if (SmtpState.DATA_BODY == smtpState) {

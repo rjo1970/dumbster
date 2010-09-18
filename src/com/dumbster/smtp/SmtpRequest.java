@@ -32,7 +32,7 @@ public class SmtpRequest {
 		this.params = params;
 	}
 
-	public SmtpResponse execute(List<SmtpMessage> messages, SmtpMessage message) {		
+	public SmtpResponse execute(List<MailMessage> messages, MailMessage message) {		
 		return clientAction.response(smtpState, messages, message);
 	}
 	

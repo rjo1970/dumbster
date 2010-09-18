@@ -19,7 +19,7 @@ package com.dumbster.smtp;
 
 import org.junit.*;
 
-import com.dumbster.smtp.SmtpMessage;
+import com.dumbster.smtp.MailMessage;
 import com.dumbster.smtp.SmtpRequest;
 import com.dumbster.smtp.SmtpResponse;
 import com.dumbster.smtp.SmtpState;
@@ -31,8 +31,8 @@ import java.util.List;
 
 public class SmtpRequestTest {
 	
-	private static List<SmtpMessage> messages = new ArrayList<SmtpMessage>();
-	private static SmtpMessage message = new SmtpMessage();
+	private static List<MailMessage> messages = new ArrayList<MailMessage>();
+	private static MailMessage message = new MailMessage();
 
     @Test
     public void testUnrecognizedCommandConnectState() {

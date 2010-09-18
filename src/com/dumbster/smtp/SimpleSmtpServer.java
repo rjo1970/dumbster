@@ -28,8 +28,8 @@ import java.io.IOException;
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-	private List<SmtpMessage> receivedMail = Collections
-			.synchronizedList(new ArrayList<SmtpMessage>());
+	private List<MailMessage> receivedMail = Collections
+			.synchronizedList(new ArrayList<MailMessage>());
 	public static final int DEFAULT_SMTP_PORT = 25;
 	private volatile boolean stopped = true;
 	private ServerSocket serverSocket;
@@ -125,7 +125,7 @@ public class SimpleSmtpServer implements Runnable {
 		}
 	}
 
-	public synchronized Iterator<SmtpMessage> getReceivedEmail() {
+	public synchronized Iterator<MailMessage> getReceivedEmail() {
 		return receivedMail.iterator();
 	}
 
