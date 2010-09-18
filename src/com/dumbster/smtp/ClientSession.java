@@ -7,14 +7,14 @@ import java.util.List;
 
 import com.dumbster.smtp.action.Connect;
 
-public class SmtpClientSession implements Runnable {
+public class ClientSession implements Runnable {
 
 	private SmtpIOSource socket;
 	private List<SmtpMessage> serverMessages;
 	private SmtpMessage msg;
 	private SmtpResponse smtpResponse;
 
-	public SmtpClientSession(SmtpIOSource socket, List<SmtpMessage> messages) {
+	public ClientSession(SmtpIOSource socket, List<SmtpMessage> messages) {
 		this.socket = socket;
 		this.serverMessages = messages;
 		msg = new SmtpMessage();
