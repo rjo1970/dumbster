@@ -36,7 +36,7 @@ public enum SmtpState {
 	 * Create an SMTP request object given a line of the input stream from the
 	 * client.
 	 */
-	public SmtpRequest createRequest(String s) {
+	public Request createRequest(String s) {
 		Action action = null;
 		String params = null;
 
@@ -89,7 +89,7 @@ public enum SmtpState {
 				action = new Unrecognized();
 			}
 		}
-		SmtpRequest req = new SmtpRequest(action, params, this);
+		Request req = new Request(action, params, this);
 		return req;
 	}
 

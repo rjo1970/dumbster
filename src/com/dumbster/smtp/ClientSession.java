@@ -18,7 +18,7 @@ public class ClientSession implements Runnable {
 		this.socket = socket;
 		this.serverMessages = messages;
 		msg = new MailMessage();
-		SmtpRequest smtpRequest = initializeStateMachine();
+		Request smtpRequest = initializeStateMachine();
 		smtpResponse = smtpRequest.execute(serverMessages, msg);
 	}
 
@@ -35,7 +35,7 @@ public class ClientSession implements Runnable {
 				break;
 			}
 
-			SmtpRequest request = smtpState.createRequest(line);
+			Request request = smtpState.createRequest(line);
 			SmtpResponse response = request.execute(serverMessages, msg);
 			storeInputInMessage(request, response);
 			sendResponse(out, response);
@@ -52,7 +52,7 @@ public class ClientSession implements Runnable {
 		}
 	}
 
-	private void storeInputInMessage(SmtpRequest request, SmtpResponse response) {
+	private void storeInputInMessage(Request request, SmtpResponse response) {
 		String params = request.getParams();
 		if (params != null) {
 			if (SmtpState.DATA_HDR.equals(response.getNextState())) {
@@ -73,9 +73,9 @@ public class ClientSession implements Runnable {
 		return smtpResponse.getNextState();
 	}
 
-	private SmtpRequest initializeStateMachine() {
+	private Request initializeStateMachine() {
 		SmtpState smtpState = SmtpState.CONNECT;
-		SmtpRequest smtpRequest = new SmtpRequest(new Connect(), "", smtpState);
+		Request smtpRequest = new Request(new Connect(), "", smtpState);
 		return smtpRequest;
 	}
 

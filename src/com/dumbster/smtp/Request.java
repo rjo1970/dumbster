@@ -21,12 +21,12 @@ import java.util.List;
 
 import com.dumbster.smtp.action.*;
 
-public class SmtpRequest {
+public class Request {
 	private Action clientAction;
 	private SmtpState smtpState;
 	private String params;	
 
-	public SmtpRequest(Action action, String params, SmtpState state) {
+	public Request(Action action, String params, SmtpState state) {
 		this.clientAction = action;
 		this.smtpState = state;
 		this.params = params;
