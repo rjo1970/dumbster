@@ -3,7 +3,7 @@ package com.dumbster.smtp.action;
 import java.util.List;
 
 import com.dumbster.smtp.MailMessage;
-import com.dumbster.smtp.SmtpResponse;
+import com.dumbster.smtp.Response;
 import com.dumbster.smtp.SmtpState;
 
 public class Mail implements Action {
@@ -19,11 +19,11 @@ public class Mail implements Action {
 	}
 
 	@Override
-	public SmtpResponse response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
+	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 			if (SmtpState.MAIL == smtpState || SmtpState.QUIT == smtpState) {
-			return new SmtpResponse(250, "OK", SmtpState.RCPT);
+			return new Response(250, "OK", SmtpState.RCPT);
 		} else {
-			return new SmtpResponse(503,
+			return new Response(503,
 					"Bad sequence of commands: " + this, smtpState);
 		}
 	}

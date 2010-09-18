@@ -19,7 +19,7 @@ package com.dumbster.smtp;
 /**
  * SMTP response container.
  */
-public class SmtpResponse {
+public class Response {
 	/**
 	 * Response code - see RFC-2821.
 	 */
@@ -43,7 +43,7 @@ public class SmtpResponse {
 	 * @param next
 	 *            next state of the SMTP server
 	 */
-	public SmtpResponse(int code, String message, SmtpState next) {
+	public Response(int code, String message, SmtpState next) {
 		this.code = code;
 		this.message = message;
 		this.nextState = next;
