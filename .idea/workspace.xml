@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="a7f8553f-357d-4d52-987f-b91964a928bd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/RequestFactory.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/ClientSession.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/ClientSession.java" />
     </list>
     <ignored path="$USER_HOME_GRAILS$/" />
     <ignored path="$USER_HOME_GRIFFON$/" />
@@ -78,16 +74,16 @@
       <file leaf-file-name="Request.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/Request.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="4" selection-start="832" selection-end="832" vertical-scroll-proportion="0.0">
+            <state line="51" column="8" selection-start="1466" selection-end="1792" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="84" column="39" selection-start="3052" selection-end="3052" vertical-scroll-proportion="1.5635036">
+            <state line="84" column="39" selection-start="3052" selection-end="3052" vertical-scroll-proportion="-57.12">
               <folding />
             </state>
           </provider>
@@ -102,10 +98,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RequestTest.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="RequestTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="13" selection-start="961" selection-end="961" vertical-scroll-proportion="0.0">
+            <state line="38" column="0" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.23448277">
               <folding />
             </state>
           </provider>
@@ -138,8 +134,8 @@
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/RequestFactory.java" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/ClientSession.java" />
-        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" />
         <option value="$PROJECT_DIR$/build.xml" />
+        <option value="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" />
       </list>
     </option>
   </component>
@@ -566,6 +562,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="39" selection-start="3052" selection-end="3052" vertical-scroll-proportion="-57.12">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/SmtpState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="14" selection-start="675" selection-end="675" vertical-scroll-proportion="0.0">
@@ -580,23 +583,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="13" selection-start="961" selection-end="961" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/Request.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="4" selection-start="832" selection-end="832" vertical-scroll-proportion="0.0">
+        <state line="51" column="8" selection-start="1466" selection-end="1792" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
+    <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="39" selection-start="3052" selection-end="3052" vertical-scroll-proportion="1.5635036">
+        <state line="38" column="0" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.23448277">
           <folding />
         </state>
       </provider>

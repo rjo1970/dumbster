@@ -44,41 +44,42 @@ public class Request {
         return new Request(new Connect(), "", SmtpState.CONNECT);
     }
 
-    public static Request createRequest(SmtpState state, String s) {
+    // todo:  clearly a cyclomatic terror!
+    public static Request createRequest(SmtpState state, String message) {
         Action action;
         String params = null;
 
         if (SmtpState.DATA_HDR == state) {
-            if (s.equals(".")) {
+            if (message.equals(".")) {
                 action = new DataEnd();
-            } else if (s.length() < 1) {
+            } else if (message.length() < 1) {
                 action = new BlankLine();
             } else {
                 action = new Unrecognized();
-                params = s;
+                params = message;
             }
         } else if (SmtpState.DATA_BODY == state) {
-            if (s.equals(".")) {
+            if (message.equals(".")) {
                 action = new DataEnd();
             } else {
                 action = new Unrecognized();
-                if (s.length() < 1) {
+                if (message.length() < 1) {
                     params = "\n";
                 } else {
-                    params = s;
+                    params = message;
                 }
             }
         } else {
-            String su = s.toUpperCase();
+            String su = message.toUpperCase();
             if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
                 action = new Ehlo();
-                params = s.substring(5);
+                params = message.substring(5);
             } else if (su.startsWith("MAIL FROM:")) {
                 action = new Mail();
-                params = s.substring(10);
+                params = message.substring(10);
             } else if (su.startsWith("RCPT TO:")) {
                 action = new Rcpt();
-                params = s.substring(8);
+                params = message.substring(8);
             } else if (su.startsWith("DATA")) {
                 action = new Data();
             } else if (su.startsWith("QUIT")) {
