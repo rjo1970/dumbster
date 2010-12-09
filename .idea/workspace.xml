@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="a7f8553f-357d-4d52-987f-b91964a928bd" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" afterPath="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java" afterPath="$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java" />
     </list>
     <ignored path="$USER_HOME_GRAILS$/" />
     <ignored path="$USER_HOME_GRIFFON$/" />
@@ -74,7 +76,7 @@
       <file leaf-file-name="Request.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/Request.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="8" selection-start="1466" selection-end="1792" vertical-scroll-proportion="0.0">
+            <state line="108" column="0" selection-start="3498" selection-end="3498" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -101,7 +103,16 @@
       <file leaf-file-name="RequestTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="0" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.23448277">
+            <state line="41" column="50" selection-start="1435" selection-end="1435" vertical-scroll-proportion="0.3048276">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Unrecognized.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/action/Unrecognized.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="44" selection-start="327" selection-end="356" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -136,6 +147,7 @@
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/ClientSession.java" />
         <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/src/com/dumbster/smtp/Request.java" />
+        <option value="$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java" />
       </list>
     </option>
   </component>
@@ -229,6 +241,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="smtp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dumbster" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dumbster" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smtp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="action" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -585,14 +619,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/Request.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="8" selection-start="1466" selection-end="1792" vertical-scroll-proportion="0.0">
+        <state line="108" column="0" selection-start="3498" selection-end="3498" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dumbster/smtp/action/Unrecognized.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="44" selection-start="327" selection-end="356" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test-src/com/dumbster/smtp/RequestTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.23448277">
+        <state line="41" column="50" selection-start="1435" selection-end="1435" vertical-scroll-proportion="0.3048276">
           <folding />
         </state>
       </provider>

@@ -36,8 +36,10 @@ public class RequestTest {
 
     @Test
     public void testUnrecognizedCommandConnectState() {
-        Request request = new Request(new Unrecognized(), null, SmtpState.CONNECT);
+        Request request = Request.createRequest(SmtpState.GREET, "UNRECOGNIZED");
         Response response = request.execute(messages, message);
+        assertEquals(SmtpState.GREET, request.getSmtpState());
+        assertEquals("Unrecognized command / data", request.getClientAction().toString());
         assertEquals(500, response.getCode());
     }
     

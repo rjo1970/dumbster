@@ -35,7 +35,11 @@ public class Request {
 	public Response execute(List<MailMessage> messages, MailMessage message) {		
 		return clientAction.response(smtpState, messages, message);
 	}
-	
+
+    Action getClientAction() { return clientAction; }
+
+    SmtpState getSmtpState() { return smtpState; }
+
 	public String getParams() {
 		return params;
 	}
