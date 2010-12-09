@@ -8,7 +8,6 @@ import com.dumbster.smtp.SmtpState;
 
 public class Unrecognized implements Action {
 
-	@Override
 	public boolean isStateless() {
 		return false;
 	}
@@ -18,7 +17,6 @@ public class Unrecognized implements Action {
 		return "Unrecognized command / data";
 	}
 
-	@Override
 	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 		if (SmtpState.DATA_HDR == smtpState || SmtpState.DATA_BODY == smtpState) {
 			return new Response(-1, "", smtpState);

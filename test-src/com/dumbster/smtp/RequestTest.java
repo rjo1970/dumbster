@@ -45,7 +45,7 @@ public class RequestTest {
     
     @Test
     public void testConnect_Connect() {
-    	Request request = new Request(new Connect(), null, SmtpState.CONNECT);
+    	Request request = Request.initialRequest();
     	Response response = request.execute(messages, message);
     	assertEquals(220, response.getCode());
     }

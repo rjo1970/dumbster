@@ -33,6 +33,16 @@ limitations under the License.
 
     <property name="build.compiler" value="modern"/>
 
+    <property name="cobertura.dir" value="${builddir}/coverage" />
+
+    <path id="cobertura.classpath">
+        <fileset dir="${libdir}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
     <path id="compile.path">
         <fileset dir="${libdir}">
             <include name="**/*.jar"/>
@@ -90,21 +100,36 @@ limitations under the License.
     </target>
 
     <target name="test" depends="clean, jar, compile-tests">
+
+        <cobertura-instrument todir="${builddir}/instrumented" datafile="${builddir}/cobertura.ser">
+            <ignore regex="org.apache.log4j.*" />
+            <fileset dir="${compiledir}">
+                <include name="**/*.class" />
+                <exclude name="**/*Test.class" />
+            </fileset>
+        </cobertura-instrument>
+
         <junit fork="yes" printsummary="yes" haltonfailure="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile"
+		        file="${builddir}/cobertura.ser" />
             <classpath>
+                <pathelement path="${builddir}/instrumented" />
                 <pathelement path="${testcompiledir}"/>
                 <pathelement path="${compiledir}"/>
                 <fileset dir="${libdir}">
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>
-            <formatter type="plain"/>
+            <formatter type="xml"/>
             <batchtest todir="${builddir}/test" haltonfailure="yes">
                 <fileset dir="${testsrcdir}">
                     <include name="**/*.java"/>
                 </fileset>
             </batchtest>
         </junit>
+
+        <cobertura-report format="html" destdir="${builddir}/test/coverage" srcdir="${srcdir}" datafile="${builddir}/cobertura.ser"/>
+
     </target>
 
     <!-- == Generate javadoc ================================================ -->
