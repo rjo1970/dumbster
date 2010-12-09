@@ -147,6 +147,12 @@ public class RequestTest {
     	Response response = request.execute(messages, message);
     	assertEquals(-1, response.getCode());    	
     }
+
+    @Test
+    public void testDataHeaderAcceptsDot() {
+        Request request = Request.createRequest(SmtpState.DATA_HDR, ".");
+        assertEquals(".", request.getClientAction().toString());
+    }
     
     @Test
     public void testBlankLine_DataBody() {
@@ -237,6 +243,48 @@ public class RequestTest {
         Request request = new Request(new Unrecognized(), null, SmtpState.DATA_HDR);
         Response response = request.execute(messages, message);
         assertEquals(-1, response.getCode());
+    }
+
+    @Test
+    public void testRsetFromCreateRequest() {
+        Request request = Request.createRequest(SmtpState.GREET, "RSET");
+        assertEquals("RSET", request.getClientAction().toString());
+    }
+
+    @Test
+    public void testNoopFromCreateRequest() {
+        Request request = Request.createRequest(SmtpState.GREET, "NOOP");
+        assertEquals("NOOP", request.getClientAction().toString());
+    }
+
+    @Test
+    public void testExpnFromCreateRequest() {
+        Request request = Request.createRequest(SmtpState.GREET, "EXPN");
+        assertEquals("EXPN", request.getClientAction().toString());        
+    }
+
+    @Test
+    public void testVrfyFromCreateRequest() {
+        Request request = Request.createRequest(SmtpState.GREET, "VRFY");
+        assertEquals("VRFY", request.getClientAction().toString());
+    }
+
+    @Test
+    public void testHelpFromCreateRequest() {
+        Request request = Request.createRequest(SmtpState.GREET, "HELP");
+        assertEquals("HELP", request.getClientAction().toString());        
+    }
+
+    @Test
+    public void testEhlo() {
+        Request request = Request.createRequest(SmtpState.GREET, "EHLO ");
+        assertEquals("EHLO", request.getClientAction().toString());
+    }
+
+    @Test
+    public void testHelo() {
+        Request request = Request.createRequest(SmtpState.GREET, "HELO");
+        assertEquals("EHLO", request.getClientAction().toString());
     }
 
 }

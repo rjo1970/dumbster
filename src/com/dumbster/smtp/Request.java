@@ -48,7 +48,6 @@ public class Request {
         return new Request(new Connect(), "", SmtpState.CONNECT);
     }
 
-    // todo:  clearly a cyclomatic terror!
     public static Request createRequest(SmtpState state, String message) {
         Action action;
         String params = null;
@@ -77,7 +76,9 @@ public class Request {
             String su = message.toUpperCase();
             if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
                 action = new Ehlo();
-                params = message.substring(5);
+                try {
+                    params = message.substring(5);
+                } catch (StringIndexOutOfBoundsException ignored) {}
             } else if (su.startsWith("MAIL FROM:")) {
                 action = new Mail();
                 params = message.substring(10);
