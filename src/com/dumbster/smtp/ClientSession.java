@@ -35,7 +35,7 @@ public class ClientSession implements Runnable {
 				break;
 			}
 
-			Request request = smtpState.createRequest(line);
+			Request request = RequestFactory.createRequest(smtpState, line);
 			Response response = request.execute(serverMessages, msg);
 			storeInputInMessage(request, response);
 			sendResponse(out, response);
@@ -75,8 +75,7 @@ public class ClientSession implements Runnable {
 
 	private Request initializeStateMachine() {
 		SmtpState smtpState = SmtpState.CONNECT;
-		Request smtpRequest = new Request(new Connect(), "", smtpState);
-		return smtpRequest;
+        return new Request(new Connect(), "", smtpState);
 	}
 
 	private static void sendResponse(PrintWriter out, Response smtpResponse) {
@@ -88,15 +87,14 @@ public class ClientSession implements Runnable {
 		}
 	}
 
-	@Override
 	public void run() {
 		try {
 			sessionLoop();
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		} finally {
 			try {
 				socket.close();
-			} catch (Exception e2) {
+			} catch (Exception ignored) {
 			}
 		}
 	}

@@ -16,8 +16,6 @@
  */
 package com.dumbster.smtp;
 
-import com.dumbster.smtp.action.*;
-
 public enum SmtpState {
 	CONNECT("CONNECT"), GREET("GREET"), MAIL("MAIL"), RCPT("RCPT"), DATA_HDR(
 			"DATA_HDR"), DATA_BODY("DATA_BODY"), QUIT("QUIT");
@@ -30,67 +28,6 @@ public enum SmtpState {
 
 	public String toString() {
 		return this.description;
-	}
-	
-	/**
-	 * Create an SMTP request object given a line of the input stream from the
-	 * client.
-	 */
-	public Request createRequest(String s) {
-		Action action = null;
-		String params = null;
-
-		if (SmtpState.DATA_HDR == this) {
-			if (s.equals(".")) {
-				action = new DataEnd();
-			} else if (s.length() < 1) {
-				action = new BlankLine();
-			} else {
-				action = new Unrecognized();
-				params = s;
-			}
-		} else if (SmtpState.DATA_BODY == this) {
-			if (s.equals(".")) {
-				action = new DataEnd();
-			} else {
-				action = new Unrecognized();
-				if (s.length() < 1) {
-					params = "\n";
-				} else {
-					params = s;
-				}
-			}
-		} else {
-			String su = s.toUpperCase();
-			if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
-				action = new Ehlo();
-				params = s.substring(5);
-			} else if (su.startsWith("MAIL FROM:")) {
-				action = new Mail();
-				params = s.substring(10);
-			} else if (su.startsWith("RCPT TO:")) {
-				action = new Rcpt();
-				params = s.substring(8);
-			} else if (su.startsWith("DATA")) {
-				action = new Data();
-			} else if (su.startsWith("QUIT")) {
-				action = new Quit();
-			} else if (su.startsWith("RSET")) {
-				action = new Rset();
-			} else if (su.startsWith("NOOP")) {
-				action = new NoOp();
-			} else if (su.startsWith("EXPN")) {
-				action = new Expn();
-			} else if (su.startsWith("VRFY")) {
-				action = new Vrfy();
-			} else if (su.startsWith("HELP")) {
-				action = new Help();
-			} else {
-				action = new Unrecognized();
-			}
-		}
-		Request req = new Request(action, params, this);
-		return req;
 	}
 
 }
