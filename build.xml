@@ -43,7 +43,11 @@ limitations under the License.
     <!-- === compile ======================================================== -->
 
     <target name="compile" depends="init">
-        <javac srcdir="${srcdir}" destdir="${compiledir}" debug="true" debuglevel="lines,vars,source">
+        <javac srcdir="${srcdir}"
+               destdir="${compiledir}"
+               debug="true"
+               includeantruntime="false"
+               debuglevel="lines,vars,source">
             <classpath refid="compile.path"/>
             <include name="com/dumbster/smtp/"/>
         </javac>
@@ -75,7 +79,11 @@ limitations under the License.
 
     <!-- === Unit test ====================================================== -->
     <target name="compile-tests" depends="init">
-        <javac srcdir="${testsrcdir}" destdir="${testcompiledir}" debug="true" debuglevel="lines,vars,source">
+        <javac srcdir="${testsrcdir}"
+               destdir="${testcompiledir}"
+               debug="true"
+               includeantruntime="false"
+               debuglevel="lines,vars,source">
             <classpath refid="compile.path"/>
             <include name="com/dumbster/smtp/"/>
         </javac>
