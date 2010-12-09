@@ -8,15 +8,10 @@ import com.dumbster.smtp.SmtpState;
 
 public class Ehlo implements Action {
 
-	public boolean isStateless() {
-		return false;
-	}
-
 	public String toString() {
 		return "EHLO";
 	}
 
-	@Override
 	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 		if (SmtpState.GREET == smtpState) {
 			return new Response(250, "OK", SmtpState.MAIL);

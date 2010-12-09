@@ -8,10 +8,6 @@ import com.dumbster.smtp.SmtpState;
 
 public class Unrecognized implements Action {
 
-	public boolean isStateless() {
-		return false;
-	}
-
 	@Override
 	public String toString() {
 		return "Unrecognized command / data";

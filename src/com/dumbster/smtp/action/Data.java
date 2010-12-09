@@ -8,26 +8,20 @@ import com.dumbster.smtp.SmtpState;
 
 public class Data implements Action {
 
-	@Override
-	public boolean isStateless() {
-		return false;
-	}
+    @Override
+    public String toString() {
+        return "DATA";
+    }
 
-	@Override
-	public String toString() {
-		return "DATA";
-	}
-
-	@Override
-	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
-			if (SmtpState.RCPT == smtpState) {
-			return new Response(354,
-					"Start mail input; end with <CRLF>.<CRLF>",
-					SmtpState.DATA_HDR);
-		} else {
-			return new Response(503,
-					"Bad sequence of commands: " + this, smtpState);
-		}
-	}
+    public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
+        if (SmtpState.RCPT == smtpState) {
+            return new Response(354,
+                    "Start mail input; end with <CRLF>.<CRLF>",
+                    SmtpState.DATA_HDR);
+        } else {
+            return new Response(503,
+                    "Bad sequence of commands: " + this, smtpState);
+        }
+    }
 
 }

@@ -9,16 +9,10 @@ import com.dumbster.smtp.SmtpState;
 public class Rcpt implements Action {
 
 	@Override
-	public boolean isStateless() {
-		return false;
-	}
-
-	@Override
 	public String toString() {
 		return "RCPT";
 	}
 
-	@Override
 	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 			if (SmtpState.RCPT == smtpState) {
 			return new Response(250, "OK", smtpState);

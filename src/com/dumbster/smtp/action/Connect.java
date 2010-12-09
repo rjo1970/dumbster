@@ -8,10 +8,6 @@ import com.dumbster.smtp.SmtpState;
 
 public class Connect implements Action {
 
-	public boolean isStateless() {
-		return false;
-	}
-
 	public String toString() {
 		return "Connect";
 	}

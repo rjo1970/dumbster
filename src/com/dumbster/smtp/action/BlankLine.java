@@ -8,17 +8,12 @@ import com.dumbster.smtp.SmtpState;
 
 public class BlankLine implements Action {
 
-	@Override
-	public boolean isStateless() {
-		return false;
-	}
 
 	@Override
 	public String toString() {
 		return "Blank line";
 	}
 
-	@Override
 	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 		if (SmtpState.DATA_HDR == smtpState) {
 			return new Response(-1, "", SmtpState.DATA_BODY);

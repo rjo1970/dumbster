@@ -9,16 +9,10 @@ import com.dumbster.smtp.SmtpState;
 public class Help implements Action {
 
 	@Override
-	public boolean isStateless() {
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "HELP";
 	}
 
-	@Override
 	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
 		return new Response(211, "No help available", smtpState);
 	}
