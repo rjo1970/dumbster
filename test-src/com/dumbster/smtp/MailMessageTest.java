@@ -26,6 +26,18 @@ public class MailMessageTest {
 		assertEquals("foo", message.getHeaderNames().next());
 		assertEquals("foo: bar1\n\n\n", message.toString());
 	}
+    
+    @Test
+    public void testEmptyHeaderValue() {
+        String[] values = message.getHeaderValues("NOT PRESENT");
+        assertEquals(0, values.length);
+    }
+
+    @Test
+    public void testEmptyFirstHeaderValue() {
+        String value = message.getFirstHeaderValue("NOT PRESENT");
+        assertEquals(null, value);
+    }
 
 	@Test
 	public void testAddTwoSameHeaders() {

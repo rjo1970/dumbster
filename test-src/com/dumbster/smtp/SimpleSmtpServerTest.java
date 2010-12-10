@@ -162,7 +162,6 @@ public class SimpleSmtpServerTest {
                 transport.connect(Server, SMTP_PORT, "ddd", "ddd");
                 transport.sendMessage(msg, InternetAddress.parse(To, false));
                 transport.sendMessage(msg, InternetAddress.parse("dimiter.bakardjiev@musala.com", false));
-
             } catch (javax.mail.MessagingException me) {
                 me.printStackTrace();
             } catch (Exception e) {
