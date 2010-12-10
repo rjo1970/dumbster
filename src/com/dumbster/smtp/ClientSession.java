@@ -29,13 +29,8 @@ public class ClientSession implements Runnable {
         sendResponse(out, smtpResponse);
         SmtpState smtpState = smtpResponse.getNextState();
 
-		while (smtpState != SmtpState.CONNECT) {
-			String line = input.readLine();
-
-			if (line == null) {
-				break;
-			}
-
+        String line;
+        while (smtpState != SmtpState.CONNECT && ((line = input.readLine()) != null)) {
 			Request request = Request.createRequest(smtpState, line);
 			Response response = request.execute(serverMessages, msg);
 			storeInputInMessage(request, response);
