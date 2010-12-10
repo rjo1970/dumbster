@@ -63,6 +63,23 @@ public class SimpleSmtpServerTest {
     }
 
     @Test
+    public void testThreadedSend() throws InterruptedException {
+        server.setThreaded(true);
+        try {
+            sendMessage(SMTP_PORT, "sender@here.com", "Test", "Test Body", "receiver@there.com");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected exception: " + e);
+        }
+        Thread.sleep(250);
+        assertTrue(server.getEmailCount() == 1);
+        Iterator emailIter = server.getReceivedEmail();
+        MailMessage email = (MailMessage) emailIter.next();
+        assertEquals("Test", email.getFirstHeaderValue("Subject"));
+        assertEquals("Test Body",email.getBody());
+    }
+
+    @Test
     public void testSendMessageWithCarriageReturn() {
         String bodyWithCR = "\n\nKeep these pesky carriage returns\n\n";
         try {
