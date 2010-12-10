@@ -23,10 +23,11 @@ public class ClientSession implements Runnable {
 	}
 
 	private void sessionLoop() throws IOException {
+
 		BufferedReader input = socket.getInputStream();
 		PrintWriter out = socket.getOutputStream();
-
-		SmtpState smtpState = sendInitialResponse(out);
+        sendResponse(out, smtpResponse);
+        SmtpState smtpState = smtpResponse.getNextState();
 
 		while (smtpState != SmtpState.CONNECT) {
 			String line = input.readLine();
@@ -66,11 +67,6 @@ public class ClientSession implements Runnable {
 				msg.appendBody(params);
 			}
 		}
-	}
-
-	private SmtpState sendInitialResponse(PrintWriter out) {
-		sendResponse(out, smtpResponse);
-		return smtpResponse.getNextState();
 	}
 
 	private static void sendResponse(PrintWriter out, Response smtpResponse) {
