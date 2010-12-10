@@ -19,10 +19,6 @@ package com.dumbster.smtp;
 
 import org.junit.*;
 
-import com.dumbster.smtp.MailMessage;
-import com.dumbster.smtp.Request;
-import com.dumbster.smtp.Response;
-import com.dumbster.smtp.SmtpState;
 import com.dumbster.smtp.action.*;
 
 import static org.junit.Assert.*;
@@ -38,7 +34,7 @@ public class RequestTest {
     public void testUnrecognizedCommandConnectState() {
         Request request = Request.createRequest(SmtpState.GREET, "UNRECOGNIZED");
         Response response = request.execute(messages, message);
-        assertEquals(SmtpState.GREET, request.getSmtpState());
+        assertEquals(SmtpState.GREET, request.getState());
         assertEquals("Unrecognized command / data", request.getClientAction().toString());
         assertEquals(500, response.getCode());
     }

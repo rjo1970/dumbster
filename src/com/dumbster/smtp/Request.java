@@ -22,88 +22,119 @@ import java.util.List;
 import com.dumbster.smtp.action.*;
 
 public class Request {
-	private Action clientAction;
-	private SmtpState smtpState;
-	private String params;	
+    private Action clientAction;
+    private SmtpState state;
+    private String params;
 
-	Request(Action action, String params, SmtpState state) {
-		this.clientAction = action;
-		this.smtpState = state;
-		this.params = params;
-	}
+    Request(Action action, String params, SmtpState state) {
+        this.clientAction = action;
+        this.state = state;
+        this.params = params;
+    }
 
-	public Response execute(List<MailMessage> messages, MailMessage message) {		
-		return clientAction.response(smtpState, messages, message);
-	}
+    private Request() {
+    }
 
-    Action getClientAction() { return clientAction; }
+    public Response execute(List<MailMessage> messages, MailMessage message) {
+        return clientAction.response(state, messages, message);
+    }
 
-    SmtpState getSmtpState() { return smtpState; }
+    Action getClientAction() {
+        return clientAction;
+    }
 
-	public String getParams() {
-		return params;
-	}
+    SmtpState getState() {
+        return state;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    private boolean isInDataHeaderState() {
+        return SmtpState.DATA_HDR == state;
+    }
+
+    private boolean isInDataBodyState() {
+        return SmtpState.DATA_BODY == state;
+    }
 
     public static Request initialRequest() {
         return new Request(new Connect(), "", SmtpState.CONNECT);
     }
 
     public static Request createRequest(SmtpState state, String message) {
-        Action action;
-        String params = null;
+        Request request = new Request();
+        request.state = state;
 
-        if (SmtpState.DATA_HDR == state) {
-            if (message.equals(".")) {
-                action = new DataEnd();
-            } else if (message.length() < 1) {
-                action = new BlankLine();
-            } else {
-                action = new Unrecognized();
-                params = message;
-            }
-        } else if (SmtpState.DATA_BODY == state) {
-            if (message.equals(".")) {
-                action = new DataEnd();
-            } else {
-                action = new Unrecognized();
-                if (message.length() < 1) {
-                    params = "\n";
-                } else {
-                    params = message;
-                }
-            }
+        if (request.isInDataHeaderState()) {
+            return buildDataHeaderRequest(message, request);
+        }
+
+        if (request.isInDataBodyState()) {
+            return buildDataBodyRequest(message, request);
+        }
+        return buildCommandRequest(message, request);
+    }
+
+    private static Request buildDataHeaderRequest(String message, Request request) {
+        if (message.equals(".")) {
+            request.clientAction = new DataEnd();
+        } else if (message.length() < 1) {
+            request.clientAction = new BlankLine();
         } else {
-            String su = message.toUpperCase();
-            if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
-                action = new Ehlo();
-                try {
-                    params = message.substring(5);
-                } catch (StringIndexOutOfBoundsException ignored) {}
-            } else if (su.startsWith("MAIL FROM:")) {
-                action = new Mail();
-                params = message.substring(10);
-            } else if (su.startsWith("RCPT TO:")) {
-                action = new Rcpt();
-                params = message.substring(8);
-            } else if (su.startsWith("DATA")) {
-                action = new Data();
-            } else if (su.startsWith("QUIT")) {
-                action = new Quit();
-            } else if (su.startsWith("RSET")) {
-                action = new Rset();
-            } else if (su.startsWith("NOOP")) {
-                action = new NoOp();
-            } else if (su.startsWith("EXPN")) {
-                action = new Expn();
-            } else if (su.startsWith("VRFY")) {
-                action = new Vrfy();
-            } else if (su.startsWith("HELP")) {
-                action = new Help();
+            request.clientAction = new Unrecognized();
+            request.params = message;
+        }
+        return request;
+    }
+
+    private static Request buildDataBodyRequest(String message, Request request) {
+        if (message.equals(".")) {
+            request.clientAction = new DataEnd();
+        } else {
+            request.clientAction = new Unrecognized();
+            if (message.length() < 1) {
+                request.params = "\n";
             } else {
-                action = new Unrecognized();
+                request.params = message;
             }
         }
-        return new Request(action, params, state);
+        return request;
     }
-    
+
+    private static Request buildCommandRequest(String message, Request request) {
+        String su = message.toUpperCase();
+        if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
+            request.clientAction = new Ehlo();
+            try {
+                request.params = message.substring(5);
+            } catch (StringIndexOutOfBoundsException ignored) {
+            }
+        } else if (su.startsWith("MAIL FROM:")) {
+            request.clientAction = new Mail();
+            request.params = message.substring(10);
+        } else if (su.startsWith("RCPT TO:")) {
+            request.clientAction = new Rcpt();
+            request.params = message.substring(8);
+        } else if (su.startsWith("DATA")) {
+            request.clientAction = new Data();
+        } else if (su.startsWith("QUIT")) {
+            request.clientAction = new Quit();
+        } else if (su.startsWith("RSET")) {
+            request.clientAction = new Rset();
+        } else if (su.startsWith("NOOP")) {
+            request.clientAction = new NoOp();
+        } else if (su.startsWith("EXPN")) {
+            request.clientAction = new Expn();
+        } else if (su.startsWith("VRFY")) {
+            request.clientAction = new Vrfy();
+        } else if (su.startsWith("HELP")) {
+            request.clientAction = new Help();
+        } else {
+            request.clientAction = new Unrecognized();
+        }
+        return request;
+    }
+
 }
