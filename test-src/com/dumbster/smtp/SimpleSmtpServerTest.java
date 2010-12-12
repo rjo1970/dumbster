@@ -71,7 +71,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        Thread.sleep(250);
+        Thread.sleep(1250);
         assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
         MailMessage email = (MailMessage) emailIter.next();
