@@ -18,18 +18,13 @@ package com.dumbster.smtp;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.io.IOException;
 
 /**
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-	private List<MailMessage> receivedMail = Collections
-			.synchronizedList(new ArrayList<MailMessage>());
+    private MailStore mailStore = new RollingMailStore();
 	public static final int DEFAULT_SMTP_PORT = 25;
 	private volatile boolean stopped = true;
 	private ServerSocket serverSocket;
@@ -79,7 +74,7 @@ public class SimpleSmtpServer implements Runnable {
 			synchronized (this) {
 				SocketWrapper source = new SocketWrapper();
 				source.setSocket(socket);
-				ClientSession transaction = new ClientSession(source, receivedMail);
+				ClientSession transaction = new ClientSession(source, mailStore);
 				if (threaded) {
 					Thread t = new Thread(transaction);
 					try {
@@ -124,12 +119,17 @@ public class SimpleSmtpServer implements Runnable {
 		}
 	}
 
-	public synchronized Iterator<MailMessage> getReceivedEmail() {
-		return receivedMail.iterator();
-	}
 
-	public synchronized int getEmailCount() {
-		return receivedMail.size();
+    public MailMessage[] getMessages() {
+        return mailStore.getMessages();
+    }
+
+    public MailMessage getMessage(int i) {
+        return mailStore.getMessage(i);
+    }
+
+	public int getEmailCount() {
+		return mailStore.getEmailCount();
 	}
 
 	public static SimpleSmtpServer start() {

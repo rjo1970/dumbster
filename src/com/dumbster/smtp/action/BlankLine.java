@@ -1,8 +1,7 @@
 package com.dumbster.smtp.action;
 
-import java.util.List;
-
 import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.MailStore;
 import com.dumbster.smtp.Response;
 import com.dumbster.smtp.SmtpState;
 
@@ -14,7 +13,7 @@ public class BlankLine implements Action {
 		return "Blank line";
 	}
 
-	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
+	public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
 		if (SmtpState.DATA_HDR == smtpState) {
 			return new Response(-1, "", SmtpState.DATA_BODY);
 		} else if (SmtpState.DATA_BODY == smtpState) {

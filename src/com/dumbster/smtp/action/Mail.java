@@ -1,8 +1,7 @@
 package com.dumbster.smtp.action;
 
-import java.util.List;
-
 import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.MailStore;
 import com.dumbster.smtp.Response;
 import com.dumbster.smtp.SmtpState;
 
@@ -13,7 +12,7 @@ public class Mail implements Action {
 		return "MAIL";
 	}
 
-	public Response response(SmtpState smtpState, List<MailMessage> messages, MailMessage currentMessage) {
+	public Response response(SmtpState smtpState,  MailStore mailStore, MailMessage currentMessage) {
 			if (SmtpState.MAIL == smtpState || SmtpState.QUIT == smtpState) {
 			return new Response(250, "OK", SmtpState.RCPT);
 		} else {

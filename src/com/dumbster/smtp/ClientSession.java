@@ -10,16 +10,16 @@ import com.dumbster.smtp.action.Connect;
 public class ClientSession implements Runnable {
 
 	private IOSource socket;
-	private List<MailMessage> serverMessages;
+	private MailStore mailStore;
 	private MailMessage msg;
 	private Response smtpResponse;
 
-	public ClientSession(IOSource socket, List<MailMessage> messages) {
+	public ClientSession(IOSource socket, MailStore mailStore) {
 		this.socket = socket;
-		this.serverMessages = messages;
+		this.mailStore = mailStore;
 		msg = new MailMessage();
 		Request smtpRequest = Request.initialRequest();
-		smtpResponse = smtpRequest.execute(serverMessages, msg);
+		smtpResponse = smtpRequest.execute(mailStore, msg);
 	}
 
 	private void sessionLoop() throws IOException {
@@ -32,7 +32,7 @@ public class ClientSession implements Runnable {
         String line;
         while (smtpState != SmtpState.CONNECT && ((line = input.readLine()) != null)) {
 			Request request = Request.createRequest(smtpState, line);
-			Response response = request.execute(serverMessages, msg);
+			Response response = request.execute(mailStore, msg);
 			storeInputInMessage(request, response);
 			sendResponse(out, response);
 			smtpState = response.getNextState();
@@ -42,8 +42,7 @@ public class ClientSession implements Runnable {
 
 	private void saveAndRefreshMessageIfComplete(SmtpState smtpState) {
 		if (smtpState == SmtpState.QUIT) {
-			serverMessages.add(msg);
-			System.out.println(msg);
+			mailStore.addMessage(msg);
 			msg = new MailMessage();
 		}
 	}

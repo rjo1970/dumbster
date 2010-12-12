@@ -17,8 +17,6 @@
 
 package com.dumbster.smtp;
 
-import java.util.List;
-
 import com.dumbster.smtp.action.*;
 
 public class Request {
@@ -35,8 +33,8 @@ public class Request {
     private Request() {
     }
 
-    public Response execute(List<MailMessage> messages, MailMessage message) {
-        return clientAction.response(state, messages, message);
+    public Response execute(MailStore mailStore, MailMessage message) {
+        return clientAction.response(state, mailStore, message);
     }
 
     Action getClientAction() {

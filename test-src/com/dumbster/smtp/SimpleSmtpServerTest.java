@@ -26,7 +26,6 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
 import java.util.Date;
-import java.util.Iterator;
 
 public class SimpleSmtpServerTest {
     private static final int SMTP_PORT = 1081;
@@ -62,8 +61,7 @@ public class SimpleSmtpServerTest {
         }
 
         assertTrue(server.getEmailCount() == 1);
-        Iterator emailIter = server.getReceivedEmail();
-        MailMessage email = (MailMessage) emailIter.next();
+        MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body",email.getBody());
     }
@@ -79,8 +77,7 @@ public class SimpleSmtpServerTest {
         }
         Thread.sleep(500);
         assertTrue(server.getEmailCount() == 1);
-        Iterator emailIter = server.getReceivedEmail();
-        MailMessage email = (MailMessage) emailIter.next();
+        MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body",email.getBody());
     }
@@ -96,8 +93,7 @@ public class SimpleSmtpServerTest {
         }
 
         assertEquals(1, server.getEmailCount());
-        Iterator emailIter = server.getReceivedEmail();
-        MailMessage email = (MailMessage) emailIter.next();
+        MailMessage email = server.getMessage(0);
         assertEquals(bodyWithCR, email.getBody());
     }
 
@@ -162,7 +158,7 @@ public class SimpleSmtpServerTest {
         message.setContent(multipart);
         Transport.send(message);
 
-        assertTrue(server.getReceivedEmail().next().getBody().indexOf("Apache License") > 0);
+        assertTrue(server.getMessage(0).getBody().indexOf("Apache License") > 0);
     }
 
     @Test
@@ -206,8 +202,7 @@ public class SimpleSmtpServerTest {
         }
 
         assertEquals(2, server.getEmailCount());
-        Iterator emailIter = server.getReceivedEmail();
-        MailMessage email = (MailMessage) emailIter.next();
+        MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body", email.getBody());
     }
