@@ -20,12 +20,10 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-import javax.mail.Session;
-import javax.mail.Message;
-import javax.mail.Transport;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.InternetAddress;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
 import java.util.Properties;
 import java.util.Date;
 import java.util.Iterator;
@@ -34,6 +32,13 @@ public class SimpleSmtpServerTest {
     private static final int SMTP_PORT = 1081;
 
     private SimpleSmtpServer server;
+
+    private final String Server = "localhost";
+    private final String From = "sender@here.com";
+    private final String To = "receiver@there.com";
+    private final String Subject = "Test";
+    private final String Body = "Test Body";
+    private final String FileName = "license.txt";
 
     @Before
     public void setup() {
@@ -48,8 +53,9 @@ public class SimpleSmtpServerTest {
 
     @Test
     public void testSend() {
+        System.out.println("testSend");
         try {
-            sendMessage(SMTP_PORT, "sender@here.com", "Test", "Test Body", "receiver@there.com");
+            sendMessage(SMTP_PORT, From, Subject, Body, To);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
@@ -66,12 +72,12 @@ public class SimpleSmtpServerTest {
     public void testThreadedSend() throws InterruptedException {
         server.setThreaded(true);
         try {
-            sendMessage(SMTP_PORT, "sender@here.com", "Test", "Test Body", "receiver@there.com");
+            sendMessage(SMTP_PORT, From, Subject, Body, To);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        Thread.sleep(1250);
+        Thread.sleep(500);
         assertTrue(server.getEmailCount() == 1);
         Iterator emailIter = server.getReceivedEmail();
         MailMessage email = (MailMessage) emailIter.next();
@@ -83,7 +89,7 @@ public class SimpleSmtpServerTest {
     public void testSendMessageWithCarriageReturn() {
         String bodyWithCR = "\n\nKeep these pesky carriage returns\n\n";
         try {
-            sendMessage(SMTP_PORT, "sender@hereagain.com", "CRTest", bodyWithCR, "receivingagain@there.com");
+            sendMessage(SMTP_PORT, From, Subject, bodyWithCR, To);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
@@ -123,34 +129,58 @@ public class SimpleSmtpServerTest {
     }
 
     @Test
+    public void testSendingFileAttachment() throws MessagingException {
+        System.out.println("testSendingFileAttachment");
+        Properties props = getMailProperties(SMTP_PORT);
+        props.put("mail.smtp.host", "localhost");
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage message = new MimeMessage(session);
+
+        message.setFrom(new InternetAddress(From));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(To));
+        message.setSubject(Subject);
+
+        // create the message part
+        MimeBodyPart messageBodyPart =
+          new MimeBodyPart();
+
+        //fill message
+        messageBodyPart.setText(Body);
+
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+
+        // Part two is attachment
+        messageBodyPart = new MimeBodyPart();
+        DataSource source = new javax.activation.FileDataSource(FileName);
+        messageBodyPart.setDataHandler(
+          new DataHandler(source));
+        messageBodyPart.setFileName(FileName);
+        multipart.addBodyPart(messageBodyPart);
+
+        // Put parts in message
+        message.setContent(multipart);
+        Transport.send(message);
+
+        assertTrue(server.getReceivedEmail().next().getBody().indexOf("Apache License") > 0);
+    }
+
+    @Test
     public void testSendTwoMsgsWithLogin() {
         try {
-            String Server = "localhost";
-            String From = "sender@here.com";
-            String To = "receiver@there.com";
-            String Subject = "Test";
-            String body = "Test Body";
 
             Properties props = System.getProperties();
-
-            if (Server != null) {
-                props.put("mail.smtp.host", Server);
-            }
 
             Session session = Session.getDefaultInstance(props, null);
             Message msg = new MimeMessage(session);
 
-            if (From != null) {
-                msg.setFrom(new InternetAddress(From));
-            } else {
-                msg.setFrom();
-            }
+            msg.setFrom(new InternetAddress(From));
 
             InternetAddress.parse(To, false);
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(To, false));
             msg.setSubject(Subject);
 
-            msg.setText(body);
+            msg.setText(Body);
             msg.setHeader("X-Mailer", "musala");
             msg.setSentDate(new Date());
             msg.saveChanges();

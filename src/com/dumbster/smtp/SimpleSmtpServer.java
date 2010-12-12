@@ -65,8 +65,9 @@ public class SimpleSmtpServer implements Runnable {
 	private void initializeServerSocket() throws Exception {
 		serverSocket = new ServerSocket(port);
 		serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
-		synchronized (this) {
-			notifyAll();
+        Thread.sleep(100);
+        synchronized (this) {
+            notifyAll();
 		}
 	}
 
