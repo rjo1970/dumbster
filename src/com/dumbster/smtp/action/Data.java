@@ -12,7 +12,7 @@ public class Data implements Action {
         return "DATA";
     }
 
-    public Response response(SmtpState smtpState,  MailStore mailStore, MailMessage currentMessage) {
+    public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
         if (SmtpState.RCPT == smtpState) {
             return new Response(354,
                     "Start mail input; end with <CRLF>.<CRLF>",

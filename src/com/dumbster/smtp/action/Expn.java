@@ -7,13 +7,13 @@ import com.dumbster.smtp.SmtpState;
 
 public class Expn implements Action {
 
-	@Override
-	public String toString() {
-		return "EXPN";
-	}
+    @Override
+    public String toString() {
+        return "EXPN";
+    }
 
-	public Response response(SmtpState smtpState,  MailStore mailStore, MailMessage currentMessage) {
-		return new Response(252, "Not supported", smtpState);
-	}
+    public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
+        return new Response(252, "Not supported", smtpState);
+    }
 
 }

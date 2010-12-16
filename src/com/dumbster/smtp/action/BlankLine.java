@@ -8,20 +8,20 @@ import com.dumbster.smtp.SmtpState;
 public class BlankLine implements Action {
 
 
-	@Override
-	public String toString() {
-		return "Blank line";
-	}
+    @Override
+    public String toString() {
+        return "Blank line";
+    }
 
-	public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
-		if (SmtpState.DATA_HDR == smtpState) {
-			return new Response(-1, "", SmtpState.DATA_BODY);
-		} else if (SmtpState.DATA_BODY == smtpState) {
-			return new Response(-1, "", smtpState);
-		} else {
-			return new Response(503,
-					"Bad sequence of commands: " + this, smtpState);
-		}		
-	}
+    public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
+        if (SmtpState.DATA_HDR == smtpState) {
+            return new Response(-1, "", SmtpState.DATA_BODY);
+        } else if (SmtpState.DATA_BODY == smtpState) {
+            return new Response(-1, "", smtpState);
+        } else {
+            return new Response(503,
+                    "Bad sequence of commands: " + this, smtpState);
+        }
+    }
 
 }

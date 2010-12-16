@@ -138,7 +138,8 @@ public class Request {
     private static void extractParams(String message, Request request) {
         try {
             request.params = message.substring(5);
-        } catch (StringIndexOutOfBoundsException ignored) {}
+        } catch (StringIndexOutOfBoundsException ignored) {
+        }
     }
 
 }

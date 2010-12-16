@@ -27,71 +27,71 @@ import java.util.Set;
  * Container for a complete SMTP message - headers and message body.
  */
 public class MailMessage {
-	private Map<String, List<String>> headers;
-	private StringBuffer body;
+    private Map<String, List<String>> headers;
+    private StringBuffer body;
 
-	public MailMessage() {
-		headers = new HashMap<String, List<String>>(10);
-		body = new StringBuffer();
-	}
+    public MailMessage() {
+        headers = new HashMap<String, List<String>>(10);
+        body = new StringBuffer();
+    }
 
-	public Iterator<String> getHeaderNames() {
-		Set<String> nameSet = headers.keySet();
-		return nameSet.iterator();
-	}
+    public Iterator<String> getHeaderNames() {
+        Set<String> nameSet = headers.keySet();
+        return nameSet.iterator();
+    }
 
-	public String[] getHeaderValues(String name) {
-		List<String> values = (List<String>) headers.get(name);
-		if (values == null) {
-			return new String[0];
-		} else {
-			return (String[]) values.toArray(new String[0]);
-		}
-	}
+    public String[] getHeaderValues(String name) {
+        List<String> values = headers.get(name);
+        if (values == null) {
+            return new String[0];
+        } else {
+            return values.toArray(new String[headers.size()]);
+        }
+    }
 
-	public String getFirstHeaderValue(String name) {
-		List<String> values = (List<String>) headers.get(name);
-		if (values == null) {
-			return null;
-		} else {
-			Iterator<String> iterator = values.iterator();
-			return (String) iterator.next();
-		}
-	}
+    public String getFirstHeaderValue(String name) {
+        List<String> values = headers.get(name);
+        if (values == null) {
+            return null;
+        } else {
+            Iterator<String> iterator = values.iterator();
+            return iterator.next();
+        }
+    }
 
-	public String getBody() {
-		return body.toString();
-	}
+    public String getBody() {
+        return body.toString();
+    }
 
-	public void addHeader(String name, String value) {
-		List<String> valueList = (List<String>) headers.get(name);
-		if (valueList == null) {
-			valueList = new ArrayList<String>(1);
-		}
-		valueList.add(value);
-		headers.put(name, valueList);
-	}
-	
-	public void appendBody(String line) {
-		body.append(line);
-	}
+    public void addHeader(String name, String value) {
+        List<String> valueList = headers.get(name);
+        if (valueList == null) {
+            valueList = new ArrayList<String>(1);
+        }
+        valueList.add(value);
+        headers.put(name, valueList);
+    }
 
-	public String toString() {
-		StringBuffer msg = new StringBuffer();
-		for (Iterator<String> i = headers.keySet().iterator(); i.hasNext();) {
-			String name = (String) i.next();
-			List<String> values = (List<String>) headers.get(name);
-			for (Iterator<String> j = values.iterator(); j.hasNext();) {
-				String value = (String) j.next();
-				msg.append(name);
-				msg.append(": ");
-				msg.append(value);
-				msg.append('\n');
-			}
-		}
-		msg.append('\n');
-		msg.append(body);
-		msg.append('\n');
-		return msg.toString();
-	}
+    public void appendBody(String line) {
+        body.append(line);
+    }
+
+    public String toString() {
+        StringBuffer msg = new StringBuffer();
+        for (Iterator<String> i = headers.keySet().iterator(); i.hasNext();) {
+            String name = i.next();
+            List<String> values = headers.get(name);
+            for (Iterator<String> j = values.iterator(); j.hasNext();) {
+                String value = j.next();
+                msg.append(name);
+                msg.append(": ");
+                msg.append(value);
+                msg.append('\n');
+            }
+        }
+        msg.append('\n');
+        msg.append(body);
+        msg.append('\n');
+        return msg.toString();
+    }
 }

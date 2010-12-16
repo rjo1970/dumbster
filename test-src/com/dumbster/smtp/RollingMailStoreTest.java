@@ -1,6 +1,7 @@
 package com.dumbster.smtp;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class RollingMailStoreTest {
@@ -44,7 +45,8 @@ public class RollingMailStoreTest {
         try {
             mailStore.getMessage(0);
             fail("Should have raised exception.");
-        } catch (IndexOutOfBoundsException ignored) {}
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     @Test
@@ -60,7 +62,7 @@ public class RollingMailStoreTest {
         mailStore.addMessage(firstMessage);
 
         assertEquals("First Post!", mailStore.getMessage(0).getBody());
-        for(int i =0; i< 100; i++) {
+        for (int i = 0; i < 100; i++) {
             addAMessage();
         }
 

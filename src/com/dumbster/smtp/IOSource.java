@@ -6,8 +6,10 @@ import java.io.PrintWriter;
 
 public interface IOSource {
 
-	public BufferedReader getInputStream() throws IOException;
-	public PrintWriter getOutputStream() throws IOException;
-	public void close() throws IOException;
-	
+    public BufferedReader getInputStream() throws IOException;
+
+    public PrintWriter getOutputStream() throws IOException;
+
+    public void close() throws IOException;
+
 }

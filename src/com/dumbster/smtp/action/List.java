@@ -15,7 +15,8 @@ public class List implements Action {
             Integer messageIndex = Integer.valueOf(params);
             if (messageIndex > -1)
                 this.messageIndex = messageIndex;
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     @Override
@@ -27,9 +28,11 @@ public class List implements Action {
 
         StringBuffer result = new StringBuffer();
         if (messageIndex != null && messageIndex < mailStore.getEmailCount()) {
-          result.append(mailStore.getMessage(messageIndex).toString());
+            result.append(mailStore.getMessage(messageIndex).toString());
         }
-        result.append("There are " + mailStore.getEmailCount() + " message(s).");
+        result.append("There are ");
+        result.append(mailStore.getEmailCount());
+        result.append(" message(s).");
         return new Response(250, result.toString(), SmtpState.GREET);
     }
 }
