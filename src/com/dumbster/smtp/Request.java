@@ -105,10 +105,7 @@ public class Request {
         String su = message.toUpperCase();
         if (su.startsWith("EHLO ") || su.startsWith("HELO")) {
             request.clientAction = new Ehlo();
-            try {
-                request.params = message.substring(5);
-            } catch (StringIndexOutOfBoundsException ignored) {
-            }
+            extractParams(message, request);
         } else if (su.startsWith("MAIL FROM:")) {
             request.clientAction = new Mail();
             request.params = message.substring(10);
@@ -129,10 +126,19 @@ public class Request {
             request.clientAction = new Vrfy();
         } else if (su.startsWith("HELP")) {
             request.clientAction = new Help();
+        } else if (su.startsWith("LIST")) {
+            extractParams(message, request);
+            request.clientAction = new List(request.params);
         } else {
             request.clientAction = new Unrecognized();
         }
         return request;
+    }
+
+    private static void extractParams(String message, Request request) {
+        try {
+            request.params = message.substring(5);
+        } catch (StringIndexOutOfBoundsException ignored) {}
     }
 
 }
