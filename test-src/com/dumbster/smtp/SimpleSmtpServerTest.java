@@ -63,7 +63,7 @@ public class SimpleSmtpServerTest {
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
-        assertEquals("Test Body",email.getBody());
+        assertEquals("Test Body", email.getBody());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SimpleSmtpServerTest {
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
-        assertEquals("Test Body",email.getBody());
+        assertEquals("Test Body", email.getBody());
     }
 
     @Test
@@ -103,15 +103,14 @@ public class SimpleSmtpServerTest {
             MimeMessage[] mimeMessages = new MimeMessage[2];
             Properties mailProps = getMailProperties(SMTP_PORT);
             Session session = Session.getInstance(mailProps, null);
- 
+
             mimeMessages[0] = createMessage(session, "sender@whatever.com", "receiver@home.com", "Doodle1", "Bug1");
             mimeMessages[1] = createMessage(session, "sender@whatever.com", "receiver@home.com", "Doodle2", "Bug2");
 
             Transport transport = session.getTransport("smtp");
             transport.connect("localhost", SMTP_PORT, null, null);
 
-            for (int i = 0; i < mimeMessages.length; i++) {
-                MimeMessage mimeMessage = mimeMessages[i];
+            for (MimeMessage mimeMessage : mimeMessages) {
                 transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
             }
 
@@ -136,29 +135,29 @@ public class SimpleSmtpServerTest {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(To));
         message.setSubject(Subject);
 
-        // create the message part
-        MimeBodyPart messageBodyPart =
-          new MimeBodyPart();
-
-        //fill message
-        messageBodyPart.setText(Body);
-
         Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(messageBodyPart);
-
-        // Part two is attachment
-        messageBodyPart = new MimeBodyPart();
-        DataSource source = new javax.activation.FileDataSource(FileName);
-        messageBodyPart.setDataHandler(
-          new DataHandler(source));
-        messageBodyPart.setFileName(FileName);
-        multipart.addBodyPart(messageBodyPart);
-
-        // Put parts in message
+        multipart.addBodyPart(buildMessageBody());
+        multipart.addBodyPart(buildFileAttachment());
         message.setContent(multipart);
         Transport.send(message);
 
         assertTrue(server.getMessage(0).getBody().indexOf("Apache License") > 0);
+    }
+
+    private MimeBodyPart buildFileAttachment() throws MessagingException {
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        DataSource source = new javax.activation.FileDataSource(FileName);
+        messageBodyPart.setDataHandler(
+                new DataHandler(source));
+        messageBodyPart.setFileName(FileName);
+        return messageBodyPart;
+    }
+
+    private MimeBodyPart buildMessageBody() throws MessagingException {
+        MimeBodyPart messageBodyPart =
+                new MimeBodyPart();
+        messageBodyPart.setText(Body);
+        return messageBodyPart;
     }
 
     @Test
@@ -219,7 +218,6 @@ public class SimpleSmtpServerTest {
     private void sendMessage(int port, String from, String subject, String body, String to) throws MessagingException {
         Properties mailProps = getMailProperties(port);
         Session session = Session.getInstance(mailProps, null);
-        //session.setDebug(true);
 
         MimeMessage msg = createMessage(session, from, to, subject, body);
         Transport.send(msg);

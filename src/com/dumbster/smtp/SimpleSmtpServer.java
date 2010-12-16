@@ -25,99 +25,91 @@ import java.io.IOException;
  */
 public class SimpleSmtpServer implements Runnable {
     private MailStore mailStore = new RollingMailStore();
-	public static final int DEFAULT_SMTP_PORT = 25;
-	private volatile boolean stopped = true;
-	private ServerSocket serverSocket;
-	private int port = DEFAULT_SMTP_PORT;
-	private static final int SERVER_SOCKET_TIMEOUT = 500;
-	private volatile boolean threaded = false;
+    public static final int DEFAULT_SMTP_PORT = 25;
+    private volatile boolean stopped = true;
+    private ServerSocket serverSocket;
+    private int port = DEFAULT_SMTP_PORT;
+    private static final int SERVER_SOCKET_TIMEOUT = 500;
+    private volatile boolean threaded = false;
 
-	public SimpleSmtpServer() {
-	}
+    public SimpleSmtpServer() {
+    }
 
-	public SimpleSmtpServer(int port) {
-		this.port = port;
-	}
+    public SimpleSmtpServer(int port) {
+        this.port = port;
+    }
 
-	public void run() {
-		stopped = false;
-		try {
-			initializeServerSocket();
-			serverLoop();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (serverSocket != null) {
-				try {
-					serverSocket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+    public void run() {
+        stopped = false;
+        try {
+            initializeServerSocket();
+            serverLoop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (serverSocket != null) {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-	private void initializeServerSocket() throws Exception {
-		serverSocket = new ServerSocket(port);
-		serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
+    private void initializeServerSocket() throws Exception {
+        serverSocket = new ServerSocket(port);
+        serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
         Thread.sleep(100);
         synchronized (this) {
             notifyAll();
-		}
-	}
+        }
+    }
 
-	private void serverLoop() throws IOException {
-		while (!isStopped()) {
-			Socket socket = clientSocket();
-			if (socket == null)
-				continue;
-			synchronized (this) {
-				SocketWrapper source = new SocketWrapper();
-				source.setSocket(socket);
-				ClientSession transaction = new ClientSession(source, mailStore);
-				if (threaded) {
-					Thread t = new Thread(transaction);
-					try {
-						t.join();
-					} catch (InterruptedException e) {
-					}
-					t.start();
-				} else {
-					transaction.run();
-				}
+    private void serverLoop() throws IOException {
+        while (!isStopped()) {
+            Socket socket = clientSocket();
+            if (socket == null)
+                continue;
+            synchronized (this) {
+                SocketWrapper source = new SocketWrapper();
+                source.setSocket(socket);
+                ClientSession transaction = new ClientSession(source, mailStore);
+                if (threaded) {
+                    Thread t = new Thread(transaction);
+                    try {
+                        t.join();
+                    } catch (InterruptedException ignored) {
+                    }
+                    t.start();
+                } else {
+                    transaction.run();
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	private Socket clientSocket() {
-		Socket socket = null;
-		try {
-			socket = serverSocket.accept();
-		} catch (Exception e) {
-			if (socket != null) {
-				try {
-					socket.close();
-				} catch (Exception e2) {
-				} finally {
-					socket = null;
-				}
-			}
-		}
-		return socket;
-	}
+    private Socket clientSocket() {
+        Socket socket = null;
+        try {
+            socket = serverSocket.accept();
+        } catch (Exception ignored) {
+        }
+        return socket;
+    }
 
-	public synchronized boolean isStopped() {
-		return stopped;
-	}
+    public synchronized boolean isStopped() {
+        return stopped;
+    }
 
-	public synchronized void stop() {
-		stopped = true;
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-		}
-	}
+    public synchronized void stop() {
+        stopped = true;
+        try {
+            serverSocket.close();
+        } catch (IOException ignored) {
+        }
+    }
 
 
     public MailMessage[] getMessages() {
@@ -128,36 +120,40 @@ public class SimpleSmtpServer implements Runnable {
         return mailStore.getMessage(i);
     }
 
-	public int getEmailCount() {
-		return mailStore.getEmailCount();
-	}
+    public int getEmailCount() {
+        return mailStore.getEmailCount();
+    }
 
-	public static SimpleSmtpServer start() {
-		return start(DEFAULT_SMTP_PORT);
-	}
+    public static SimpleSmtpServer start() {
+        return start(DEFAULT_SMTP_PORT);
+    }
 
-	public static SimpleSmtpServer start(int port) {
-		SimpleSmtpServer server = new SimpleSmtpServer(port);
-		Thread t = new Thread(server);
-		t.start();
+    public static SimpleSmtpServer start(int port) {
+        SimpleSmtpServer server = new SimpleSmtpServer(port);
+        Thread t = new Thread(server);
+        t.start();
 
-		synchronized (server) {
-			try {
-				server.wait();
-			} catch (InterruptedException e) {
-			}
-		}
-		return server;
-	}
+        synchronized (server) {
+            try {
+                server.wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        return server;
+    }
 
-	/**
-	 * Toggles if the SMTP server is single or multi-threaded for response to
-	 * SMTP sessions.
-	 * 
-	 * @param threaded
-	 */
-	public void setThreaded(boolean threaded) {
-		this.threaded = threaded;
-	}
+    /**
+     * Toggles if the SMTP server is single or multi-threaded for response to
+     * SMTP sessions.
+     *
+     * @param threaded
+     */
+    public void setThreaded(boolean threaded) {
+        this.threaded = threaded;
+    }
+
+    public void setMailStore(MailStore mailStore) {
+        this.mailStore = mailStore;
+    }
 
 }
