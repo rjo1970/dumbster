@@ -1,11 +1,17 @@
 Dumbster fake SMTP Server
 Forked from http://quintanasoft.com/dumbster/ version 1.6 by Jason Kitchen
 
-* Works as a unit testing SMTP target (just as always)
-* Now works stand-alone as an executable JAR
-* Now multithreaded (by default, single-threaded for unit testing)
-* Improved test coverage
+* Works as a single-threaded unit testing SMTP target
+* Works as a multi-threaded unit testing SMTP target with SimpleSmtpServer setThreaded(boolean)
+* API change- returns an Array of messages rather than an Iterator
+* API change- RollingMailStore implements MailStore keeps rolling 100 msgs.
+* API change- SimpleSmtpServer you can inject your own MailStore
+              implementation.
 
+* Now works stand-alone as an executable JAR
+* Improved test coverage
+* telnet to smtp server and use "list" command to view number of msgs
+* use list command with an index 0..(size-1) of messages to view a message
 
 EXAMPLE (SMTP unit testing fake)
 public class SimpleSmtpServerTest extends TestCase {
