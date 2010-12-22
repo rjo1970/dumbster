@@ -14,15 +14,15 @@ public class ClientSession implements Runnable {
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
         this.mailStore = mailStore;
-        msg = new MailMessage();
+        this.msg = new MailMessage();
         Request smtpRequest = Request.initialRequest();
         smtpResponse = smtpRequest.execute(mailStore, msg);
     }
 
     private void sessionLoop() throws IOException {
-
-        BufferedReader input = socket.getInputStream();
         PrintWriter out = socket.getOutputStream();
+        out.flush();
+        BufferedReader input = socket.getInputStream();
         sendResponse(out, smtpResponse);
         SmtpState smtpState = smtpResponse.getNextState();
 
