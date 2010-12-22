@@ -34,10 +34,9 @@ public class SimpleSmtpServerTest extends TestCase {
     server.stop();
 
     assertTrue(server.getReceivedEmailSize() == 1);
-    Iterator emailIter = server.getReceivedEmail();
-    SmtpMessage email = (SmtpMessage)emailIter.next();
-    assertTrue(email.getHeaderValue("Subject").equals("Test"));
-    assertTrue(email.getBody().equals("Test Body"));	
+    MailMessage message = server.getMessage(0);
+    assertEquals("Test", email.getHeaderValue("Subject"));
+    assertEquals("Test Body", email.getBody());	
   }
 ...  
 }
