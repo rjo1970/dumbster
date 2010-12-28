@@ -128,6 +128,17 @@ public class SimpleSmtpServer implements Runnable {
         return start(DEFAULT_SMTP_PORT);
     }
 
+    public void anticipateMessageCountFor(int messageCount, int ticks) {
+        int tickdown = ticks;
+        while (mailStore.getEmailCount() < messageCount && tickdown > 0) {
+            tickdown--;
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
+
     public static SimpleSmtpServer start(int port) {
         SimpleSmtpServer server = new SimpleSmtpServer(port);
         Thread t = new Thread(server);

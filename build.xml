@@ -30,18 +30,19 @@ limitations under the License.
     <property name="libdir" value="lib"/>
     <property name="testsrcdir" value="test-src"/>
     <property name="testcompiledir" value="${builddir}/test"/>
+    <property name="testreportdir" value="${testcompiledir}/report"/>
 
     <property name="build.compiler" value="modern"/>
 
-    <property name="cobertura.dir" value="${builddir}/coverage" />
+    <property name="cobertura.dir" value="${builddir}/coverage"/>
 
     <path id="cobertura.classpath">
         <fileset dir="${libdir}">
-            <include name="*.jar" />
+            <include name="*.jar"/>
         </fileset>
     </path>
 
-    <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+    <taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
 
     <path id="compile.path">
         <fileset dir="${libdir}">
@@ -67,7 +68,7 @@ limitations under the License.
 
     <target name="jar" depends="compile">
         <delete file="${builddir}/dumbster.jar"/>
-    	<echo file="${builddir}/manifest.txt">Main-Class: com.dumbster.smtp.Main</echo>
+        <echo file="${builddir}/manifest.txt">Main-Class: com.dumbster.smtp.Main</echo>
         <jar jarfile="${builddir}/dumbster.jar" basedir="${compiledir}/" manifest="${builddir}/manifest.txt"/>
     </target>
 
@@ -85,6 +86,7 @@ limitations under the License.
     <target name="init">
         <mkdir dir="${compiledir}"/>
         <mkdir dir="${testcompiledir}"/>
+        <mkdir dir="${testreportdir}"/>
     </target>
 
     <!-- === Unit test ====================================================== -->
@@ -102,18 +104,20 @@ limitations under the License.
     <target name="test" depends="clean, jar, compile-tests">
 
         <cobertura-instrument todir="${builddir}/instrumented" datafile="${builddir}/cobertura.ser">
-            <ignore regex="org.apache.log4j.*" />
+            <ignore regex="org.apache.log4j.*"/>
             <fileset dir="${compiledir}">
-                <include name="**/*.class" />
-                <exclude name="**/*Test.class" />
+                <include name="**/*.class"/>
+                <exclude name="**/*Test.class"/>
             </fileset>
         </cobertura-instrument>
 
-        <junit fork="yes" printsummary="yes" haltonfailure="yes">
+        <junit fork="yes" printsummary="yes"
+               errorProperty="test.failed"
+               failureProperty="test.failed">
             <sysproperty key="net.sourceforge.cobertura.datafile"
-		        file="${builddir}/cobertura.ser" />
+                         file="${builddir}/cobertura.ser"/>
             <classpath>
-                <pathelement path="${builddir}/instrumented" />
+                <pathelement path="${builddir}/instrumented"/>
                 <pathelement path="${testcompiledir}"/>
                 <pathelement path="${compiledir}"/>
                 <fileset dir="${libdir}">
@@ -121,15 +125,24 @@ limitations under the License.
                 </fileset>
             </classpath>
             <formatter type="xml"/>
-            <batchtest todir="${builddir}/test" haltonfailure="yes">
+            <batchtest fork="yes" todir="${testcompiledir}">
                 <fileset dir="${testsrcdir}">
                     <include name="**/*.java"/>
                 </fileset>
             </batchtest>
         </junit>
 
-        <cobertura-report format="html" destdir="${builddir}/test/coverage" srcdir="${srcdir}" datafile="${builddir}/cobertura.ser"/>
+        <junitreport todir="${testreportdir}">
+            <fileset dir="${testcompiledir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${testreportdir}"/>
+        </junitreport>
 
+        <cobertura-report format="html" destdir="${builddir}/test/coverage" srcdir="${srcdir}"
+                          datafile="${builddir}/cobertura.ser"/>
+
+        <fail message="Something bad happened." if="test.failed"/>
     </target>
 
     <!-- == Generate javadoc ================================================ -->
@@ -143,7 +156,8 @@ limitations under the License.
 
     <!-- == Prepare release ================================================= -->
     <target name="release" depends="jar">
-        <zip destfile="${builddir}/dumbster${release}-all.zip" basedir="." includes="*.txt, *.xml, test-src/**, src/**, lib/**">
+        <zip destfile="${builddir}/dumbster${release}-all.zip" basedir="."
+             includes="*.txt, *.xml, test-src/**, src/**, lib/**">
             <zipfileset dir="." includes="build/dumbster.jar" fullpath="dumbster${release}.jar"/>
         </zip>
     </target>

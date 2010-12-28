@@ -51,6 +51,12 @@ public class SimpleSmtpServerTest {
     }
 
     @Test
+    public void testNoMessageSentButWaitingDoesNotHang() {
+        server.anticipateMessageCountFor(1, 10);
+        assertEquals(0, server.getEmailCount());
+    }
+
+    @Test
     public void testSend() {
         System.out.println("testSend");
         try {
@@ -59,7 +65,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-
+        server.anticipateMessageCountFor(1, 500);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
@@ -67,7 +73,7 @@ public class SimpleSmtpServerTest {
     }
 
     @Test
-    public void testThreadedSend() throws InterruptedException {
+    public void testThreadedSend() {
         server.setThreaded(true);
         try {
             sendMessage(SMTP_PORT, From, Subject, Body, To);
@@ -75,7 +81,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        Thread.sleep(500);
+        server.anticipateMessageCountFor(1, 500);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
@@ -91,7 +97,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-
+        server.anticipateMessageCountFor(1, 500);
         assertEquals(1, server.getEmailCount());
         MailMessage email = server.getMessage(0);
         assertEquals(bodyWithCR, email.getBody());
@@ -119,7 +125,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-
+        server.anticipateMessageCountFor(2, 500);
         assertEquals(2, server.getEmailCount());
     }
 
@@ -140,7 +146,7 @@ public class SimpleSmtpServerTest {
         multipart.addBodyPart(buildFileAttachment());
         message.setContent(multipart);
         Transport.send(message);
-
+        server.anticipateMessageCountFor(1, 500);
         assertTrue(server.getMessage(0).getBody().indexOf("Apache License") > 0);
     }
 
@@ -199,7 +205,7 @@ public class SimpleSmtpServerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        server.anticipateMessageCountFor(2, 500);
         assertEquals(2, server.getEmailCount());
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
