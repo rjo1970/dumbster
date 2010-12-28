@@ -11,6 +11,7 @@ public class ClientSession implements Runnable {
     private MailMessage msg;
     private Response smtpResponse;
     private PrintWriter out;
+    private BufferedReader input;
 
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
@@ -22,7 +23,7 @@ public class ClientSession implements Runnable {
 
     private void sessionLoop() throws IOException {
         prepareOutput();
-        BufferedReader input = socket.getInputStream();
+        prepareInput();
         sendResponse();
         SmtpState smtpState = smtpResponse.getNextState();
 
@@ -40,6 +41,19 @@ public class ClientSession implements Runnable {
     private void prepareOutput() throws IOException {
         out = socket.getOutputStream();
         out.flush();
+    }
+
+    private void prepareInput() throws IOException {
+        input = socket.getInputStream();
+    }
+
+    private void sendResponse() {
+        if (smtpResponse.getCode() > 0) {
+            int code = smtpResponse.getCode();
+            String message = smtpResponse.getMessage();
+            out.print(code + " " + message + "\r\n");
+            out.flush();
+        }
     }
 
     private void saveAndRefreshMessageIfComplete(SmtpState smtpState) {
@@ -70,15 +84,6 @@ public class ClientSession implements Runnable {
             String name = params.substring(0, headerNameEnd).trim();
             String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(name, value);
-        }
-    }
-
-    private void sendResponse() {
-        if (smtpResponse.getCode() > 0) {
-            int code = smtpResponse.getCode();
-            String message = smtpResponse.getMessage();
-            out.print(code + " " + message + "\r\n");
-            out.flush();
         }
     }
 
