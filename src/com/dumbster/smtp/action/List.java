@@ -28,6 +28,7 @@ public class List implements Action {
 
         StringBuffer result = new StringBuffer();
         if (messageIndex != null && messageIndex < mailStore.getEmailCount()) {
+            result.append("\n-------------------------------------------\n");            
             result.append(mailStore.getMessage(messageIndex).toString());
         }
         result.append("There are ");
