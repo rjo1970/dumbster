@@ -23,16 +23,16 @@ public class ClientSession implements Runnable {
     private void sessionLoop() throws IOException {
         prepareOutput();
         BufferedReader input = socket.getInputStream();
-        sendResponse(out, smtpResponse);
+        sendResponse();
         SmtpState smtpState = smtpResponse.getNextState();
 
         String line;
         while (smtpState != SmtpState.CONNECT && ((line = input.readLine()) != null)) {
             Request request = Request.createRequest(smtpState, line);
-            Response response = request.execute(mailStore, msg);
-            storeInputInMessage(request, response);
-            sendResponse(out, response);
-            smtpState = response.getNextState();
+            smtpResponse = request.execute(mailStore, msg);
+            storeInputInMessage(request, smtpResponse);
+            sendResponse();
+            smtpState = smtpResponse.getNextState();
             saveAndRefreshMessageIfComplete(smtpState);
         }
     }
@@ -73,7 +73,7 @@ public class ClientSession implements Runnable {
         }
     }
 
-    private static void sendResponse(PrintWriter out, Response smtpResponse) {
+    private void sendResponse() {
         if (smtpResponse.getCode() > 0) {
             int code = smtpResponse.getCode();
             String message = smtpResponse.getMessage();
