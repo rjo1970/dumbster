@@ -46,17 +46,25 @@ public class ClientSession implements Runnable {
 
     private void storeInputInMessage(Request request, Response response) {
         String params = request.getParams();
-        if (params != null) {
-            if (SmtpState.DATA_HDR.equals(response.getNextState())) {
-                int headerNameEnd = params.indexOf(':');
-                if (headerNameEnd >= 0) {
-                    String name = params.substring(0, headerNameEnd).trim();
-                    String value = params.substring(headerNameEnd + 1).trim();
-                    msg.addHeader(name, value);
-                }
-            } else if (SmtpState.DATA_BODY == response.getNextState()) {
-                msg.appendBody(params);
-            }
+        if (null == params)
+            return;
+
+        if (SmtpState.DATA_HDR.equals(response.getNextState())) {
+            addDataHeader(params);
+            return;
+        }
+
+        if (SmtpState.DATA_BODY == response.getNextState()) {
+            msg.appendBody(params);
+        }
+    }
+
+    private void addDataHeader(String params) {
+        int headerNameEnd = params.indexOf(':');
+        if (headerNameEnd > 0) {
+            String name = params.substring(0, headerNameEnd).trim();
+            String value = params.substring(headerNameEnd + 1).trim();
+            msg.addHeader(name, value);
         }
     }
 
