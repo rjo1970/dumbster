@@ -12,6 +12,7 @@ public class ClientSession implements Runnable {
     private Response smtpResponse;
     private PrintWriter out;
     private BufferedReader input;
+    private SmtpState smtpState;
 
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
@@ -25,7 +26,7 @@ public class ClientSession implements Runnable {
         prepareOutput();
         prepareInput();
         sendResponse();
-        SmtpState smtpState = smtpResponse.getNextState();
+        updateSmtpState();
 
         String line;
         while (smtpState != SmtpState.CONNECT && ((line = input.readLine()) != null)) {
@@ -33,7 +34,7 @@ public class ClientSession implements Runnable {
             smtpResponse = request.execute(mailStore, msg);
             storeInputInMessage(request, smtpResponse);
             sendResponse();
-            smtpState = smtpResponse.getNextState();
+            updateSmtpState();
             saveAndRefreshMessageIfComplete(smtpState);
         }
     }
@@ -54,6 +55,10 @@ public class ClientSession implements Runnable {
             out.print(code + " " + message + "\r\n");
             out.flush();
         }
+    }
+
+    private void updateSmtpState() {
+        smtpState = smtpResponse.getNextState();
     }
 
     private void saveAndRefreshMessageIfComplete(SmtpState smtpState) {
