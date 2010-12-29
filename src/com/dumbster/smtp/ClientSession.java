@@ -7,36 +7,41 @@ import java.io.PrintWriter;
 public class ClientSession implements Runnable {
 
     private IOSource socket;
-    private MailStore mailStore;
+    private volatile MailStore mailStore;
     private MailMessage msg;
     private Response smtpResponse;
     private PrintWriter out;
     private BufferedReader input;
     private SmtpState smtpState;
+    private String line;
 
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
         this.mailStore = mailStore;
         this.msg = new MailMessage();
-        Request smtpRequest = Request.initialRequest();
-        smtpResponse = smtpRequest.execute(mailStore, msg);
+        Request request = Request.initialRequest();
+        smtpResponse = request.execute(this.mailStore, msg);
     }
 
-    private void sessionLoop() throws IOException {
+    public void run() {
+        try {
+            prepareSessionLoop();
+            sessionLoop();
+        } catch (Exception ignored) {
+        } finally {
+            try {
+                socket.close();
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    private void prepareSessionLoop() throws IOException {
         prepareOutput();
         prepareInput();
         sendResponse();
         updateSmtpState();
-
-        String line;
-        while (smtpState != SmtpState.CONNECT && ((line = input.readLine()) != null)) {
-            Request request = Request.createRequest(smtpState, line);
-            smtpResponse = request.execute(mailStore, msg);
-            storeInputInMessage(request, smtpResponse);
-            sendResponse();
-            updateSmtpState();
-            saveAndRefreshMessageIfComplete(smtpState);
-        }
+        readLine();
     }
 
     private void prepareOutput() throws IOException {
@@ -61,24 +66,40 @@ public class ClientSession implements Runnable {
         smtpState = smtpResponse.getNextState();
     }
 
-    private void saveAndRefreshMessageIfComplete(SmtpState smtpState) {
+    private void readLine() throws IOException {
+        line = input.readLine();
+    }
+
+    private void sessionLoop() throws IOException {
+        while (smtpState != SmtpState.CONNECT && (line != null)) {
+            Request request = Request.createRequest(smtpState, line);
+            smtpResponse = request.execute(mailStore, msg);
+            storeInputInMessage(request);
+            sendResponse();
+            updateSmtpState();
+            saveAndRefreshMessageIfComplete();
+            readLine();
+        }
+    }
+
+    private void saveAndRefreshMessageIfComplete() {
         if (smtpState == SmtpState.QUIT) {
             mailStore.addMessage(msg);
             msg = new MailMessage();
         }
     }
 
-    private void storeInputInMessage(Request request, Response response) {
+    private void storeInputInMessage(Request request) {
         String params = request.getParams();
         if (null == params)
             return;
 
-        if (SmtpState.DATA_HDR.equals(response.getNextState())) {
+        if (SmtpState.DATA_HDR.equals(smtpResponse.getNextState())) {
             addDataHeader(params);
             return;
         }
 
-        if (SmtpState.DATA_BODY == response.getNextState()) {
+        if (SmtpState.DATA_BODY == smtpResponse.getNextState()) {
             msg.appendBody(params);
         }
     }
@@ -89,18 +110,6 @@ public class ClientSession implements Runnable {
             String name = params.substring(0, headerNameEnd).trim();
             String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(name, value);
-        }
-    }
-
-    public void run() {
-        try {
-            sessionLoop();
-        } catch (Exception ignored) {
-        } finally {
-            try {
-                socket.close();
-            } catch (Exception ignored) {
-            }
         }
     }
 
