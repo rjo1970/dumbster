@@ -24,7 +24,7 @@ import java.io.IOException;
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-    private MailStore mailStore = new RollingMailStore();
+    private volatile MailStore mailStore = new RollingMailStore();
     public static final int DEFAULT_SMTP_PORT = 25;
     private volatile boolean stopped = true;
     private ServerSocket serverSocket;
@@ -79,9 +79,9 @@ public class SimpleSmtpServer implements Runnable {
                     Thread t = new Thread(transaction);
                     try {
                         t.join();
+                        t.start();
                     } catch (InterruptedException ignored) {
                     }
-                    t.start();
                 } else {
                     transaction.run();
                 }
@@ -94,7 +94,7 @@ public class SimpleSmtpServer implements Runnable {
         Socket socket = null;
         try {
             socket = serverSocket.accept();
-        } catch (Exception ignored) {
+        } catch (IOException ignored) {
         }
         return socket;
     }
@@ -110,7 +110,6 @@ public class SimpleSmtpServer implements Runnable {
         } catch (IOException ignored) {
         }
     }
-
 
     public MailMessage[] getMessages() {
         return mailStore.getMessages();
@@ -134,7 +133,8 @@ public class SimpleSmtpServer implements Runnable {
             tickdown--;
             try {
                 Thread.sleep(1);
-            } catch (InterruptedException ignored) {
+            } catch (InterruptedException e) {
+                return;
             }
         }
     }
@@ -147,7 +147,7 @@ public class SimpleSmtpServer implements Runnable {
         synchronized (server) {
             try {
                 server.wait();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
         return server;
