@@ -41,7 +41,6 @@ public class ClientSession implements Runnable {
         prepareInput();
         sendResponse();
         updateSmtpState();
-        readLine();
     }
 
     private void prepareOutput() throws IOException {
@@ -66,20 +65,24 @@ public class ClientSession implements Runnable {
         smtpState = smtpResponse.getNextState();
     }
 
-    private void readLine() throws IOException {
-        line = input.readLine();
-    }
-
     private void sessionLoop() throws IOException {
-        while (smtpState != SmtpState.CONNECT && (line != null)) {
+        while (smtpState != SmtpState.CONNECT && readNextLineReady()) {
             Request request = Request.createRequest(smtpState, line);
             smtpResponse = request.execute(mailStore, msg);
             storeInputInMessage(request);
             sendResponse();
             updateSmtpState();
             saveAndRefreshMessageIfComplete();
-            readLine();
         }
+    }
+
+    private boolean readNextLineReady() throws IOException {
+        readLine();
+        return line != null;
+    }
+
+    private void readLine() throws IOException {
+        line = input.readLine();
     }
 
     private void saveAndRefreshMessageIfComplete() {
