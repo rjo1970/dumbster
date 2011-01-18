@@ -18,7 +18,7 @@ public class ClientSession implements Runnable {
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
         this.mailStore = mailStore;
-        this.msg = new MailMessage();
+        this.msg = new MailMessageImpl();
         Request request = Request.initialRequest();
         smtpResponse = request.execute(this.mailStore, msg);
     }
@@ -88,7 +88,7 @@ public class ClientSession implements Runnable {
     private void saveAndRefreshMessageIfComplete() {
         if (smtpState == SmtpState.QUIT) {
             mailStore.addMessage(msg);
-            msg = new MailMessage();
+            msg = new MailMessageImpl();
         }
     }
 

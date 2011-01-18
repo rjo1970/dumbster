@@ -2,7 +2,7 @@ package com.dumbster.smtp;
 
 import java.util.Iterator;
 
-public interface MailMessage {
+public interface IMailMessage {
 
     public abstract Iterator<String> getHeaderNames();
 

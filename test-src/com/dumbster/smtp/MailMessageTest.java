@@ -10,7 +10,7 @@ public class MailMessageTest {
 
     @Before
     public void setup() {
-        this.message = new MailMessage();
+        this.message = new MailMessageImpl();
     }
 
     @Test

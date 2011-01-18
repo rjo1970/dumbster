@@ -25,7 +25,7 @@ public class RollingMailStoreTest {
     }
 
     private void addAMessage() {
-        MailMessage message = new MailMessage();
+        MailMessage message = new MailMessageImpl();
         mailStore.addMessage(message);
     }
 
@@ -57,7 +57,7 @@ public class RollingMailStoreTest {
 
     @Test
     public void testMailRollsOff() {
-        MailMessage firstMessage = new MailMessage();
+        MailMessage firstMessage = new MailMessageImpl();
         firstMessage.appendBody("First Post!");
         mailStore.addMessage(firstMessage);
 
