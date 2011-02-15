@@ -58,7 +58,6 @@ public class SimpleSmtpServerTest {
 
     @Test
     public void testSend() {
-        System.out.println("testSend");
         try {
             sendMessage(SMTP_PORT, From, Subject, Body, To);
         } catch (Exception e) {
@@ -69,6 +68,26 @@ public class SimpleSmtpServerTest {
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
+        assertEquals("Test Body", email.getBody());
+    }
+
+    @Test
+    public void testSendWithLongSubject() {
+        StringBuffer b = new StringBuffer();
+        for(int i=0; i<500; i++)
+            b.append("X");
+        String longSubject = b.toString();
+        try {
+            sendMessage(SMTP_PORT, From, b.toString(), Body, To);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected exception: " + e);
+        }
+        server.anticipateMessageCountFor(1, 500);
+        assertTrue(server.getEmailCount() == 1);
+        MailMessage email = server.getMessage(0);
+        assertEquals(longSubject, email.getFirstHeaderValue("Subject"));
+        assertEquals(500, longSubject.length());
         assertEquals("Test Body", email.getBody());
     }
 
@@ -131,7 +150,6 @@ public class SimpleSmtpServerTest {
 
     @Test
     public void testSendingFileAttachment() throws MessagingException {
-        System.out.println("testSendingFileAttachment");
         Properties props = getMailProperties(SMTP_PORT);
         props.put("mail.smtp.host", "localhost");
         Session session = Session.getDefaultInstance(props, null);

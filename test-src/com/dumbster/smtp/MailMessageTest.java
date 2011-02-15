@@ -29,6 +29,16 @@ public class MailMessageTest {
     }
 
     @Test
+    public void testLongSubjectHeader() {
+        StringBuffer b = new StringBuffer();
+        for (int i =0; i<500; i++)  {
+            b.append("X");
+        }
+        message.addHeader("Subject", b.toString());
+        assertEquals("Subject: "+b+"\n\n\n", message.toString());
+    }
+
+    @Test
     public void testEmptyHeaderValue() {
         String[] values = message.getHeaderValues("NOT PRESENT");
         assertEquals(0, values.length);
