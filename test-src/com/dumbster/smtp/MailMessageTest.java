@@ -30,12 +30,9 @@ public class MailMessageTest {
 
     @Test
     public void testLongSubjectHeader() {
-        StringBuffer b = new StringBuffer();
-        for (int i =0; i<500; i++)  {
-            b.append("X");
-        }
-        message.addHeader("Subject", b.toString());
-        assertEquals("Subject: "+b+"\n\n\n", message.toString());
+        String longSubject = StringUtil.longString(500);
+        message.addHeader("Subject", longSubject);
+        assertEquals("Subject: "+longSubject+"\n\n\n", message.toString());
     }
 
     @Test

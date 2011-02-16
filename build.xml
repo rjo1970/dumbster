@@ -127,7 +127,7 @@ limitations under the License.
             <formatter type="xml"/>
             <batchtest fork="yes" todir="${testcompiledir}">
                 <fileset dir="${testsrcdir}">
-                    <include name="**/*.java"/>
+                    <include name="**/*Test.java"/>
                 </fileset>
             </batchtest>
         </junit>

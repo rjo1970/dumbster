@@ -35,13 +35,11 @@ public class MailMessageImpl implements MailMessage {
         body = new StringBuffer();
     }
 
-    @Override
     public Iterator<String> getHeaderNames() {
         Set<String> nameSet = headers.keySet();
         return nameSet.iterator();
     }
 
-    @Override
     public String[] getHeaderValues(String name) {
         List<String> values = headers.get(name);
         if (values == null) {
@@ -51,7 +49,6 @@ public class MailMessageImpl implements MailMessage {
         }
     }
 
-    @Override
     public String getFirstHeaderValue(String name) {
         List<String> values = headers.get(name);
         if (values == null) {
@@ -62,12 +59,10 @@ public class MailMessageImpl implements MailMessage {
         }
     }
 
-    @Override
     public String getBody() {
         return body.toString();
     }
 
-    @Override
     public void addHeader(String name, String value) {
         List<String> valueList = headers.get(name);
         if (valueList == null) {
@@ -77,7 +72,6 @@ public class MailMessageImpl implements MailMessage {
         headers.put(name, valueList);
     }
 
-    @Override
     public void appendBody(String line) {
         body.append(line);
     }

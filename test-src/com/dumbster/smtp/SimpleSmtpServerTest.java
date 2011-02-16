@@ -73,12 +73,9 @@ public class SimpleSmtpServerTest {
 
     @Test
     public void testSendWithLongSubject() {
-        StringBuffer b = new StringBuffer();
-        for(int i=0; i<500; i++)
-            b.append("X");
-        String longSubject = b.toString();
+        String longSubject = StringUtil.longString(500);
         try {
-            sendMessage(SMTP_PORT, From, b.toString(), Body, To);
+            sendMessage(SMTP_PORT, From, longSubject, Body, To);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
