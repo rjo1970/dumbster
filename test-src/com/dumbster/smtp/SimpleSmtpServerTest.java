@@ -39,6 +39,8 @@ public class SimpleSmtpServerTest {
     private final String Body = "Test Body";
     private final String FileName = "license.txt";
 
+    private final int WAIT_TICKS = 10000;
+
     @Before
     public void setup() {
         server = SimpleSmtpServer.start(SMTP_PORT);
@@ -64,7 +66,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        server.anticipateMessageCountFor(1, 500);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
@@ -80,7 +82,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        server.anticipateMessageCountFor(1, 500);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals(longSubject, email.getFirstHeaderValue("Subject"));
@@ -97,7 +99,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        server.anticipateMessageCountFor(1, 500);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
@@ -113,7 +115,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        server.anticipateMessageCountFor(1, 500);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertEquals(1, server.getEmailCount());
         MailMessage email = server.getMessage(0);
         assertEquals(bodyWithCR, email.getBody());
@@ -141,7 +143,7 @@ public class SimpleSmtpServerTest {
             e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
-        server.anticipateMessageCountFor(2, 500);
+        server.anticipateMessageCountFor(2, WAIT_TICKS);
         assertEquals(2, server.getEmailCount());
     }
 
@@ -161,7 +163,7 @@ public class SimpleSmtpServerTest {
         multipart.addBodyPart(buildFileAttachment());
         message.setContent(multipart);
         Transport.send(message);
-        server.anticipateMessageCountFor(1, 500);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getMessage(0).getBody().indexOf("Apache License") > 0);
     }
 
@@ -220,7 +222,7 @@ public class SimpleSmtpServerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        server.anticipateMessageCountFor(2, 500);
+        server.anticipateMessageCountFor(2, WAIT_TICKS);
         assertEquals(2, server.getEmailCount());
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
