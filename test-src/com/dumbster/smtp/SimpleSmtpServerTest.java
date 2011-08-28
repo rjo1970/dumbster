@@ -43,7 +43,7 @@ public class SimpleSmtpServerTest {
 
     @Before
     public void setup() {
-        server = SimpleSmtpServer.start(SMTP_PORT);
+        server = SmtpServerExecutor.startServer(SMTP_PORT);
     }
 
     @After

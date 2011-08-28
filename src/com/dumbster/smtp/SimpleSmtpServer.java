@@ -123,10 +123,6 @@ public class SimpleSmtpServer implements Runnable {
         return mailStore.getEmailCount();
     }
 
-    public static SimpleSmtpServer start() {
-        return start(DEFAULT_SMTP_PORT);
-    }
-
     public void anticipateMessageCountFor(int messageCount, int ticks) {
         int tickdown = ticks;
         while (mailStore.getEmailCount() < messageCount && tickdown > 0) {
@@ -137,20 +133,6 @@ public class SimpleSmtpServer implements Runnable {
                 return;
             }
         }
-    }
-
-    public static SimpleSmtpServer start(int port) {
-        SimpleSmtpServer server = new SimpleSmtpServer(port);
-        Thread t = new Thread(server);
-        t.start();
-
-        synchronized (server) {
-            try {
-                server.wait();
-            } catch (InterruptedException ignored) {
-            }
-        }
-        return server;
     }
 
     /**
