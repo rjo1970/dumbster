@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" output="classes" path="src"/>
 	<classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
-	<classpathentry kind="lib" path="/Users/rj/git/dumbster/lib/activation.jar"/>
-	<classpathentry kind="lib" path="/Users/rj/git/dumbster/lib/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="/Users/rj/git/dumbster/lib/mail.jar"/>
-	<classpathentry kind="con" path="/Users/rj/git/dumbster/build/classes"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/mail.jar"/>
+	<classpathentry kind="con" path="build/classes"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
