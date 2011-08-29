@@ -19,24 +19,31 @@ package com.dumbster.smtp;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Dummy SMTP server for testing purposes.
  */
 public class SimpleSmtpServer implements Runnable {
-    private volatile MailStore mailStore = new RollingMailStore();
     public static final int DEFAULT_SMTP_PORT = 25;
+    private static final int SERVER_SOCKET_TIMEOUT = 5000;
+    private static final int MAX_THREADS = 10;
+
+    private volatile MailStore mailStore = new RollingMailStore();
     private volatile boolean stopped = true;
-    private ServerSocket serverSocket;
-    private int port = DEFAULT_SMTP_PORT;
-    private static final int SERVER_SOCKET_TIMEOUT = 500;
+    private volatile boolean ready = false;
     private volatile boolean threaded = false;
 
-    public SimpleSmtpServer() {
+    private ServerSocket serverSocket;
+    private int port;
+
+    SimpleSmtpServer(int port) {
+        this.port = port;
     }
 
-    public SimpleSmtpServer(int port) {
-        this.port = port;
+    public boolean isReady() {
+        return ready;
     }
 
     public void run() {
@@ -47,6 +54,7 @@ public class SimpleSmtpServer implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            ready = false;
             if (serverSocket != null) {
                 try {
                     serverSocket.close();
@@ -60,46 +68,37 @@ public class SimpleSmtpServer implements Runnable {
     private void initializeServerSocket() throws Exception {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(SERVER_SOCKET_TIMEOUT);
-        Thread.sleep(100);
-        synchronized (this) {
-            notifyAll();
-        }
     }
 
     private void serverLoop() throws IOException {
+        int poolSize = threaded ? MAX_THREADS : 1;
+        ExecutorService threadExecutor = Executors.newFixedThreadPool(poolSize);
         while (!isStopped()) {
-            Socket socket = clientSocket();
-            if (socket == null)
-                continue;
-            synchronized (this) {
-                SocketWrapper source = new SocketWrapper();
-                source.setSocket(socket);
-                ClientSession transaction = new ClientSession(source, mailStore);
-                if (threaded) {
-                    Thread t = new Thread(transaction);
-                    try {
-                        t.join();
-                        t.start();
-                    } catch (InterruptedException ignored) {
-                    }
-                } else {
-                    transaction.run();
-                }
-
-            }
+            SocketWrapper source = new SocketWrapper(clientSocket());
+            ClientSession session = new ClientSession(source, mailStore);
+            threadExecutor.execute(session);
         }
+        ready = false;
     }
 
-    private Socket clientSocket() {
+    private Socket clientSocket() throws IOException {
         Socket socket = null;
-        try {
-            socket = serverSocket.accept();
-        } catch (IOException ignored) {
+        while (socket == null) {
+            socket = accept();
         }
         return socket;
     }
 
-    public synchronized boolean isStopped() {
+    private Socket accept() {
+        try {
+            ready = true;
+            return serverSocket.accept();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean isStopped() {
         return stopped;
     }
 

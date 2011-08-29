@@ -16,7 +16,7 @@ public class RollingMailStore implements MailStore {
         return receivedMail.size();
     }
 
-    public synchronized void addMessage(MailMessage message) {
+    public void addMessage(MailMessage message) {
         receivedMail.add(message);
         if (getEmailCount() > 100) {
             receivedMail.remove(0);

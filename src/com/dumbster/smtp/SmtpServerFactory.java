@@ -8,12 +8,27 @@ import java.util.concurrent.Executors;
  * Date: Aug 28, 2011
  * Time: 6:48:14 AM
  */
-public class SmtpServerExecutor {
+public class SmtpServerFactory {
     public static SimpleSmtpServer startServer(int port) {
         SimpleSmtpServer server = new SimpleSmtpServer(port);
+        executeServer(server);
+        waitForReadyServer(server);
+        return server;
+    }
+
+    private static void executeServer(SimpleSmtpServer server) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(server);
-        return server;
+    }
+
+    private static void waitForReadyServer(SimpleSmtpServer server) {
+        while (!server.isReady()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static SimpleSmtpServer startServer() {

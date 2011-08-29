@@ -9,7 +9,7 @@ import java.net.Socket;
 public class SocketWrapper implements IOSource {
     private Socket socket;
 
-    public void setSocket(Socket socket) {
+    public SocketWrapper(Socket socket)  {
         this.socket = socket;
     }
 
