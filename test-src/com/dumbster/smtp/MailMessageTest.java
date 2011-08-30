@@ -29,6 +29,13 @@ public class MailMessageTest {
     }
 
     @Test
+    public void testAppendHeader() {
+        message.addHeader("foo", "bar1");
+        message.appendHeader("foo", " baz2");
+        assertEquals("bar1 baz2", message.getFirstHeaderValue("foo"));
+    }
+
+    @Test
     public void testLongSubjectHeader() {
         String longSubject = StringUtil.longString(500);
         message.addHeader("Subject", longSubject);

@@ -14,6 +14,8 @@ public class ClientSession implements Runnable {
     private BufferedReader input;
     private SmtpState smtpState;
     private String line;
+    private String lastHeaderName = null;
+
 
     public ClientSession(IOSource socket, MailStore mailStore) {
         this.socket = socket;
@@ -83,6 +85,7 @@ public class ClientSession implements Runnable {
 
     private void readLine() throws IOException {
         line = input.readLine();
+        System.out.println(line);
     }
 
     private void saveAndRefreshMessageIfComplete() {
@@ -108,12 +111,24 @@ public class ClientSession implements Runnable {
     }
 
     private void addDataHeader(String params) {
+        System.out.println("Adding data header: " + params);
+        String value = "";
         int headerNameEnd = params.indexOf(':');
         if (headerNameEnd > 0) {
-            String name = params.substring(0, headerNameEnd).trim();
-            String value = params.substring(headerNameEnd + 1).trim();
-            msg.addHeader(name, value);
+            lastHeaderName = params.substring(0, headerNameEnd).trim();
+            value = params.substring(headerNameEnd + 1).trim();
+            msg.addHeader(lastHeaderName, value);
+        } else if (whiteSpacedLineStart(params)) {
+            msg.appendHeader(lastHeaderName, params);
         }
+    }
+
+    private boolean whiteSpacedLineStart(String s)  {
+        if (s == null || "".equals(s))
+          return false;
+        char c = s.charAt(0);
+        return c == 32 || c == 0x0b || c == '\n' ||
+                c == '\r' || c == '\t' || c == '\f';
     }
 
 }

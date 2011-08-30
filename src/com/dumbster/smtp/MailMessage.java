@@ -14,6 +14,8 @@ public interface MailMessage {
 
     public abstract void addHeader(String name, String value);
 
+    public abstract void appendHeader(String name, String value);
+
     public abstract void appendBody(String line);
 
 }

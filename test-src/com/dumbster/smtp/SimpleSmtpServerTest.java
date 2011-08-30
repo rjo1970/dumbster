@@ -32,11 +32,11 @@ public class SimpleSmtpServerTest {
 
     private SimpleSmtpServer server;
 
-    private final String Server = "localhost";
-    private final String From = "sender@here.com";
-    private final String To = "receiver@there.com";
-    private final String Subject = "Test";
-    private final String Body = "Test Body";
+    private final String SERVER = "localhost";
+    private final String FROM = "sender@here.com";
+    private final String TO = "receiver@there.com";
+    private final String SUBJECT = "Test";
+    private final String BODY = "Test Body";
     private final String FileName = "license.txt";
 
     private final int WAIT_TICKS = 10000;
@@ -60,12 +60,7 @@ public class SimpleSmtpServerTest {
 
     @Test
     public void testSend() {
-        try {
-            sendMessage(SMTP_PORT, From, Subject, Body, To);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unexpected exception: " + e);
-        }
+        sendMessage(SMTP_PORT, FROM, SUBJECT, BODY, TO);
         server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
@@ -76,12 +71,7 @@ public class SimpleSmtpServerTest {
     @Test
     public void testSendWithLongSubject() {
         String longSubject = StringUtil.longString(500);
-        try {
-            sendMessage(SMTP_PORT, From, longSubject, Body, To);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unexpected exception: " + e);
-        }
+        sendMessage(SMTP_PORT, FROM, longSubject, BODY, TO);
         server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
@@ -91,34 +81,33 @@ public class SimpleSmtpServerTest {
     }
 
     @Test
+    public void testSendWithFoldedSubject() {
+        String subject = "This\r\n is a folded\r\n Subject line.";
+        sendMessage(SMTP_PORT, FROM, subject, BODY, TO);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
+        assertEquals(1, server.getEmailCount());
+        MailMessage email = server.getMessage(0);
+        assertEquals("This is a folded Subject line.", email.getFirstHeaderValue("Subject"));
+    }
+
+    @Test @Ignore  // should this work?
+    public void testSendMessageWithCarriageReturn() {
+        String bodyWithCR = "\r\nKeep these pesky carriage returns\r\n";
+        sendMessage(SMTP_PORT, FROM, SUBJECT, bodyWithCR, TO);
+        assertEquals(1, server.getEmailCount());
+        MailMessage email = server.getMessage(0);
+        assertEquals(bodyWithCR, email.getBody());
+    }
+
+    @Test
     public void testThreadedSend() {
         server.setThreaded(true);
-        try {
-            sendMessage(SMTP_PORT, From, Subject, Body, To);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unexpected exception: " + e);
-        }
+        sendMessage(SMTP_PORT, FROM, SUBJECT, BODY, TO);
         server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertTrue(server.getEmailCount() == 1);
         MailMessage email = server.getMessage(0);
         assertEquals("Test", email.getFirstHeaderValue("Subject"));
         assertEquals("Test Body", email.getBody());
-    }
-
-    @Test
-    public void testSendMessageWithCarriageReturn() {
-        String bodyWithCR = "\n\nKeep these pesky carriage returns\n\n";
-        try {
-            sendMessage(SMTP_PORT, From, Subject, bodyWithCR, To);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unexpected exception: " + e);
-        }
-        server.anticipateMessageCountFor(1, WAIT_TICKS);
-        assertEquals(1, server.getEmailCount());
-        MailMessage email = server.getMessage(0);
-        assertEquals(bodyWithCR, email.getBody());
     }
 
     @Test
@@ -154,9 +143,9 @@ public class SimpleSmtpServerTest {
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(session);
 
-        message.setFrom(new InternetAddress(From));
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(To));
-        message.setSubject(Subject);
+        message.setFrom(new InternetAddress(FROM));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+        message.setSubject(SUBJECT);
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(buildMessageBody());
@@ -179,7 +168,7 @@ public class SimpleSmtpServerTest {
     private MimeBodyPart buildMessageBody() throws MessagingException {
         MimeBodyPart messageBodyPart =
                 new MimeBodyPart();
-        messageBodyPart.setText(Body);
+        messageBodyPart.setText(BODY);
         return messageBodyPart;
     }
 
@@ -192,13 +181,13 @@ public class SimpleSmtpServerTest {
             Session session = Session.getDefaultInstance(props, null);
             Message msg = new MimeMessage(session);
 
-            msg.setFrom(new InternetAddress(From));
+            msg.setFrom(new InternetAddress(FROM));
 
-            InternetAddress.parse(To, false);
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(To, false));
-            msg.setSubject(Subject);
+            InternetAddress.parse(TO, false);
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO, false));
+            msg.setSubject(SUBJECT);
 
-            msg.setText(Body);
+            msg.setText(BODY);
             msg.setHeader("X-Mailer", "musala");
             msg.setSentDate(new Date());
             msg.saveChanges();
@@ -207,8 +196,8 @@ public class SimpleSmtpServerTest {
 
             try {
                 transport = session.getTransport("smtp");
-                transport.connect(Server, SMTP_PORT, "ddd", "ddd");
-                transport.sendMessage(msg, InternetAddress.parse(To, false));
+                transport.connect(SERVER, SMTP_PORT, "ddd", "ddd");
+                transport.sendMessage(msg, InternetAddress.parse(TO, false));
                 transport.sendMessage(msg, InternetAddress.parse("dimiter.bakardjiev@musala.com", false));
             } catch (javax.mail.MessagingException me) {
                 me.printStackTrace();
@@ -238,12 +227,17 @@ public class SimpleSmtpServerTest {
     }
 
 
-    private void sendMessage(int port, String from, String subject, String body, String to) throws MessagingException {
-        Properties mailProps = getMailProperties(port);
-        Session session = Session.getInstance(mailProps, null);
+    private void sendMessage(int port, String from, String subject, String body, String to) {
+        try {
+            Properties mailProps = getMailProperties(port);
+            Session session = Session.getInstance(mailProps, null);
 
-        MimeMessage msg = createMessage(session, from, to, subject, body);
-        Transport.send(msg);
+            MimeMessage msg = createMessage(session, from, to, subject, body);
+            Transport.send(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected exception: " + e);
+        }
     }
 
     private MimeMessage createMessage(
