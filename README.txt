@@ -17,7 +17,7 @@ EXAMPLE (SMTP unit testing fake)
 public class SimpleSmtpServerTest extends TestCase {
 ...
   public void testSend() {
-    SimpleSmtpServer server = SimpleSmtpServerFactory.startServer();
+    SimpleSmtpServer server = SmtpServerFactory.startServer();
 
     try {
       // Submits an email using javamail to the email server listening on
