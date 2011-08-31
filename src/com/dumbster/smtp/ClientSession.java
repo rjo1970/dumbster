@@ -85,7 +85,6 @@ public class ClientSession implements Runnable {
 
     private void readLine() throws IOException {
         line = input.readLine();
-        System.out.println(line);
     }
 
     private void saveAndRefreshMessageIfComplete() {
@@ -111,12 +110,10 @@ public class ClientSession implements Runnable {
     }
 
     private void addDataHeader(String params) {
-        System.out.println("Adding data header: " + params);
-        String value = "";
         int headerNameEnd = params.indexOf(':');
-        if (headerNameEnd > 0) {
+        if (headerNameEnd > 0 && !whiteSpacedLineStart(params)) {
             lastHeaderName = params.substring(0, headerNameEnd).trim();
-            value = params.substring(headerNameEnd + 1).trim();
+            String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(lastHeaderName, value);
         } else if (whiteSpacedLineStart(params)) {
             msg.appendHeader(lastHeaderName, params);

@@ -83,11 +83,22 @@ public class SimpleSmtpServerTest {
     @Test
     public void testSendWithFoldedSubject() {
         String subject = "This\r\n is a folded\r\n Subject line.";
+        MailMessage email = sendMessageWithSubject(subject);
+        assertEquals("This is a folded Subject line.", email.getFirstHeaderValue("Subject"));
+    }
+
+    private MailMessage sendMessageWithSubject(String subject) {
         sendMessage(SMTP_PORT, FROM, subject, BODY, TO);
         server.anticipateMessageCountFor(1, WAIT_TICKS);
         assertEquals(1, server.getEmailCount());
-        MailMessage email = server.getMessage(0);
-        assertEquals("This is a folded Subject line.", email.getFirstHeaderValue("Subject"));
+        return server.getMessage(0);
+    }
+
+    @Test
+    public void testSendWithFoldedSubjectLooksLikeHeader() {
+        String subject = "This\r\n really: looks\r\n strange.";
+        MailMessage email = sendMessageWithSubject(subject);
+        assertEquals("This really: looks strange.", email.getFirstHeaderValue("Subject"));
     }
 
     @Test @Ignore  // should this work?
