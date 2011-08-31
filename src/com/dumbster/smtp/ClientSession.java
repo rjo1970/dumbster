@@ -106,6 +106,8 @@ public class ClientSession implements Runnable {
 
         if (SmtpState.DATA_BODY == smtpResponse.getNextState()) {
             msg.appendBody(params);
+            System.out.println("==="+msg.getBody()+"===");
+            return;
         }
     }
 
@@ -115,7 +117,7 @@ public class ClientSession implements Runnable {
             lastHeaderName = params.substring(0, headerNameEnd).trim();
             String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(lastHeaderName, value);
-        } else if (whiteSpacedLineStart(params)) {
+        } else if (whiteSpacedLineStart(params) && lastHeaderName != null) {
             msg.appendHeader(lastHeaderName, params);
         }
     }
