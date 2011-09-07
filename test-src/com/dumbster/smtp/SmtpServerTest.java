@@ -27,10 +27,10 @@ import javax.mail.internet.*;
 import java.util.Properties;
 import java.util.Date;
 
-public class SimpleSmtpServerTest {
+public class SmtpServerTest {
     private static final int SMTP_PORT = 1081;
 
-    private SimpleSmtpServer server;
+    private SmtpServer server;
 
     private final String SERVER = "localhost";
     private final String FROM = "sender@here.com";

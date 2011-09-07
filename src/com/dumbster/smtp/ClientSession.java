@@ -106,7 +106,6 @@ public class ClientSession implements Runnable {
 
         if (SmtpState.DATA_BODY == smtpResponse.getNextState()) {
             msg.appendBody(params);
-            System.out.println("==="+msg.getBody()+"===");
             return;
         }
     }

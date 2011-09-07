@@ -9,19 +9,19 @@ import java.util.concurrent.Executors;
  * Time: 6:48:14 AM
  */
 public class SmtpServerFactory {
-    public static SimpleSmtpServer startServer(int port) {
-        SimpleSmtpServer server = new SimpleSmtpServer(port);
+    public static SmtpServer startServer(int port) {
+        SmtpServer server = new SmtpServer(port);
         executeServer(server);
         waitForReadyServer(server);
         return server;
     }
 
-    private static void executeServer(SimpleSmtpServer server) {
+    private static void executeServer(SmtpServer server) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(server);
     }
 
-    private static void waitForReadyServer(SimpleSmtpServer server) {
+    private static void waitForReadyServer(SmtpServer server) {
         while (!server.isReady()) {
             try {
                 Thread.sleep(1);
@@ -31,7 +31,7 @@ public class SmtpServerFactory {
         }
     }
 
-    public static SimpleSmtpServer startServer() {
-        return startServer(SimpleSmtpServer.DEFAULT_SMTP_PORT);
+    public static SmtpServer startServer() {
+        return startServer(SmtpServer.DEFAULT_SMTP_PORT);
     }
 }

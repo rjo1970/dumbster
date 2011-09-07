@@ -2,7 +2,7 @@ package com.dumbster.smtp;
 
 public class Main {
     public static void main(String[] args) {
-        SimpleSmtpServer server;
+        SmtpServer server;
         if (args.length == 1) {
             server = SmtpServerFactory.startServer(port(args[0]));
         } else {

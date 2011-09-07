@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 /**
  * Dummy SMTP server for testing purposes.
  */
-public class SimpleSmtpServer implements Runnable {
+public class SmtpServer implements Runnable {
     public static final int DEFAULT_SMTP_PORT = 25;
     private static final int SERVER_SOCKET_TIMEOUT = 5000;
     private static final int MAX_THREADS = 10;
@@ -38,7 +38,7 @@ public class SimpleSmtpServer implements Runnable {
     private ServerSocket serverSocket;
     private int port;
 
-    SimpleSmtpServer(int port) {
+    SmtpServer(int port) {
         this.port = port;
     }
 
