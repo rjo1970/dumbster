@@ -76,6 +76,7 @@ limitations under the License.
 
     <target name="clean">
         <delete dir="${builddir}"/>
+        <delete dir="target"/>
         <delete>
             <fileset dir="." includes="**/*~" defaultexcludes="no"/>
         </delete>
