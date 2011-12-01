@@ -18,7 +18,7 @@
 		<link>
 			<name>classes</name>
 			<type>2</type>
-			<location>/Users/rj/git/dumbster/build/classes</location>
+			<locationURI>PROJECT_LOC/build/classes</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
