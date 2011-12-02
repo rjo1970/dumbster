@@ -18,6 +18,8 @@ package com.dumbster.smtp;
 
 import org.junit.*;
 
+import com.dumbster.smtp.SmtpServer;
+
 import static org.junit.Assert.*;
 
 import javax.activation.DataHandler;
@@ -69,6 +71,18 @@ public class SmtpServerTest {
     }
 
     @Test
+    public void testClearMessages() {
+        sendMessage(SMTP_PORT, FROM, SUBJECT, BODY, TO);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
+        assertTrue(server.getEmailCount() == 1);
+        sendMessage(SMTP_PORT, FROM, SUBJECT, BODY, TO);
+        server.anticipateMessageCountFor(1, WAIT_TICKS);
+        assertTrue(server.getEmailCount() == 2);
+        server.clearMessages();
+        assertTrue(server.getEmailCount() == 0);
+    }
+
+    @Test
     public void testSendWithLongSubject() {
         String longSubject = StringUtil.longString(500);
         sendMessage(SMTP_PORT, FROM, longSubject, BODY, TO);
@@ -101,7 +115,9 @@ public class SmtpServerTest {
         assertEquals("This really: looks strange.", email.getFirstHeaderValue("Subject"));
     }
 
-    @Test @Ignore  // should this work?
+    @Test
+    @Ignore
+    // should this work?
     public void testSendMessageWithCarriageReturn() {
         String bodyWithCR = "\r\nKeep these pesky carriage returns\r\n";
         sendMessage(SMTP_PORT, FROM, SUBJECT, bodyWithCR, TO);
@@ -170,15 +186,13 @@ public class SmtpServerTest {
     private MimeBodyPart buildFileAttachment() throws MessagingException {
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         DataSource source = new javax.activation.FileDataSource(FileName);
-        messageBodyPart.setDataHandler(
-                new DataHandler(source));
+        messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(FileName);
         return messageBodyPart;
     }
 
     private MimeBodyPart buildMessageBody() throws MessagingException {
-        MimeBodyPart messageBodyPart =
-                new MimeBodyPart();
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
         messageBodyPart.setText(BODY);
         return messageBodyPart;
     }
@@ -237,7 +251,6 @@ public class SmtpServerTest {
         return mailProps;
     }
 
-
     private void sendMessage(int port, String from, String subject, String body, String to) {
         try {
             Properties mailProps = getMailProperties(port);
@@ -251,8 +264,7 @@ public class SmtpServerTest {
         }
     }
 
-    private MimeMessage createMessage(
-            Session session, String from, String to, String subject, String body) throws MessagingException {
+    private MimeMessage createMessage(Session session, String from, String to, String subject, String body) throws MessagingException {
         MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(from));
         msg.setSubject(subject);
