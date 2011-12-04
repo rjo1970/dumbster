@@ -148,4 +148,7 @@ public class SmtpServer implements Runnable {
         this.mailStore = mailStore;
     }
 
+    public void clearMessages() {
+        this.mailStore.clearMessages();
+    }
 }

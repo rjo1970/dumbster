@@ -30,4 +30,9 @@ public class RollingMailStore implements MailStore {
     public MailMessage getMessage(int index) {
         return receivedMail.get(index);
     }
+
+    @Override
+    public void clearMessages() {
+        this.receivedMail.clear();
+    }
 }

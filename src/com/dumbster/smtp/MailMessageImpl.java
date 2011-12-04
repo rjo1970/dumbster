@@ -45,7 +45,7 @@ public class MailMessageImpl implements MailMessage {
         if (values == null) {
             return new String[0];
         } else {
-            return values.toArray(new String[headers.size()]);
+            return values.toArray(new String[values.size()]);
         }
     }
 
