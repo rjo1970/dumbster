@@ -8,4 +8,6 @@ public interface MailStore {
     public MailMessage[] getMessages();
 
     public MailMessage getMessage(int index);
+
+    public void clearMessages();
 }

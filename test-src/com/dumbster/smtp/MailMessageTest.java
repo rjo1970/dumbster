@@ -2,6 +2,8 @@ package com.dumbster.smtp;
 
 import org.junit.*;
 
+import com.dumbster.smtp.MailMessage;
+
 import static org.junit.Assert.*;
 
 public class MailMessageTest {
@@ -61,6 +63,17 @@ public class MailMessageTest {
         assertEquals("bar1", message.getFirstHeaderValue("foo"));
         assertEquals("bar2", message.getHeaderValues("foo")[1]);
         assertEquals("foo: bar1\nfoo: bar2\n\n\n", message.toString());
+    }
+
+    @Test
+    public void testGetHeaders() {
+        message.addHeader("foo", "bar1");
+        message.addHeader("foo", "bar2");
+        message.addHeader("baz", "bar3");
+        assertEquals("bar1", message.getFirstHeaderValue("foo"));
+        assertEquals("bar2", message.getHeaderValues("foo")[1]);
+        assertEquals("bar3", message.getFirstHeaderValue("baz"));
+        assertEquals(1, message.getHeaderValues("baz").length);
     }
 
     @Test

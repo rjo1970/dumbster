@@ -1,6 +1,5 @@
 package com.dumbster.smtp;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -11,17 +10,11 @@ import java.util.concurrent.Executors;
 public class SmtpServerFactory {
     public static SmtpServer startServer(int port) {
         SmtpServer server = new SmtpServer(port);
-        executeServer(server);
-        waitForReadyServer(server);
-        return server;
+        Executors.newSingleThreadExecutor().execute(server);
+        return whenReady(server);
     }
 
-    private static void executeServer(SmtpServer server) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(server);
-    }
-
-    private static void waitForReadyServer(SmtpServer server) {
+    private static SmtpServer whenReady(SmtpServer server) {
         while (!server.isReady()) {
             try {
                 Thread.sleep(1);
@@ -29,6 +22,7 @@ public class SmtpServerFactory {
                 e.printStackTrace();
             }
         }
+        return server;
     }
 
     public static SmtpServer startServer() {
