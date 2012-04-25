@@ -129,6 +129,9 @@ public class Request {
         } else if (su.startsWith("LIST")) {
             extractParams(message, request);
             request.clientAction = new List(request.params);
+        } else if (su.startsWith("DLMS")) {
+            extractParams(message, request);
+            request.clientAction = new DeleteMessage(request.params);
         } else {
             request.clientAction = new Unrecognized();
         }

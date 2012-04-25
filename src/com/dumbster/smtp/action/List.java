@@ -30,7 +30,7 @@ public class List implements Action {
         MailMessage[] messages = mailStore.getMessages();
         if (messageIndex != null) {
         final int ix = messageIndex.intValue();
-            if (ix > 0 && ix < messages.length) {
+            if (ix >= 0 && ix < messages.length) {
                 result.append("\n-------------------------------------------\n");
                 result.append(messages[ix].toString());
             }

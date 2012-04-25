@@ -59,4 +59,13 @@ public class FixedSizeMailStore implements MailStore {
             _messages.clear();
         }
     }
+
+    @Override
+    public void deleteMessage(int index) {
+        synchronized (_messages) {
+            if (index > -1 && index < _messages.size()) {
+                _messages.remove(index);
+            }
+        }
+    }
 }
