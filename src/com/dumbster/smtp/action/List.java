@@ -24,15 +24,19 @@ public class List implements Action {
         return "LIST";
     }
 
+    @Override
     public Response response(SmtpState smtpState, MailStore mailStore, MailMessage currentMessage) {
-
-        StringBuffer result = new StringBuffer();
-        if (messageIndex != null && messageIndex < mailStore.getEmailCount()) {
-            result.append("\n-------------------------------------------\n");            
-            result.append(mailStore.getMessage(messageIndex).toString());
+        StringBuilder result = new StringBuilder();
+        MailMessage[] messages = mailStore.getMessages();
+        if (messageIndex != null) {
+        final int ix = messageIndex.intValue();
+            if (ix > 0 && ix < messages.length) {
+                result.append("\n-------------------------------------------\n");
+                result.append(messages[ix].toString());
+            }
         }
         result.append("There are ");
-        result.append(mailStore.getEmailCount());
+        result.append(messages.length);
         result.append(" message(s).");
         return new Response(250, result.toString(), SmtpState.GREET);
     }
