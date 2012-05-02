@@ -18,4 +18,19 @@ public interface MailMessage {
 
     public abstract void appendBody(String line);
 
+    /**
+     * Not used for the SMTP protocol but by POP3
+     *
+     * @return a unique identifier consisting of one to 70 characters in the range 0x21
+     * to 0x7E
+     */
+    public abstract String getUID();
+
+    /**
+     * Used by the POP3 protocol. POP3 requires that messages be "byte stuffed" upon retrieval.
+     *
+     * @return the entire message, ready for POP3
+     */
+    public String byteStuff();
+
 }

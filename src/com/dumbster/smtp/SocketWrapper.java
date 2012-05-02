@@ -13,15 +13,18 @@ public class SocketWrapper implements IOSource {
         this.socket = socket;
     }
 
+    @Override
     public BufferedReader getInputStream() throws IOException {
         return new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
     }
 
+    @Override
     public PrintWriter getOutputStream() throws IOException {
         return new PrintWriter(socket.getOutputStream());
     }
 
+    @Override
     public void close() throws IOException {
         socket.close();
     }

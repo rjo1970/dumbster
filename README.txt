@@ -47,6 +47,9 @@ java -jar dumbster.jar 4444
 EXAMPLE (SMTP fake server allowing two simultaneous connections on port 4444)
 java -Ddumbster.numThreads=2 -jar dumbster.jar 4444
 
+EXAMPLE (fake server allowing two simultaneous connections each for SMTP on port 8989 and POP3 on port 9090)
+java -Ddumbster.numThreads=2 -jar dumbster.jar 8989 9090
+
 LICENSE
 =======
 Under Apache 2.0 license.

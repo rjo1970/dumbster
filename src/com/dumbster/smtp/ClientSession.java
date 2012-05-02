@@ -1,65 +1,39 @@
 package com.dumbster.smtp;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-public class ClientSession implements Runnable {
+import com.dumbster.util.AbstractSession;
 
-    private IOSource socket;
-    private volatile MailStore mailStore;
+public class ClientSession extends AbstractSession {
+
     private MailMessage msg;
     private Response smtpResponse;
-    private PrintWriter out;
-    private BufferedReader input;
     private SmtpState smtpState;
     private String line;
     private String lastHeaderName = null;
 
 
     public ClientSession(IOSource socket, MailStore mailStore) {
-        this.socket = socket;
-        this.mailStore = mailStore;
+        super(mailStore, socket);
         this.msg = new MailMessageImpl();
         Request request = Request.initialRequest();
-        smtpResponse = request.execute(this.mailStore, msg);
+        smtpResponse = request.execute(getMailStore(), msg);
     }
 
-    public void run() {
-        try {
-            prepareSessionLoop();
-            sessionLoop();
-        } catch (Exception ignored) {
-        } finally {
-            try {
-                socket.close();
-            } catch (Exception ignored) {
-            }
-        }
-    }
-
-    private void prepareSessionLoop() throws IOException {
+    @Override
+    protected void prepareSessionLoop() throws IOException {
         prepareOutput();
         prepareInput();
         sendResponse();
         updateSmtpState();
     }
 
-    private void prepareOutput() throws IOException {
-        out = socket.getOutputStream();
-        out.flush();
-    }
-
-    private void prepareInput() throws IOException {
-        input = socket.getInputStream();
-    }
-
     private void sendResponse() {
         if (smtpResponse.getCode() > 0) {
             int code = smtpResponse.getCode();
             String message = smtpResponse.getMessage();
-            out.print(code + " " + message + "\r\n");
-            out.flush();
+            getOutput().print(code + " " + message + "\r\n");
+            getOutput().flush();
         }
     }
 
@@ -67,10 +41,11 @@ public class ClientSession implements Runnable {
         smtpState = smtpResponse.getNextState();
     }
 
-    private void sessionLoop() throws IOException {
+    @Override
+    protected void sessionLoop() throws IOException {
         while (smtpState != SmtpState.CONNECT && readNextLineReady()) {
             Request request = Request.createRequest(smtpState, line);
-            smtpResponse = request.execute(mailStore, msg);
+            smtpResponse = request.execute(getMailStore(), msg);
             storeInputInMessage(request);
             sendResponse();
             updateSmtpState();
@@ -84,29 +59,27 @@ public class ClientSession implements Runnable {
     }
 
     private void readLine() throws IOException {
-        line = input.readLine();
+        line = getInput().readLine();
     }
 
     private void saveAndRefreshMessageIfComplete() {
         if (smtpState == SmtpState.QUIT) {
-            mailStore.addMessage(msg);
+            getMailStore().addMessage(msg);
             msg = new MailMessageImpl();
         }
     }
 
     private void storeInputInMessage(Request request) {
-        String params = request.getParams();
-        if (null == params)
-            return;
-
-        if (SmtpState.DATA_HDR.equals(smtpResponse.getNextState())) {
-            addDataHeader(params);
-            return;
-        }
-
-        if (SmtpState.DATA_BODY == smtpResponse.getNextState()) {
-            msg.appendBody(params);
-            return;
+        final String params = request.getParams();
+        if (params != null) {
+            switch (smtpResponse.getNextState()) {
+                case DATA_HDR:
+                    addDataHeader(params);
+                    break;
+                case DATA_BODY:
+                    msg.appendBody(params);
+                    break;
+            }
         }
     }
 

@@ -32,7 +32,7 @@ public class SmtpServer implements Runnable {
     private static final int SERVER_SOCKET_TIMEOUT = 5000;
     private static final int MAX_THREADS = 10;
 
-    private volatile MailStore mailStore = new FixedSizeMailStore(50); // TODO the implementation to use should be driven by some config
+    private volatile MailStore mailStore = new NullMailStore();
     private volatile boolean stopped = true;
     private volatile boolean ready = false;
     private volatile boolean threaded = false;
@@ -62,6 +62,7 @@ public class SmtpServer implements Runnable {
         return ready;
     }
 
+    @Override
     public void run() {
         stopped = false;
         try {

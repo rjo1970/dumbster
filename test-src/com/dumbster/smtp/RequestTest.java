@@ -17,11 +17,26 @@
 
 package com.dumbster.smtp;
 
-import org.junit.*;
+import com.dumbster.smtp.action.BlankLine;
+import com.dumbster.smtp.action.Connect;
+import com.dumbster.smtp.action.Data;
+import com.dumbster.smtp.action.DataEnd;
+import com.dumbster.smtp.action.Ehlo;
+import com.dumbster.smtp.action.Expn;
+import com.dumbster.smtp.action.Help;
+import com.dumbster.smtp.action.List;
+import com.dumbster.smtp.action.Mail;
+import com.dumbster.smtp.action.NoOp;
+import com.dumbster.smtp.action.Quit;
+import com.dumbster.smtp.action.Rcpt;
+import com.dumbster.smtp.action.Rset;
+import com.dumbster.smtp.action.Unrecognized;
+import com.dumbster.smtp.action.Vrfy;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.dumbster.smtp.action.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RequestTest {
 

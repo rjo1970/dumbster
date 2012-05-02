@@ -17,7 +17,22 @@
 
 package com.dumbster.smtp;
 
-import com.dumbster.smtp.action.*;
+import com.dumbster.smtp.action.Action;
+import com.dumbster.smtp.action.BlankLine;
+import com.dumbster.smtp.action.Connect;
+import com.dumbster.smtp.action.Data;
+import com.dumbster.smtp.action.DataEnd;
+import com.dumbster.smtp.action.Ehlo;
+import com.dumbster.smtp.action.Expn;
+import com.dumbster.smtp.action.Help;
+import com.dumbster.smtp.action.List;
+import com.dumbster.smtp.action.Mail;
+import com.dumbster.smtp.action.NoOp;
+import com.dumbster.smtp.action.Quit;
+import com.dumbster.smtp.action.Rcpt;
+import com.dumbster.smtp.action.Rset;
+import com.dumbster.smtp.action.Unrecognized;
+import com.dumbster.smtp.action.Vrfy;
 
 public class Request {
     private Action clientAction;
@@ -129,9 +144,6 @@ public class Request {
         } else if (su.startsWith("LIST")) {
             extractParams(message, request);
             request.clientAction = new List(request.params);
-        } else if (su.startsWith("DLMS")) {
-            extractParams(message, request);
-            request.clientAction = new DeleteMessage(request.params);
         } else {
             request.clientAction = new Unrecognized();
         }
