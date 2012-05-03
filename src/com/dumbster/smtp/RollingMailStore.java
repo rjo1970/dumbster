@@ -35,4 +35,16 @@ public class RollingMailStore implements MailStore {
     public void clearMessages() {
         this.receivedMail.clear();
     }
+
+    @Override
+    public void deleteMessage(int index) {
+        try {
+            receivedMail.remove(index);
+        } catch (IndexOutOfBoundsException iob) {
+            // oh, well
+        } catch (UnsupportedOperationException uo) {
+            // that's kind of surprising
+            uo.printStackTrace(System.err);
+        }
+    }
 }

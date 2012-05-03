@@ -16,18 +16,28 @@
  */
 package com.dumbster.smtp;
 
-import org.junit.*;
-
-import com.dumbster.smtp.SmtpServer;
-
-import static org.junit.Assert.*;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.util.Date;
+import java.util.Properties;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class SmtpServerTest {
     private static final int SMTP_PORT = 1081;
