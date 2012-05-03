@@ -1,10 +1,10 @@
 package com.dumbster.pop;
 
-import java.io.IOException;
-
 import com.dumbster.smtp.IOSource;
 import com.dumbster.smtp.MailStore;
 import com.dumbster.util.AbstractSession;
+
+import java.io.IOException;
 
 public class ClientSession extends AbstractSession {
 
@@ -46,10 +46,12 @@ public class ClientSession extends AbstractSession {
         String line;
         do {
             line = getInput().readLine();
-            Request request = Request.createRequest(_popState, line);
-            _response = request.execute(getMailStore());
-            sendResponse();
-            updatePOPState();
+            if (line != null) {
+                Request request = Request.createRequest(_popState, line);
+                _response = request.execute(getMailStore());
+                sendResponse();
+                updatePOPState();
+            }
         } while (_popState != null && line != null);
     }
 }

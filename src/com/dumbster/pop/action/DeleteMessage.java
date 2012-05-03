@@ -10,8 +10,8 @@ public class DeleteMessage implements Action {
 
     public DeleteMessage(String params) {
         try {
-            Integer mi = Integer.valueOf(params);
-            if (_messageIndex.intValue() > -1)
+            Integer mi = Integer.valueOf(params.trim());
+            if (mi.intValue() > -1)
                 _messageIndex = mi;
         } catch (NumberFormatException ignored) {
         }

@@ -16,13 +16,7 @@
  */
 package com.dumbster.smtp;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Container for a complete SMTP message - headers and message body.
@@ -130,9 +124,15 @@ public class MailMessageImpl implements MailMessage {
             }
             sb.append("\r\n");
         }
+        sb.append("\r\n");
+        String body = getBody();
+
         // headers are done, now it's time to build the body.
-        // we just need to substitute the sequence \r\n. with the sequence \r\n..
-        sb.append(getBody().replaceAll("\\r\\n.", "\r\n.."));
+//        POP3 says we're supposed to "byte stuff" any termination sequence (CRLF.CRLF) that appears in the message
+//        but when we do that then Apple's Mail doesn't un-stuff the dots. It may be that Mail is b0rk3n, but
+//        since that's what I'm using on my test system, I'm not bothered. I would LOVE if someone could point
+//        me to a comprehensible explanation of how this is really supposed to work.
+        sb.append(body);
         // finally, the termination sequence
         sb.append("\r\n.\r\n");
         return sb.toString();

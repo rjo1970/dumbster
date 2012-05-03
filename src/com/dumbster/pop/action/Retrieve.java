@@ -31,7 +31,11 @@ public class Retrieve implements Action {
     public Response response(POPState popState, MailStore mailStore) {
         MailMessage msg = mailStore.getMessage(_index);
         if (msg != null) {
-            return new Response(Response.OK, msg.byteStuff(), POPState.TRANSACTION);
+            String msgStr = msg.byteStuff();
+            StringBuilder sb = new StringBuilder();
+            sb.append(msgStr.length()).append(" octets\r\n");
+            sb.append(msgStr);
+            return new Response(Response.OK, sb.toString(), POPState.TRANSACTION);
         } else {
             return new Response(Response.ERROR, "no message at index "+_index, POPState.TRANSACTION);
         }

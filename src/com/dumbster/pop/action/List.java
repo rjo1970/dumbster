@@ -10,7 +10,7 @@ public class List implements Action{
     
     public List(String argument) {
         try {
-            _message = Integer.valueOf(argument);
+            _message = Integer.valueOf(argument.trim());
         } catch (Exception e) {
             _message = null;
         }

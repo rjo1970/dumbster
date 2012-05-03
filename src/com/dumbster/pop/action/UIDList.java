@@ -38,7 +38,7 @@ public class UIDList implements Action {
                 int ix = Integer.parseInt(_argument);
                 MailMessage msg = mailStore.getMessage(ix);
                 if (msg != null) {
-                    sb.append(ix).append(" ").append(msg.getUID()).append("\r\n");
+                    sb.append(ix).append(" ").append(msg.getUID()).append("\r\n.\r\n");
                     return new Response(Response.OK, sb.toString(), POPState.TRANSACTION);
                 }
             } catch (Exception e) {
@@ -52,6 +52,7 @@ public class UIDList implements Action {
             for (int ix = 0; ix < allMessages.length; ix++) {
                 sb.append(ix).append(" ").append(allMessages[ix].getUID()).append("\r\n");
             }
+            sb.append(".\r\n");
             return new Response(Response.OK, sb.toString(), POPState.TRANSACTION);
         }
     }
