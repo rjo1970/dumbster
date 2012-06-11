@@ -9,8 +9,9 @@ import java.net.Socket;
 public class SocketWrapper implements IOSource {
     private Socket socket;
 
-    public SocketWrapper(Socket socket)  {
+    public SocketWrapper(Socket socket) throws IOException {
         this.socket = socket;
+        this.socket.setSoTimeout(10000); // protects against hanged clients
     }
 
     public BufferedReader getInputStream() throws IOException {
