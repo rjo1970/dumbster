@@ -81,7 +81,14 @@ public class MailMessageImpl implements MailMessage {
     }
 
     public void appendBody(String line) {
+        if(shouldPrependNewline(line)) {
+            body.append('\n');
+        }
         body.append(line);
+    }
+
+    private boolean shouldPrependNewline(String line)  {
+      return body.length() > 0 && line.length() > 0 && !"\n".equals(line);
     }
 
     public String toString() {

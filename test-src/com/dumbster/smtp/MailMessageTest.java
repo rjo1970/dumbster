@@ -85,6 +85,15 @@ public class MailMessageTest {
     }
 
     @Test
+    public void testAppendBodyKeepsNewlines() {
+        message.appendBody("First line of text.\n");
+        message.appendBody("Now what should happen?\nShould this still work?\n");
+        message.appendBody("\n");
+        message.appendBody("");
+        assertEquals("\nFirst line of text.\n\nNow what should happen?\nShould this still work?\n\n\n", message.toString());
+    }
+
+    @Test
     public void headersAndBody() {
         message.addHeader("foo", "bar1");
         message.addHeader("foo", "bar2");
