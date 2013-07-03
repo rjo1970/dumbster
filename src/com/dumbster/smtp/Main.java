@@ -1,11 +1,12 @@
 package com.dumbster.smtp;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import com.dumbster.smtp.eml.EMLMailStore;
+
 
 public class Main {
     public static void main(String[] args) {
-        parseArguments(args);
-        
+        Arguments arguments = parseArguments(args);
+        startServer(arguments);
 
     }
 
@@ -33,7 +34,7 @@ public class Main {
         return arguments;
     }
 
-    private void startServer(Arguments arguments) {
+    private static void startServer(Arguments arguments) {
         final SmtpServer server = SmtpServerFactory.startServer(arguments.port);
 
         server.setThreaded(arguments.threaded);
@@ -48,9 +49,6 @@ public class Main {
                 System.out.println("Total messages receives: " + server.getEmailCount());
             }
          });
-    }
-    private static int port(String s)  {
-        return Integer.parseInt(s);
     }
 
     private static class Arguments {
