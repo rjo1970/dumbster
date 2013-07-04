@@ -44,6 +44,10 @@ public class SmtpServerTest extends TestCase {
 EXAMPLE (SMTP fake server for QA, running on port 4444)
 java -jar dumbster.jar 4444
 
+For more help use the command:
+java -jar dumbster.jar --help
+
+
 LICENSE
 =======
 Under Apache 2.0 license.
