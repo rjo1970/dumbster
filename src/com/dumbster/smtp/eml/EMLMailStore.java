@@ -84,21 +84,6 @@ public class EMLMailStore implements MailStore {
 
         System.out.println("Received message: " + count);
 
-        StringBuffer msg = new StringBuffer();
-        for (Iterator<String> i = message.getHeaderNames(); i.hasNext();) {
-            String name = i.next();
-            String[] values = message.getHeaderValues(name);
-            for (String value : values) {
-                msg.append(name);
-                msg.append(": ");
-                msg.append(value);
-                msg.append('\n');
-            }
-        }
-        msg.append('\n');
-        msg.append(message.getBody());
-        msg.append('\n');
-
         try {
             if (!directory.exists()) {
                 System.out.println("Directory created: " + directory);
@@ -107,9 +92,23 @@ public class EMLMailStore implements MailStore {
             String filename = new StringBuilder().append(count).append("_")
                     .append(message.getFirstHeaderValue("Subject"))
                     .append(".eml").toString();
+            filename = filename.replaceAll("[\\\\/<>\\?>\\*\"\\|]", "_");
             File file = new File(directory, filename);
             FileWriter writer = new FileWriter(file);
-            writer.append(msg);
+
+            for (Iterator<String> i = message.getHeaderNames(); i.hasNext();) {
+                String name = i.next();
+                String[] values = message.getHeaderValues(name);
+                for (String value : values) {
+                    writer.append(name);
+                    writer.append(": ");
+                    writer.append(value);
+                    writer.append('\n');
+                }
+            }
+            writer.append('\n');
+            writer.append(message.getBody());
+            writer.append('\n');
 
             writer.close();
 
