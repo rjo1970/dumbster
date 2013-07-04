@@ -3,7 +3,9 @@ package com.dumbster.smtp.eml;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,17 +14,15 @@ import com.dumbster.smtp.MailStore;
 
 /**
  * Store messages as EML files.
- * <br/>This class makes no guarantees as to the order of the received messages. 
- * The messages are stored in order but getMessages won't return messages in the same order they were received. 
- *
- * @author daniel
+ * <br/>This class makes no guarantees as to the order of the received messages.
+ * The messages are stored in order but getMessages won't return messages in the same order they were received.
  */
 public class EMLMailStore implements MailStore {
 
     private boolean initialized;
     private int count = 0;
     private File directory = new File("eml_store");
-    private MailMessage[] messages = new MailMessage[0];
+    private List<MailMessage> messages = new ArrayList<MailMessage>();
 
     /**
      * Checks if mail store is initialized and initializes it if it's not.
@@ -34,6 +34,7 @@ public class EMLMailStore implements MailStore {
             } else {
                 loadMessages();
             }
+            initialized = true;
         }
     }
 
@@ -42,6 +43,11 @@ public class EMLMailStore implements MailStore {
      */
     private void loadMessages() {
         File[] files = loadMessageFiles();
+
+        for (File file : files) {
+            MailMessage message = new EMLMailMessage(file);
+            messages.add(message);
+        }
         count = files.length;
     }
 
@@ -74,6 +80,7 @@ public class EMLMailStore implements MailStore {
     public void addMessage(MailMessage message) {
         checkInitialized();
         count++;
+        messages.add(message);
 
         System.out.println("Received message: " + count);
 
@@ -120,15 +127,7 @@ public class EMLMailStore implements MailStore {
     public MailMessage[] getMessages() {
         checkInitialized();
 
-        File[] files = loadMessageFiles();
-
-        MailMessage[] messages = new EMLMailMessage[files.length];
-        int index = 0;
-        for (File file : files) {
-            MailMessage message = new EMLMailMessage(file);
-            messages[index++] = message;
-        }
-        return messages;
+        return messages.toArray(new MailMessage[0]);
     }
 
     /**
@@ -148,6 +147,7 @@ public class EMLMailStore implements MailStore {
             file.delete();
             count--;
         }
+        messages.clear();
     }
 
     public void setDirectory(String directory) {

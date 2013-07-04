@@ -169,6 +169,7 @@ public class EMLMailStoreTest {
         }
     }
     private void givenMailStoreDirectoryHasTwoMessages() {
+        givenMailStoreDirectoryIsEmpty();
         try {
 
             File file1 = new File(emlStoreDir, "1_message.eml");

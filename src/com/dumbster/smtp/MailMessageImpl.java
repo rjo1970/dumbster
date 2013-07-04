@@ -74,10 +74,14 @@ public class MailMessageImpl implements MailMessage {
 
     public void appendHeader(String name, String value) {
         List<String> values = headers.get(name);
-        String oldValue = values.get(values.size()-1);
-        values.remove(oldValue);
-        values.add(oldValue + value);
-        headers.put(name, values);
+        if (values == null) {
+            addHeader(name, value);
+        } else {
+            String oldValue = values.get(values.size()-1);
+            values.remove(oldValue);
+            values.add(oldValue + value);
+            headers.put(name, values);
+        }
     }
 
     public void appendBody(String line) {

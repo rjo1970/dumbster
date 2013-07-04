@@ -38,6 +38,12 @@ public class MailMessageTest {
     }
 
     @Test
+    public void testAppendToNonExistingHeader() {
+        message.appendHeader("foo", " baz2");
+        assertEquals(" baz2", message.getFirstHeaderValue("foo"));
+    }
+
+    @Test
     public void testLongSubjectHeader() {
         String longSubject = StringUtil.longString(500);
         message.addHeader("Subject", longSubject);
