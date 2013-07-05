@@ -1,5 +1,8 @@
 The following is a list of changes per release:
 
+1.7 (2013-07-04)
+Added a new mail store to save received messages as EML files
+
 1.6 (2005-04-04)
 Fixed threading and synchronization problems (sourceforge tracker id: 1111796). Thanks to Charles Hudak for pointing
 out these issues.
