@@ -1,7 +1,6 @@
 package com.dumbster.smtp.eml;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,22 +23,25 @@ public class EMLMailMessage implements MailMessage {
 
     private static final Pattern PATTERN = Pattern.compile("(.*?): (.*)");
 
-    private File file;
+
+    private InputStream file;
     private Map<String, List<String>> headers = new HashMap<String, List<String>>();
     private StringBuilder body = new StringBuilder();
 
-    private boolean initialized = false;
+    private boolean isLoaded = false;
 
-    public EMLMailMessage(File file) {
+    public EMLMailMessage(InputStream file) {
         this.file = file;
     }
 
-    private void checkLoaded() {
-        if (!initialized) {
-            loadFile();
-            initialized = true;
+    public EMLMailMessage(File file) {
+        try {
+            this.file = new FileInputStream(file);
+        } catch (FileNotFoundException fnf) {
+            throw new RuntimeException(fnf);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -47,6 +49,13 @@ public class EMLMailMessage implements MailMessage {
     public Iterator<String> getHeaderNames() {
         checkLoaded();
         return headers.keySet().iterator();
+    }
+
+    private void checkLoaded() {
+        if (!isLoaded) {
+            loadFile();
+            isLoaded = true;
+        }
     }
 
     /**
@@ -57,7 +66,7 @@ public class EMLMailMessage implements MailMessage {
         checkLoaded();
         List<String> values = headers.get(name);
         if (values != null) {
-            return values.toArray(new String[0]);
+            return values.toArray(new String[values.size()]);
         }
         return null;
     }
@@ -83,6 +92,7 @@ public class EMLMailMessage implements MailMessage {
         return body.toString();
     }
 
+
     /**
      * {@inheritDoc}
      */
@@ -105,7 +115,7 @@ public class EMLMailMessage implements MailMessage {
         if (values == null) {
             addHeader(name, value);
         } else {
-            String oldValue = values.get(values.size()-1);
+            String oldValue = values.get(values.size() - 1);
             values.remove(oldValue);
             values.add(oldValue + value);
             headers.put(name, values);
@@ -128,34 +138,28 @@ public class EMLMailMessage implements MailMessage {
     }
 
     private void loadFile() {
-        try {
-            Scanner scanner = new Scanner(file);
-            SmtpState state = SmtpState.DATA_HDR;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+        Scanner scanner = new Scanner(file);
+        SmtpState state = SmtpState.DATA_HDR;
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
 
-                if (state == SmtpState.DATA_HDR) {
-                    if (line.isEmpty()) {
-                        state = SmtpState.DATA_BODY;
-                        continue;
-                    }
-
-                    Matcher matcher = PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String headerName = matcher.group(1);
-                        String headerValue = matcher.group(2);
-                        addHeader(headerName, headerValue);
-                    }
-                } else {
-                    appendBody(line);
+            if (state == SmtpState.DATA_HDR) {
+                if (line.isEmpty()) {
+                    state = SmtpState.DATA_BODY;
+                    continue;
                 }
+
+                Matcher matcher = PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    String headerName = matcher.group(1);
+                    String headerValue = matcher.group(2);
+                    addHeader(headerName, headerValue);
+                }
+            } else {
+                appendBody(line);
             }
-
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
         }
-
+        scanner.close();
     }
 
 }
