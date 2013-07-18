@@ -1,16 +1,13 @@
 package com.dumbster.smtp.eml;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.MailMessageImpl;
 import com.dumbster.smtp.SmtpState;
 
 /**
@@ -23,20 +20,18 @@ public class EMLMailMessage implements MailMessage {
 
     private static final Pattern PATTERN = Pattern.compile("(.*?): (.*)");
 
-
-    private InputStream file;
-    private Map<String, List<String>> headers = new HashMap<String, List<String>>();
-    private StringBuilder body = new StringBuilder();
+    private InputStream stream;
+    private MailMessage delegate = new MailMessageImpl();
 
     private boolean isLoaded = false;
 
     public EMLMailMessage(InputStream file) {
-        this.file = file;
+        this.stream = file;
     }
 
     public EMLMailMessage(File file) {
         try {
-            this.file = new FileInputStream(file);
+            this.stream = new FileInputStream(file);
         } catch (FileNotFoundException fnf) {
             throw new RuntimeException(fnf);
         }
@@ -48,7 +43,7 @@ public class EMLMailMessage implements MailMessage {
     @Override
     public Iterator<String> getHeaderNames() {
         checkLoaded();
-        return headers.keySet().iterator();
+        return delegate.getHeaderNames();
     }
 
     private void checkLoaded() {
@@ -64,11 +59,7 @@ public class EMLMailMessage implements MailMessage {
     @Override
     public String[] getHeaderValues(String name) {
         checkLoaded();
-        List<String> values = headers.get(name);
-        if (values != null) {
-            return values.toArray(new String[values.size()]);
-        }
-        return null;
+        return delegate.getHeaderValues(name);
     }
 
     /**
@@ -77,10 +68,7 @@ public class EMLMailMessage implements MailMessage {
     @Override
     public String getFirstHeaderValue(String name) {
         checkLoaded();
-        if (headers.containsKey(name)) {
-            return headers.get(name).get(0);
-        }
-        return null;
+        return delegate.getFirstHeaderValue(name);
     }
 
     /**
@@ -89,21 +77,15 @@ public class EMLMailMessage implements MailMessage {
     @Override
     public String getBody() {
         checkLoaded();
-        return body.toString();
+        return delegate.getBody();
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void addHeader(String name, String value) {
-        List<String> values = headers.get(name);
-        if (values == null) {
-            values = new ArrayList<String>();
-            headers.put(name, values);
-        }
-        values.add(value);
+        delegate.addHeader(name, value);
     }
 
     /**
@@ -111,15 +93,7 @@ public class EMLMailMessage implements MailMessage {
      */
     @Override
     public void appendHeader(String name, String value) {
-        List<String> values = headers.get(name);
-        if (values == null) {
-            addHeader(name, value);
-        } else {
-            String oldValue = values.get(values.size() - 1);
-            values.remove(oldValue);
-            values.add(oldValue + value);
-            headers.put(name, values);
-        }
+        delegate.appendHeader(name, value);
     }
 
     /**
@@ -127,18 +101,11 @@ public class EMLMailMessage implements MailMessage {
      */
     @Override
     public void appendBody(String line) {
-        if (shouldPrependNewline(line)) {
-            body.append("\n");
-        }
-        body.append(line);
-    }
-
-    private boolean shouldPrependNewline(String line) {
-        return body.length() > 0 && line.length() > 0 && !"\n".equals(line);
+        delegate.appendBody(line);
     }
 
     private void loadFile() {
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new Scanner(stream);
         SmtpState state = SmtpState.DATA_HDR;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();

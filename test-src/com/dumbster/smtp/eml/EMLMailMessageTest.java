@@ -40,9 +40,6 @@ public class EMLMailMessageTest {
         assertEquals(1, from.length);
         assertEquals("\"Bob Example\" <bob@example.org>", from[0]);
         assertEquals(1, message.getHeaderValues("To").length);
-
-        String[] missing = message.getHeaderValues("MissingHeader");
-        assertNull(missing);
     }
 
     @Test
