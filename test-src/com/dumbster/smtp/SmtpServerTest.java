@@ -45,13 +45,14 @@ public class SmtpServerTest {
 
     @Before
     public void setup() {
-        server = SmtpServerFactory.startServer(SMTP_PORT);
+        ServerOptions options = new ServerOptions();
+        options.port = SMTP_PORT;
+        server = SmtpServerFactory.startServer(options);
     }
 
     @After
     public void teardown() {
         server.stop();
-        server = null;
     }
 
     @Test

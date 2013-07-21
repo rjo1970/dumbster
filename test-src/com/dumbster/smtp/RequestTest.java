@@ -17,6 +17,7 @@
 
 package com.dumbster.smtp;
 
+import com.dumbster.smtp.mailstores.RollingMailStore;
 import org.junit.*;
 
 import com.dumbster.smtp.action.*;

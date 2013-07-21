@@ -1,5 +1,6 @@
 package com.dumbster.smtp;
 
+import com.dumbster.smtp.mailstores.RollingMailStore;
 import org.junit.*;
 
 import static org.junit.Assert.*;

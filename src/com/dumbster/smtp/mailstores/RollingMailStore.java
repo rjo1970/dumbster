@@ -1,4 +1,7 @@
-package com.dumbster.smtp;
+package com.dumbster.smtp.mailstores;
+
+import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.MailStore;
 
 import java.util.ArrayList;
 import java.util.Collections;

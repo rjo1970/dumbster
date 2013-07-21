@@ -30,21 +30,13 @@ public class SmtpServer implements Runnable {
     private static final int SERVER_SOCKET_TIMEOUT = 5000;
     private static final int MAX_THREADS = 10;
 
-    private volatile MailStore mailStore = new RollingMailStore();
+    private volatile MailStore mailStore;
     private volatile boolean stopped = true;
     private volatile boolean ready = false;
     private volatile boolean threaded = false;
 
     private ServerSocket serverSocket;
     private int port;
-
-    SmtpServer(int port) {
-        this.port = port;
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
 
     public void run() {
         stopped = false;
@@ -106,7 +98,14 @@ public class SmtpServer implements Runnable {
         stopped = true;
         try {
             serverSocket.close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new SmtpServerException(e);
+        }
+    }
+
+    public static class SmtpServerException extends RuntimeException {
+        public SmtpServerException(Throwable cause) {
+            super(cause);
         }
     }
 
@@ -134,6 +133,10 @@ public class SmtpServer implements Runnable {
         }
     }
 
+    public boolean isReady() {
+        return ready;
+    }
+
     /**
      * Toggles if the SMTP server is single or multi-threaded for response to
      * SMTP sessions.
@@ -146,6 +149,10 @@ public class SmtpServer implements Runnable {
 
     public void setMailStore(MailStore mailStore) {
         this.mailStore = mailStore;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public void clearMessages() {

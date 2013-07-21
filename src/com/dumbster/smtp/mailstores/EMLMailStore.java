@@ -1,4 +1,4 @@
-package com.dumbster.smtp.eml;
+package com.dumbster.smtp.mailstores;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import com.dumbster.smtp.MailMessage;
 import com.dumbster.smtp.MailStore;
+import com.dumbster.smtp.eml.EMLMailMessage;
 
 /**
  * Store messages as EML files.
@@ -25,7 +26,7 @@ public class EMLMailStore implements MailStore {
     private List<MailMessage> messages = new ArrayList<MailMessage>();
 
     /**
-     * Checks if mail store is initialized and initializes it if it's not.
+     * Checks if mail mailStore is initialized and initializes it if it's not.
      */
     private void checkInitialized() {
         if (!initialized) {
@@ -52,13 +53,13 @@ public class EMLMailStore implements MailStore {
     }
 
     /**
-     * Load message files from store directory.
+     * Load message files from mailStore directory.
      * @return an array of {@code File}
      */
     private File[] loadMessageFiles() {
         File[] files = this.directory.listFiles(new EMLFilenameFilter());
         if (files == null) {
-            System.err.println("Unable to load messages from eml store directory: " + directory);
+            System.err.println("Unable to load messages from eml mailStore directory: " + directory);
             return new File[0];
         }
         return files;
@@ -119,7 +120,7 @@ public class EMLMailStore implements MailStore {
     }
 
     /**
-     * Return a list of messages stored by this mail store.
+     * Return a list of messages stored by this mail mailStore.
      * @return a list of {@code EMLMailMessage}
      */
     @Override
