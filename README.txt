@@ -2,11 +2,13 @@ Dumbster fake SMTP Server
 Forked from http://quintanasoft.com/dumbster/ version 1.6 by Jason Kitchen
 
 * Works as a single-threaded unit testing SMTP target
-* Works as a multi-threaded unit testing SMTP target with SmtpServer setThreaded(boolean)
+* Works as a multi-threaded unit testing SMTP target
 * API change- returns an Array of messages rather than an Iterator
 * API change- RollingMailStore implements MailStore keeps rolling 100 msgs.
+* API change- EMLMailStore persists mail to files
 * API change- SmtpServer you can inject your own MailStore
               implementation.
+* API change- SmtpServer configured via ServerOptions
 
 * Now works stand-alone as an executable JAR
 * Improved test coverage
