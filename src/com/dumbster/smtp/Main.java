@@ -14,7 +14,7 @@ public class Main {
 
     private static boolean shouldShowHelp(String[] args) {
         if (args.length == 0)
-            return true;
+            return false;
         for (String arg : args) {
             if ("--help".equalsIgnoreCase(arg) || "-h".equalsIgnoreCase(arg))
                 return true;
