@@ -34,16 +34,6 @@ limitations under the License.
 
     <property name="build.compiler" value="modern"/>
 
-    <property name="cobertura.dir" value="${builddir}/coverage"/>
-
-    <path id="cobertura.classpath">
-        <fileset dir="${libdir}">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-
-    <taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
-
     <path id="compile.path">
         <fileset dir="${libdir}">
             <include name="**/*.jar"/>
@@ -104,14 +94,6 @@ limitations under the License.
 
     <target name="test" depends="clean, jar, compile-tests">
 
-        <cobertura-instrument todir="${builddir}/instrumented" datafile="${builddir}/cobertura.ser">
-            <ignore regex="org.apache.log4j.*"/>
-            <fileset dir="${compiledir}">
-                <include name="**/*.class"/>
-                <exclude name="**/*Test.class"/>
-            </fileset>
-        </cobertura-instrument>
-
         <junit fork="yes" printsummary="yes"
                errorProperty="test.failed"
                failureProperty="test.failed">
@@ -139,9 +121,6 @@ limitations under the License.
             </fileset>
             <report format="frames" todir="${testreportdir}"/>
         </junitreport>
-
-        <cobertura-report format="html" destdir="${builddir}/test/coverage" srcdir="${srcdir}"
-                          datafile="${builddir}/cobertura.ser"/>
 
         <fail message="Something bad happened." if="test.failed"/>
     </target>
