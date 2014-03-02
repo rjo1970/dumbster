@@ -1,21 +1,18 @@
 package com.dumbster.smtp.eml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-
+import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.MailMessageImpl;
 import com.dumbster.smtp.mailstores.EMLMailStore;
+import com.dumbster.smtp.mailstores.EMLMailStore.EMLFilenameFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dumbster.smtp.MailMessage;
-import com.dumbster.smtp.MailMessageImpl;
-import com.dumbster.smtp.mailstores.EMLMailStore.EMLFilenameFilter;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class EMLMailStoreTest {
 
@@ -25,8 +22,21 @@ public class EMLMailStoreTest {
     @Before
     public void setup() {
         mailStore = new EMLMailStore();
-        emlStoreDir = new File("build/test/eml_store_test");
+        emlStoreDir = new File("build/test/eml_store_test" + String.valueOf(new Random().nextInt(1000000)));
         mailStore.setDirectory(emlStoreDir);
+    }
+
+    @After
+    public void tearDown() {
+        int count = 1;
+        for (MailMessage message : mailStore.getMessages()) {
+            String filename = mailStore.getFilename(message, count++);
+            new File(emlStoreDir, filename).delete();
+        }
+        mailStore.clearMessages();
+        deleteTheTwoMessages();
+
+        emlStoreDir.delete();
     }
 
     @Test
@@ -45,6 +55,11 @@ public class EMLMailStoreTest {
         givenMailStoreDirectoryHasTwoMessages();
 
         assertEquals(2, mailStore.getEmailCount());
+    }
+
+    private void deleteTheTwoMessages() {
+        new File(emlStoreDir, "1_message.eml").delete();
+        new File(emlStoreDir, "2_message.eml").delete();
     }
 
 

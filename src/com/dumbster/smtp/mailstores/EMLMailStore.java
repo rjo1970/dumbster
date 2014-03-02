@@ -90,10 +90,7 @@ public class EMLMailStore implements MailStore {
                 System.out.println("Directory created: " + directory);
                 directory.mkdirs();
             }
-            String filename = new StringBuilder().append(count).append("_")
-                    .append(message.getFirstHeaderValue("Subject"))
-                    .append(".eml").toString();
-            filename = filename.replaceAll("[\\\\/<>\\?>\\*\"\\|]", "_");
+            String filename = getFilename(message, count);
             File file = new File(directory, filename);
             FileWriter writer = new FileWriter(file);
 
@@ -117,6 +114,14 @@ public class EMLMailStore implements MailStore {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public String getFilename(MailMessage message, int count) {
+        String filename = new StringBuilder().append(count).append("_")
+                .append(message.getFirstHeaderValue("Subject"))
+                .append(".eml").toString();
+        filename = filename.replaceAll("[\\\\/<>\\?>\\*\"\\|]", "_");
+        return filename;
     }
 
     /**
