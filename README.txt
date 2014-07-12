@@ -14,6 +14,7 @@ Forked from http://quintanasoft.com/dumbster/ version 1.6 by Jason Kitchen
 * Improved test coverage
 * telnet to smtp server and use "list" command to view number of msgs
 * use list command with an index 0..(size-1) of messages to view a message
+* Support testing of asynchronous mail transfer with BlockingQueueMailStore
 
 EXAMPLE (SMTP unit testing fake)
 public class SmtpServerTest extends TestCase {
