@@ -176,6 +176,12 @@ public class RequestTest {
     }
 
     @Test
+    public void testLineStartingWithDot_DataBody() {
+      Request request = Request.createRequest(SmtpState.DATA_BODY, ".Dot starting line");
+      assertEquals("Dot starting line", request.getParams());
+    }
+
+    @Test
     public void testBlankLine_Quit() {
         Request request = new Request(new BlankLine(), null, SmtpState.QUIT);
         Response response = request.execute(mailStore, message);

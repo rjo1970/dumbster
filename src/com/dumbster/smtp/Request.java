@@ -95,7 +95,7 @@ public class Request {
             if (message.length() < 1) {
                 request.params = "\n";
             } else {
-                request.params = message;
+                request.params = message.startsWith(".") ? message.substring(1) : message;
             }
         }
         return request;
