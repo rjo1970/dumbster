@@ -117,8 +117,13 @@ public class ClientSession implements Runnable {
             String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(lastHeaderName, value);
         } else if (whiteSpacedLineStart(params) && lastHeaderName != null) {
-            msg.appendHeader(lastHeaderName, params.trim());
+            msg.appendHeader(lastHeaderName, stripStartingTab(params));
         }
+    }
+
+    private String stripStartingTab(String s) {
+      char c = s.charAt(0);
+      return c == '\t' ? s.substring(1) : s;
     }
 
     private boolean whiteSpacedLineStart(String s)  {

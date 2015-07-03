@@ -96,6 +96,18 @@ public class SmtpServerTest {
     }
 
     @Test
+    public void testSendWithLongTo() {
+      String longTo = StringUtil.longString(60) + "@" + StringUtil.longString(60) + ".com";
+      sendMessage(SMTP_PORT, FROM, SUBJECT, BODY, longTo);
+      server.anticipateMessageCountFor(1, WAIT_TICKS);
+      assertTrue(server.getEmailCount() == 1);
+      MailMessage email = server.getMessage(0);
+      assertEquals(longTo, email.getFirstHeaderValue("To"));
+      assertEquals(longTo.length(), email.getFirstHeaderValue("To").length());
+      assertEquals("Test Body", email.getBody());
+    }
+
+    @Test
     public void testSendWithFoldedSubject() {
         String subject = "This\r\n is a folded\r\n Subject line.";
         MailMessage email = sendMessageWithSubject(subject);
