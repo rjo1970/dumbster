@@ -117,7 +117,7 @@ public class ClientSession implements Runnable {
             String value = params.substring(headerNameEnd + 1).trim();
             msg.addHeader(lastHeaderName, value);
         } else if (whiteSpacedLineStart(params) && lastHeaderName != null) {
-            msg.appendHeader(lastHeaderName, params);
+            msg.appendHeader(lastHeaderName, params.trim());
         }
     }
 
