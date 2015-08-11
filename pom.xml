@@ -6,7 +6,7 @@
     <groupId>org.github.rjo1970</groupId>
     <artifactId>dumbster</artifactId>
     <packaging>jar</packaging>
-    <version>1.9.0.3-SNAPSHOT</version>
+    <version>1.9.0.3</version>
 
     <name>Dumbster</name>
     <description>
