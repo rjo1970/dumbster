@@ -40,7 +40,7 @@ Fixed bug which prevented mutliple messages in the same connection from being tr
 
 
 1.2 (2004-05-08)
-Configurable SMTP port (thanks Dr. Christian Möller and Kevin Fries).
+Configurable SMTP port (thanks Dr. Christian MÃ¶ller and Kevin Fries).
 Mispelled getReceievedEmailSize (Sourceforge tracker id: 824194).
 Not able to enter '\n' in body of message (sourceforge tracker id: 903326).
 

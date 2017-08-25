@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'pmd'
+    id 'findbugs'
+    id 'maven'
+    id 'net.researchgate.release' version '2.6.0'
+}
+
+group = 'org.github.rjo1970'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    compile.transitive = false
+    compileClasspath.transitive = false
+    deployerJars
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'javax.activation:activation:1.1.1'
+    testCompile 'javax.mail:mail:1.4.4'
+
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.12'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.setDeprecation true
+}
+
+findbugs {
+    ignoreFailures = true
+    effort = 'max'
+    reportLevel = 'low'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            repository(url: 'sftp://git@scm.microworld.org/home/git/maven/release')
+            snapshotRepository(url: 'sftp://git@scm.microworld.org/home/git/maven/snapshot')
+        }
+    }
+}
+
+release {
+    buildTasks = ['assemble']
+    tagTemplate = '$name-$version'
+    git {
+        requireBranch = 'master'
+    }
+}
