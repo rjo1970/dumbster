@@ -58,3 +58,5 @@ release {
         requireBranch = 'master'
     }
 }
+
+afterReleaseBuild.dependsOn uploadArchives
