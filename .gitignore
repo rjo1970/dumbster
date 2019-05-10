@@ -1,6 +1,10 @@
-.*
+.classpath
+.gradle
+.idea
+.project
+.settings
 bin
 build
-doc
-*~
+out
 target
+*.iml
