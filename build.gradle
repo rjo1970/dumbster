@@ -4,13 +4,13 @@ plugins {
     id 'pmd'
     id 'findbugs'
     id 'maven'
-    id 'net.researchgate.release' version '2.6.0'
+    id 'net.researchgate.release' version '2.8.0'
 }
 
 group = 'org.github.rjo1970'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 configurations {
     compile.transitive = false
@@ -21,9 +21,9 @@ configurations {
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'javax.activation:activation:1.1.1'
-    testCompile 'javax.mail:mail:1.4.4'
+    testCompile 'javax.mail:mail:1.4.7'
 
-    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.12'
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:3.3.2'
 }
 
 repositories {
