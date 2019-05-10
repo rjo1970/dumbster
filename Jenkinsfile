@@ -11,27 +11,11 @@ stage('Tests') {
     node {
         checkout scm
         unstash 'build'
-        sh './gradlew test'
+        sh './gradlew test jacocoTestReport'
         junit 'build/test-results/test/*.xml'
-        stash includes: 'build/jacoco/test.exec', name: 'jacocoTest'
+        stash includes: 'build/reports/jacoco/test/jacocoTestReport.xml', name: 'jacocoTest'
         stash includes: 'build/test-results/test/*.xml', name: 'junitTest'
     }
-}
-stage('Checks') {
-    parallel(warnings: {
-        node {
-            checkout scm
-            unstash 'build'
-            step([$class: 'WarningsPublisher', canRunOnFailed: true, consoleParsers: [[parserName: 'Java Compiler (javac)']]])
-        }
-    }, jacoco: {
-        node {
-            checkout scm
-            unstash 'build'
-            unstash 'jacocoTest'
-            step([$class: 'JacocoPublisher', execPattern: 'build/jacoco/*.exec', classPattern: 'build/classes/java/main'])
-        }
-    })
 }
 if (scm.branches[0].name == 'master') {
     stage('SonarQube Analysis') {

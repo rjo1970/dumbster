@@ -34,13 +34,22 @@ tasks.withType(JavaCompile) {
     options.setDeprecation true
 }
 
+jacoco {
+    toolVersion = '0.8.3'
+}
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
 project.tasks['sonarqube'].dependsOn tasks.withType(Test)
 sonarqube {
     properties {
         property 'sonar.tests', ['src/test/java']
         property 'sonar.junit.reportPaths', ['build/test-results/test']
         property 'sonar.surefire.reportsPath', ['build/test-results/test']
-        property 'sonar.jacoco.reportPaths', ['build/jacoco/test.exec']
+        property 'sonar.coverage.jacoco.xmlReportPaths', ['build/reports/jacoco/test/jacocoTestReport.xml']
     }
 }
 
