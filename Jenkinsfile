@@ -14,6 +14,7 @@ stage('Tests') {
         sh './gradlew test'
         junit 'build/test-results/test/*.xml'
         stash includes: 'build/jacoco/test.exec', name: 'jacocoTest'
+        stash includes: 'build/test-results/test/*.xml', name: 'junitTest'
     }
 }
 stage('Checks') {
@@ -23,20 +24,6 @@ stage('Checks') {
             unstash 'build'
             step([$class: 'WarningsPublisher', canRunOnFailed: true, consoleParsers: [[parserName: 'Java Compiler (javac)']]])
         }
-    }, pmd: {
-        node {
-            checkout scm
-            unstash 'build'
-            sh './gradlew pmdMain pmdTest'
-            step([$class: 'PmdPublisher', canRunOnFailed: true, pattern: 'build/reports/pmd/*.xml'])
-        }
-    }, findbugs: {
-        node {
-            checkout scm
-            unstash 'build'
-            sh './gradlew findbugsMain findbugsTest'
-            step([$class: 'FindBugsPublisher', canRunOnFailed: true, pattern: 'build/reports/findbugs/*.xml'])
-        }
     }, jacoco: {
         node {
             checkout scm
@@ -45,6 +32,29 @@ stage('Checks') {
             step([$class: 'JacocoPublisher', execPattern: 'build/jacoco/*.exec', classPattern: 'build/classes/java/main'])
         }
     })
+}
+if (scm.branches[0].name == 'master') {
+    stage('SonarQube Analysis') {
+        node {
+            checkout scm
+            withSonarQubeEnv('Sonar') {
+                unstash 'build'
+                unstash 'jacocoTest'
+                unstash 'junitTest'
+                sh './gradlew --info sonarqube'
+            }
+        }
+    }
+    stage('SonarQube Quality Gate'){
+        timeout(time: 1, unit: 'HOURS') {
+            node {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
+            }
+        }
+    }
 }
 stage('Archive') {
     node {
