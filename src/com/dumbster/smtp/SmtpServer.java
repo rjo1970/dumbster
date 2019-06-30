@@ -165,4 +165,17 @@ public class SmtpServer implements Runnable {
     public void clearMessages() {
         this.mailStore.clearMessages();
     }
+
+    /**
+     * Returns port on which ServerSocket was actually started.
+     * If ServerSocket was started with port set as 0 then port will be assigned automatically
+     * from list of opened port. Because of that ServerSocket.getLocalPort() is used.
+     * @return
+     */
+    public int getPort() {
+        if (serverSocket == null || serverSocket.isClosed()) {
+            return port;
+        }
+        return serverSocket.getLocalPort();
+    }
 }
