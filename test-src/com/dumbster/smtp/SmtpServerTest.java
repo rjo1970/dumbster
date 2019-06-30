@@ -184,6 +184,33 @@ public class SmtpServerTest {
         assertTrue(server.getMessage(0).getBody().indexOf("Apache License") > 0);
     }
 
+    @Test
+    public void testExactServerPort() {
+        ServerOptions so = new ServerOptions();
+        so.port = 9050;
+        SmtpServer testServer = SmtpServerFactory.startServer(so);
+
+        sendMessage(testServer.getPort(), "qwerty@qwerty.com", "Test assigned port", "Test message", "ytrewq@qwerty.com");
+
+        testServer.anticipateMessageCountFor(1, WAIT_TICKS);
+
+        assertEquals(so.port, testServer.getPort());
+        testServer.stop();
+    }
+
+    @Test
+    public void testAutomaticallyAssignedServerPort() {
+        ServerOptions so = new ServerOptions();
+        so.port = 0;
+        SmtpServer testServer = SmtpServerFactory.startServer(so);
+
+        sendMessage(testServer.getPort(), "qwerty@qwerty.com", "Test auto-assigned port", "Test message", "ytrewq@qwerty.com");
+
+        testServer.anticipateMessageCountFor(1, WAIT_TICKS);
+        assertNotSame(so.port, testServer.getPort());
+        testServer.stop();
+    }
+
     private MimeBodyPart buildFileAttachment() throws MessagingException {
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         DataSource source = new javax.activation.FileDataSource(FileName);
