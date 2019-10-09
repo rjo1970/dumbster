@@ -41,6 +41,7 @@ public class SmtpServerTest extends TestCase {
   }  
 }
 ```
+## Usage
 
 **Running dumbster on port 4444**
 > java -jar dumbster.jar 4444
@@ -51,7 +52,8 @@ public class SmtpServerTest extends TestCase {
 **For more help use the command**
 > java -jar dumbster.jar --help
 
-
+**Run with custom mailStore Implementation**
+> java -jar dumbster.jar --mailStore=EMLMailMessage
 
 ## LICENSE
 > Under Apache 2.0 license.
