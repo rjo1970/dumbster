@@ -1,6 +1,6 @@
-#Dumbster fake SMTP Server
+# Dumbster fake SMTP Server
 
-###Forked from http://quintanasoft.com/dumbster/ version 1.6 by Jason Kitchen
+### Forked from http://quintanasoft.com/dumbster/ version 1.6 by Jason Kitchen
 
 * Works as a single-threaded unit testing SMTP target
 * Works as a multi-threaded unit testing SMTP target
@@ -15,8 +15,8 @@
 * use list command with an index 0..(size-1) of messages to view a message
 
 EXAMPLE (SMTP unit testing fake)
-public class SmtpServerTest extends TestCase {
 ```
+public class SmtpServerTest extends TestCase {
   public void testSend() {
     SmtpServer server = SmtpServerFactory.startServer();
 
@@ -42,16 +42,16 @@ public class SmtpServerTest extends TestCase {
 }
 ```
 
-*Running dumbster on port 4444*
+**Running dumbster on port 4444**
 > java -jar dumbster.jar 4444
 
-*Forces the SMTP server to be single-threaded*
+**Forces the SMTP server to be single-threaded**
 > java -jar dumbster.jar 4444 --threaded=false
 
-*For more help use the command*
+**For more help use the command**
 > java -jar dumbster.jar --help
 
 
 
-##LICENSE
+## LICENSE
 > Under Apache 2.0 license.
